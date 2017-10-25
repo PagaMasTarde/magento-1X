@@ -6,6 +6,7 @@
         "api",
         "rest",
         "magento",
+        "module",
         "ecommerce",
         "payment",
         "checkout",
@@ -14,7 +15,6 @@
         "financiar",
         "financiera",
         "financiación",
-        "paga partes",
         "método de pago"
     ],
     "homepage": "https://pagamastarde.com/",
