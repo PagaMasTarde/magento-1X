@@ -1,4 +1,4 @@
-# Prestashop Module <img src="https://pagamastarde.com/img/icons/logo.svg" width="100" align="right">
+# Magento 1X Module <img src="https://pagamastarde.com/img/icons/logo.svg" width="100" align="right">
 
 [![Build Status](https://travis-ci.org/PagaMasTarde/prestashop.svg?branch=master)](https://travis-ci.org/PagaMasTarde/prestashop)
 [![Latest Stable Version](https://poser.pugx.org/pagamastarde/prestashop/v/stable)](https://packagist.org/packages/pagamastarde/prestashop)
