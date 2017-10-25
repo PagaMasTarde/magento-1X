@@ -1,0 +1,11 @@
+language: php
+
+php:
+  - '7.0'
+
+before_script:
+  - 'npm install'
+  - 'composer install'
+
+script:
+  - 'vendor/bin/phpunit'
