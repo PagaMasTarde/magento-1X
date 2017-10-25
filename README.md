@@ -1,12 +1,11 @@
 # Magento 1X Module <img src="https://pagamastarde.com/img/icons/logo.svg" width="100" align="right">
 
-[![Build Status](https://travis-ci.org/PagaMasTarde/prestashop.svg?branch=master)](https://travis-ci.org/PagaMasTarde/prestashop)
-[![Latest Stable Version](https://poser.pugx.org/pagamastarde/prestashop/v/stable)](https://packagist.org/packages/pagamastarde/prestashop)
-[![composer.lock](https://poser.pugx.org/pagamastarde/prestashop/composerlock)](https://packagist.org/packages/pagamastarde/prestashop)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8665ec38-f898-493d-9070-f6a30ec541b0/mini.png)](https://insight.sensiolabs.com/projects/8665ec38-f898-493d-9070-f6a30ec541b0)
+[![Build Status](https://travis-ci.org/PagaMasTarde/magento-1X.svg?branch=master)](https://travis-ci.org/PagaMasTarde/magento-1X)
+[![Latest Stable Version](https://poser.pugx.org/pagamastarde/magento-1x/v/stable)](https://packagist.org/packages/pagamastarde/magento-1x)
+[![composer.lock](https://poser.pugx.org/pagamastarde/magento-1x/composerlock)](https://packagist.org/packages/pagamastarde/magento-1x)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/4f04d66a-b31f-436d-a15e-bf27fa8164a1/mini.png)](https://insight.sensiolabs.com/projects/4f04d66a-b31f-436d-a15e-bf27fa8164a1)
 
 ## Instrucciones de Instalación
-
 1. Crea tu cuenta en pagamastarde.com si aún no la tienes [desde aquí](https://bo.pagamastarde.com/users/sign_up)
 2. Descarga el módulo de [aquí](https://github.com/pagamastarde/magento-1X/releases/latest)
 3. Instala el módulo en tu magento
