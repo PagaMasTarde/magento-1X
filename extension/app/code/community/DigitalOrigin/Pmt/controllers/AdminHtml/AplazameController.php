@@ -1,8 +1,8 @@
 <?php
 
-class Aplazame_Aplazame_AdminHtml_AplazameController extends Mage_Adminhtml_Controller_Action
+class DigitalOrigin_Pmt_AdminHtml_AplazameController extends Mage_Adminhtml_Controller_Action
 {
-    /** @var Aplazame_Aplazame_Model_Api_Client */
+    /** @var DigitalOrigin_Pmt_Model_Api_Client */
     private $aplazameClient;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -36,8 +36,8 @@ class Aplazame_Aplazame_AdminHtml_AplazameController extends Mage_Adminhtml_Cont
         $this->loadLayout();
 
         $block = $this->getLayout()->createBlock('aplazame/adminHtml_productCampaigns');
-        if (!($block instanceof Aplazame_Aplazame_Block_AdminHtml_ProductCampaigns)) {
-            throw new LogicException('Expected Aplazame_Aplazame_Block_AdminHtml_ProductCampaigns');
+        if (!($block instanceof DigitalOrigin_Pmt_Block_AdminHtml_ProductCampaigns)) {
+            throw new LogicException('Expected DigitalOrigin_Pmt_Block_AdminHtml_ProductCampaigns');
         }
 
         $block->setArticlesId(array($productId));
@@ -52,8 +52,8 @@ class Aplazame_Aplazame_AdminHtml_AplazameController extends Mage_Adminhtml_Cont
         $this->loadLayout();
 
         $block = $this->getLayout()->createBlock('aplazame/adminHtml_productsCampaigns');
-        if (!($block instanceof Aplazame_Aplazame_Block_AdminHtml_ProductsCampaigns)) {
-            throw new LogicException('Expected Aplazame_Aplazame_Block_AdminHtml_ProductsCampaigns');
+        if (!($block instanceof DigitalOrigin_Pmt_Block_AdminHtml_ProductsCampaigns)) {
+            throw new LogicException('Expected DigitalOrigin_Pmt_Block_AdminHtml_ProductsCampaigns');
         }
 
         $block->setArticlesId($products);

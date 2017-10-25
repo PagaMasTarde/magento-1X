@@ -30,6 +30,25 @@
     </global>
 
     <admin>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <customconfig_options>
+                                            <title>Custom Configuration Section</title>
+                                        </customconfig_options>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
         <routers>
             <adminhtml>
                 <args>
@@ -77,20 +96,6 @@
                     </Pmt>
                 </observers>
             </sales_order_payment_refund>
-            <core_block_abstract_prepare_layout_after>
-                <observers>
-                    <campaignsMassActions>
-                        <type>singleton</type>
-                        <class>pmt/campaignsObserver</class>
-                        <method>campaignsMassActions</method>
-                    </campaignsMassActions>
-                    <productCampaigns>
-                        <type>singleton</type>
-                        <class>pmt/campaignsObserver</class>
-                        <method>productCampaigns</method>
-                    </productCampaigns>
-                </observers>
-            </core_block_abstract_prepare_layout_after>
         </events>
     </adminhtml>
 

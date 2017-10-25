@@ -5,7 +5,7 @@
  * @method string[] getArticlesId()
  * @method array[] getArticlesId()
  */
-class Aplazame_Aplazame_Block_AdminHtml_ProductCampaigns extends Mage_Adminhtml_Block_Widget
+class DigitalOrigin_Pmt_Block_AdminHtml_ProductCampaigns extends Mage_Adminhtml_Block_Widget
 {
     public function __construct()
     {
@@ -24,7 +24,7 @@ class Aplazame_Aplazame_Block_AdminHtml_ProductCampaigns extends Mage_Adminhtml_
             /** @var Mage_Catalog_Model_Product $product */
             $product = $products->load($articleId);
 
-            $articles[] = Aplazame_Aplazame_Api_BusinessModel_Article::createFromProduct($product);
+            $articles[] = DigitalOrigin_Pmt_Api_BusinessModel_Article::createFromProduct($product);
         }
 
         return $articles;

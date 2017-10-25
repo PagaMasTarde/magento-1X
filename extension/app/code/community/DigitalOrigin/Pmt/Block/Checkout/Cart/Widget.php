@@ -1,6 +1,6 @@
 <?php
 
-class Aplazame_Aplazame_Block_Checkout_Cart_Widget Extends Mage_Core_Block_Template
+class DigitalOrigin_Pmt_Block_Checkout_Cart_Widget Extends Mage_Core_Block_Template
 {
     /**
      * @var Mage_Sales_Model_Quote $_product

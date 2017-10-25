@@ -1,6 +1,6 @@
 <?php
 
-class Aplazame_Aplazame_ApiController extends Mage_Core_Controller_Front_Action
+class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
 {
     public static function forbidden()
     {
@@ -68,11 +68,11 @@ class Aplazame_Aplazame_ApiController extends Mage_Core_Controller_Front_Action
 
         switch ($path) {
             case '/article/':
-                $controller = new Aplazame_Aplazame_Api_Article(Mage::getModel('catalog/product'));
+                $controller = new DigitalOrigin_Pmt_Api_Article(Mage::getModel('catalog/product'));
 
                 return $controller->articles($queryArguments);
             case '/order/{order_id}/history/':
-                $controller = new Aplazame_Aplazame_Api_Order(Mage::getModel('sales/order'));
+                $controller = new DigitalOrigin_Pmt_Api_Order(Mage::getModel('sales/order'));
 
                 return $controller->history($pathArguments, $queryArguments);
             default:

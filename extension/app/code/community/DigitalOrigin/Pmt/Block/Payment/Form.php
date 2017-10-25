@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @method Aplazame_Aplazame_Model_Payment getMethod()
+ * @method DigitalOrigin_Pmt_Model_Payment getMethod()
  */
-class Aplazame_Aplazame_Block_Payment_Form extends Mage_Payment_Block_Form
+class DigitalOrigin_Pmt_Block_Payment_Form extends Mage_Payment_Block_Form
 {
     protected function _construct()
     {

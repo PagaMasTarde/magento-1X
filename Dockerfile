@@ -38,6 +38,12 @@ RUN buildDeps="libxml2-dev" \
     && docker-php-ext-install -j$(nproc) gd \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
 
+ADD ./config/ /
+RUN chmod +x /*.sh
+
+ENTRYPOINT ["/install.sh"]
+CMD ["apache2-foreground"]
+
 #COPY ./extension/ /var/www/html/
 
 RUN ln -s /pmt/app/code/community/DigitalOrigin /var/www/html/app/code/community/DigitalOrigin \

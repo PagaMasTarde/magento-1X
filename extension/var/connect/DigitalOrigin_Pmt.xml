@@ -1,30 +1,30 @@
 <_>
-   <form_key>pKQRH4OJ2V0oCNrm</form_key>
-   <name>Aplazame_Aplazame</name>
+   <form_key>IWILLCHECK</form_key>
+   <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
-      <version_ids>2</version_ids>
+      <version_ids>6</version_ids>
    </version_ids>
-   <summary>Aplazame, a consumer credit company, offers a payment system that can be used by online buyers to receive funding for their purchases.</summary>
-   <description>Aplazame, a consumer credit company, offers a payment system that can be used by online buyers to receive funding for their purchases.</description>
+   <summary>Paga+Tarde, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Paga+Tarde, la solución líder en España de financiación omnicanal instantánea.</summary>
+   <description>Paga+Tarde, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Paga+Tarde, la solución líder en España de financiación omnicanal instantánea.</description>
    <license>GPL</license>
    <license_uri/>
-   <version>0.4.5</version>
+   <version>6.0.0</version>
    <stability>stable</stability>
    <notes>* Make confirm to hard fail</notes>
    <authors>
       <name>
-         <name>Aplazame</name>
+         <name>Digital Origin</name>
       </name>
       <user>
-         <user>aplazame</user>
+         <user>pmt</user>
       </user>
       <email>
-         <email>dev@aplazame.com</email>
+         <email>integration@pagamastarde.com</email>
       </email>
    </authors>
-   <depends_php_min>5.2.0</depends_php_min>
-   <depends_php_max>7.0.0</depends_php_max>
+   <depends_php_min>5.3.0</depends_php_min>
+   <depends_php_max>7.1.0</depends_php_max>
    <depends>
       <package>
          <name>
@@ -69,14 +69,14 @@
       </target>
       <path>
          <path/>
-         <path>Aplazame</path>
-         <path>Aplazame</path>
-         <path>adminhtml/default/default/layout/aplazame.xml</path>
-         <path>adminhtml/default/default/template/aplazame</path>
-         <path>frontend/base/default/layout/aplazame.xml</path>
-         <path>frontend/base/default/template/aplazame</path>
+         <path>Pmt</path>
+         <path>Pmt</path>
+         <path>adminhtml/default/default/layout/pmt.xml</path>
+         <path>adminhtml/default/default/template/pmt</path>
+         <path>frontend/base/default/layout/pmt.xml</path>
+         <path>frontend/base/default/template/pmt</path>
          <path/>
-         <path>modules/Aplazame_Aplazame.xml</path>
+         <path>modules/DigitalOrigin_Pmt.xml</path>
       </path>
       <type>
          <type>file</type>
@@ -97,7 +97,7 @@
          <include/>
          <include/>
          <include/>
-         <include>#Aplazame_Aplazame.csv#</include>
+         <include>#DigitalOrigin_Pmt.csv#</include>
          <include/>
       </include>
       <ignore>

@@ -1,6 +1,6 @@
 <?php
 
-class Aplazame_Aplazame_PaymentController extends Mage_Core_Controller_Front_Action
+class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Action
 {
     /**
      * @return Mage_Checkout_Model_Session
@@ -61,7 +61,7 @@ class Aplazame_Aplazame_PaymentController extends Mage_Core_Controller_Front_Act
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
         $payment = $order->getPayment()->getMethodInstance();
-        if (!$payment instanceof Aplazame_Aplazame_Model_Payment) {
+        if (!$payment instanceof DigitalOrigin_Pmt_Model_Payment) {
             Mage::throwException($this->__('Unexpected payment method.'));
         }
 
@@ -84,7 +84,7 @@ class Aplazame_Aplazame_PaymentController extends Mage_Core_Controller_Front_Act
             /** @var Mage_Sales_Model_Order $order */
             $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
             if ($order->getId() && $order->getState() === Mage_Sales_Model_Order::STATE_NEW) {
-                /** @var Aplazame_Aplazame_Helper_Cart $cart */
+                /** @var DigitalOrigin_Pmt_Helper_Cart $cart */
                 $cart = Mage::helper('aplazame/cart');
                 $cart->resuscitateCartFromOrder($order, $this);
             }
@@ -104,11 +104,11 @@ class Aplazame_Aplazame_PaymentController extends Mage_Core_Controller_Front_Act
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->loadByIncrementId($checkout_token);
         $payment = $order->getPayment()->getMethodInstance();
-        if (!$payment instanceof Aplazame_Aplazame_Model_Payment) {
+        if (!$payment instanceof DigitalOrigin_Pmt_Model_Payment) {
             Mage::throwException($this->__('Unexpected payment method.'));
         }
 
-        $code = Aplazame_Aplazame_Model_Payment::METHOD_CODE;
+        $code = DigitalOrigin_Pmt_Model_Payment::METHOD_CODE;
 
         if (!$payment or $code !== $payment->getCode()) {
             Mage::throwException($this->__('Order not found.'));
@@ -123,7 +123,7 @@ class Aplazame_Aplazame_PaymentController extends Mage_Core_Controller_Front_Act
             ->getCollection()
             ->addAttributeToFilter('customer_id', array('like'=> $order->getCustomerId()));
 
-        $historyOrders = array_map(array('Aplazame_Aplazame_Api_BusinessModel_HistoricalOrder', 'createFromOrder'), $history_collection);
+        $historyOrders = array_map(array('DigitalOrigin_Pmt_Api_BusinessModel_HistoricalOrder', 'createFromOrder'), $history_collection);
 
         $this->getResponse()->setHeader('Content-type', 'application/json');
         $this->getResponse()->setBody(json_encode(Aplazame_Sdk_Serializer_JsonSerializer::serializeValue($historyOrders)));

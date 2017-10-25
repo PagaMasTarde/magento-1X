@@ -1,6 +1,6 @@
 <?php
 
-class Aplazame_Aplazame_Block_Product_Widget Extends Mage_Core_Block_Template
+class DigitalOrigin_Pmt_Block_Product_Widget Extends Mage_Core_Block_Template
 {
     /**
      * @var Mage_Catalog_Model_Product $_product

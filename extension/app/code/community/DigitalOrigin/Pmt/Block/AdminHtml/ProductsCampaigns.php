@@ -1,6 +1,6 @@
 <?php
 
-class Aplazame_Aplazame_Block_AdminHtml_ProductsCampaigns extends Aplazame_Aplazame_Block_AdminHtml_ProductCampaigns
+class DigitalOrigin_Pmt_Block_AdminHtml_ProductsCampaigns extends DigitalOrigin_Pmt_Block_AdminHtml_ProductCampaigns
 {
     public function __construct()
     {

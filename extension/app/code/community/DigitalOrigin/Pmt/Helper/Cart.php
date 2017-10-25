@@ -1,10 +1,10 @@
 <?php
 
-class Aplazame_Aplazame_Helper_Cart extends Mage_Core_Helper_Abstract
+class DigitalOrigin_Pmt_Helper_Cart extends Mage_Core_Helper_Abstract
 {
     /**
      * Funcion que resucita un carrito (quote) en caso
-     * de producirse algún fallo en el proceso de cobro de aplazame
+     * de producirse algún fallo en el proceso de cobro de pmt
      * o bien se ha rechazado la operación.
      */
     public function resuscitateCartFromOrder(Mage_Sales_Model_Order $order, Mage_Core_Controller_Front_Action $action = null)

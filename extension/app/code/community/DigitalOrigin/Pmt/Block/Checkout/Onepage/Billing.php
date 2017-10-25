@@ -6,9 +6,9 @@
  * la dirección, aunque el usuario no este logineado,
  * con la dirección del quote.
  *
- * Class Aplazame_Aplazame_Block_Checkout_Onepage_Billing
+ * Class DigitalOrigin_Pmt_Block_Checkout_Onepage_Billing
  */
-class Aplazame_Aplazame_Block_Checkout_Onepage_Billing extends Mage_Checkout_Block_Onepage_Billing
+class DigitalOrigin_Pmt_Block_Checkout_Onepage_Billing extends Mage_Checkout_Block_Onepage_Billing
 {
     /**
      * Return Sales Quote Address model

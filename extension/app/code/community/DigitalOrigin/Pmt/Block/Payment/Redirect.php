@@ -1,16 +1,16 @@
 <?php
 
 
-class Aplazame_Aplazame_Block_Payment_Redirect extends Mage_Core_Block_Abstract
+class DigitalOrigin_Pmt_Block_Payment_Redirect extends Mage_Core_Block_Abstract
 {
     protected function _toHtml()
     {
         $aplazameJsUri = getenv('APLAZAME_JS_URI') ? getenv('APLAZAME_JS_URI') : 'https://aplazame.com/static/aplazame.js';
 
-        /** @var Aplazame_Aplazame_Model_Api_Client $client */
+        /** @var DigitalOrigin_Pmt_Model_Api_Client $client */
         $client = Mage::getModel('aplazame/api_client');
 
-        /** @var Aplazame_Aplazame_Model_Payment $payment */
+        /** @var DigitalOrigin_Pmt_Model_Payment $payment */
         $payment = Mage::getModel('aplazame/payment');
 
         $html = '
