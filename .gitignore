@@ -1,0 +1,6 @@
+/vendor/
+/node_modules
+composer.lock
+extension/var/connect/*
+!extension/var/connect/DigitalOrigin_Pmt.xml
+

@@ -1,0 +1,150 @@
+<?php
+
+/** @var DigitalOrigin_Pmt_Block_AdminHtml_ProductCampaigns $this */
+
+?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo $this->__('Aplazame Campaigns'); ?>
+        </h4>
+    </div>
+
+    <fieldset>
+        <legend>
+            <?php echo $this->__('Campaigns'); ?>
+        </legend>
+
+        <table cellspacing="0" class="form-list">
+            <tbody id="aplazame_campaigns_container">
+            </tbody>
+        </table>
+    </fieldset>
+
+    <button type="button" name="associateProductsToCampaigns" id="associateProductsToCampaigns" onclick="associateArticlesToCampaigns()">
+        <?php echo $this->__('Associate products to selected campaigns'); ?>
+    </button>
+
+    <button type="button" name="removeProductsFromCampaigns" id="removeProductsFromCampaigns" onclick="removeArticlesFromCampaigns()">
+        <?php echo $this->__('Remove products from selected campaigns'); ?>
+    </button>
+</div>
+
+<script>
+    var apiProxyEndpoint = "<?php echo $this->getUrl('adminhtml/aplazame/proxy') ?>";
+    var campaignsContainer = document.getElementById("aplazame_campaigns_container");
+
+    var articles = <?php echo json_encode(Aplazame_Sdk_Serializer_JsonSerializer::serializeValue($this->getArticles())) ?>;
+
+    function associateArticlesToCampaign(articles, campaignId) {
+        apiRequest("POST", "/me/campaigns/" + campaignId + "/articles", articles, function() {});
+    }
+
+    function removeArticlesFromCampaign(articles, campaignId) {
+        var articleIds = articles.map(function (article) {
+            return article.id;
+        });
+
+        apiRequest("DELETE", "/me/campaigns/" + campaignId + "/articles?article-mid=" + articleIds.join(","), null, function() {});
+    }
+
+    function associateArticlesToCampaigns() {
+        var campaignsId = getSelectedCampaigns();
+
+        campaignsId.forEach(function (campaignId) {
+            associateArticlesToCampaign(articles, campaignId);
+        });
+    }
+
+    function removeArticlesFromCampaigns() {
+        var campaignsId = getSelectedCampaigns();
+
+        campaignsId.forEach(function (campaignId) {
+            removeArticlesFromCampaign(articles, campaignId);
+        });
+    }
+
+    function getSelectedCampaigns()
+    {
+        var checkboxes = document.getElementsByName("campaigns");
+        var selected = [];
+        for (var i = 0; i < checkboxes.length; ++i) {
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) {
+                selected.push(checkbox["data-campaignId"]);
+            }
+        }
+
+        return selected;
+    }
+
+    function insertCampaign(campaign) {
+
+        var inputId = "campaign_" + campaign.id;
+        /**
+         * @type {HTMLInputElement|Element}
+         */
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "campaigns";
+        checkbox.value = campaign.id;
+        checkbox.id = inputId;
+        checkbox["data-campaignId"] = campaign.id;
+
+        if (!campaign.partial) {
+            checkbox.checked = true;
+            checkbox.disabled = true;
+            checkbox.title = "<?php echo $this->__('The campaign applies to all products from your catalogue'); ?>";
+        }
+
+        /**
+         * @type {HTMLLabelElement|Element}
+         */
+        var label = document.createElement("label");
+        label.htmlFor = inputId;
+
+        label.appendChild(document.createTextNode(campaign.name));
+
+        var tr = document.createElement("tr");
+
+        var tdLabel = document.createElement("td");
+        tdLabel.className = "label";
+        tdLabel.appendChild(label);
+
+        var tdValue = document.createElement("td");
+        tdValue.className = "value";
+        tdValue.appendChild(checkbox);
+
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdValue);
+
+        campaignsContainer.appendChild(tr);
+    }
+
+    function displayCampaigns(campaigns) {
+        campaigns.forEach(insertCampaign);
+    }
+
+    function apiRequest(method, path, data, callback) {
+        new Ajax.Request(apiProxyEndpoint, {
+            method: "POST",
+            parameters: {
+                method: method,
+                path: path,
+                data: JSON.stringify(data)
+            },
+            onComplete: function (transport) {
+                var payload = JSON.parse(transport.responseText);
+
+                callback(payload);
+            }
+        });
+    }
+
+    apiRequest("GET", "/me/campaigns", null, function(payload) {
+        var campaigns = payload.results;
+
+        displayCampaigns(campaigns);
+    });
+</script>

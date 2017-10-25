@@ -1,0 +1,43 @@
+{  
+    "name": "pagamastarde/magento-1X",
+    "description": "Paga+Tarde Magento 1 module",
+    "type": "module",
+    "keywords": [  
+        "paga+tarde",
+        "api",
+        "rest",
+        "magento",
+        "ecommerce",
+        "payment",
+        "checkout",
+        "credit",
+        "pagamastarde",
+        "financiar",
+        "financiera",
+        "financiación",
+        "paga partes",
+        "método de pago"
+    ],
+    "homepage": "https://pagamastarde.com/",
+    "license": "proprietary",
+    "authors": [
+        {  
+            "name": "Digital Origin",
+            "email": "cromero@digitalorigin.com"
+        }
+    ],
+    "require": {  
+        "php": ">=5.3",
+        "pagamastarde/shopper-library": "^1.0",
+        "pagamastarde/pmt-api-client": "^1.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit-selenium": "^2",
+        "facebook/webdriver": "^1.4"
+    },
+    "autoload": {
+        "classmap": ["extension"]
+    },
+    "minimum-stability": "stable"
+}

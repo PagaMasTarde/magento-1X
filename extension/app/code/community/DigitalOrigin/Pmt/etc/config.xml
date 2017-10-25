@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <DigitalOrigin_Pmt>
+            <version>0.4.5</version>
+        </DigitalOrigin_Pmt>
+    </modules>
+    <global>
+        <models>
+            <pmt>
+                <class>DigitalOrigin_Pmt_Model</class>
+            </pmt>
+        </models>
+        <blocks>
+            <pmt>
+                <class>DigitalOrigin_Pmt_Block</class>
+            </pmt>
+            <checkout>
+                <rewrite>
+                    <onepage_billing>DigitalOrigin_Pmt_Block_Checkout_Onepage_Billing</onepage_billing>
+                    <onepage_shipping>DigitalOrigin_Pmt_Block_Checkout_Onepage_Shipping</onepage_shipping>
+                </rewrite>
+            </checkout>
+        </blocks>
+        <helpers>
+            <pmt>
+                <class>DigitalOrigin_Pmt_Helper</class>
+            </pmt>
+        </helpers>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <DigitalOrigin_Pmt after="Mage_Adminhtml">DigitalOrigin_Pmt_AdminHtml</DigitalOrigin_Pmt>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <pmt>
+                    <file>pmt.xml</file>
+                </pmt>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <DigitalOrigin_Pmt>
+                    <files>
+                        <default>DigitalOrigin_Pmt.csv</default>
+                    </files>
+                </DigitalOrigin_Pmt>
+            </modules>
+        </translate>
+        <events>
+            <order_cancel_after>
+                <observers>
+                    <Pmt>
+                        <type>singleton</type>
+                        <class>pmt/observer</class>
+                        <method>salesOrderPaymentCancel</method>
+                    </Pmt>
+                </observers>
+            </order_cancel_after>
+            <sales_order_payment_refund>
+                <observers>
+                    <Pmt>
+                        <type>singleton</type>
+                        <class>pmt/observer</class>
+                        <method>salesOrderPaymentRefund</method>
+                    </Pmt>
+                </observers>
+            </sales_order_payment_refund>
+            <core_block_abstract_prepare_layout_after>
+                <observers>
+                    <campaignsMassActions>
+                        <type>singleton</type>
+                        <class>pmt/campaignsObserver</class>
+                        <method>campaignsMassActions</method>
+                    </campaignsMassActions>
+                    <productCampaigns>
+                        <type>singleton</type>
+                        <class>pmt/campaignsObserver</class>
+                        <method>productCampaigns</method>
+                    </productCampaigns>
+                </observers>
+            </core_block_abstract_prepare_layout_after>
+        </events>
+    </adminhtml>
+
+    <frontend>
+        <routers>
+            <pmt>
+                <use>standard</use>
+                <args>
+                    <module>DigitalOrigin_Pmt</module>
+                    <frontName>pmt</frontName>
+                </args>
+            </pmt>
+        </routers>
+
+        <layout>
+            <updates>
+                <pmt>
+                    <file>pmt.xml</file>
+                </pmt>
+            </updates>
+        </layout>
+
+    </frontend>
+    <default>
+        <payment>
+            <pmt>
+                <active>0</active>
+                <sandbox>0</sandbox>
+                <model>pmt/payment</model>
+                <title>Financialo con Paga+Tarde</title>
+                <secret_api_key backend_model="adminhtml/system_config_backend_encrypted"/>
+                <button>dt:has(input#p_method_pmt)</button>
+                <instructions><![CDATA[Fracciona tu compra con <a href="https://pmt.com" target="_blank">Pmt</a>.
+Obtén financiación al instante sólo con tu Nombre y Apellidos, DNI/NIE, Teléfono.
+Sin comisiones ocultas ni letra pequeña.]]>
+                </instructions>
+            </pmt>
+        </payment>
+    </default>
+
+</config>

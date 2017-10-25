@@ -1,0 +1,23 @@
+<layout version="0.1.0">
+    <default>
+        <reference name="head" before="-">
+            <block type="page/html" name="pmt_common" as="pmt_common">
+                <action method="setTemplate" ifconfig="payment/pmt/active">
+                    <template>pmt/payment/common.phtml</template>
+                </action>
+            </block>
+        </reference>
+    </default>
+    <catalog_product_view>
+        <reference name="product.info.extrahint">
+            <block type="pmt/product_widget" as="pmt_widget" name="pmt.widget" template="pmt/product/widget.phtml" before="-"/>
+        </reference>
+    </catalog_product_view>
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <block type="pmt/checkout_cart_widget" as="checkout.cart.extra"
+                   name="pmt.checkout.cart.widget"
+                   template="pmt/checkout/cart/widget.phtml" before="-"/>
+        </reference>
+    </checkout_cart_index>
+</layout>

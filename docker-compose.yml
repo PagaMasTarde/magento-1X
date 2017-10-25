@@ -1,0 +1,40 @@
+version: "2"
+
+services:
+  web:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    depends_on:
+      - db
+    environment:
+      - MAGENTO_LOCALE=es_ES
+      - MAGENTO_TIMEZONE=Europe/Madrid
+      - MAGENTO_DEFAULT_CURRENCY=EUR
+      - MAGENTO_ADMIN_FIRSTNAME=Owner
+      - MAGENTO_ADMIN_LASTNAME=Store
+      - MAGENTO_ADMIN_EMAIL=admin@example.com
+      - MAGENTO_ADMIN_USERNAME=admin
+      - MAGENTO_ADMIN_PASSWORD=p4%%sw0rd
+      - MAGENTO_DB_HOST=db
+      - MAGENTO_DB_PASSWORD=password
+      - MAGENTO_URL=magento.aplazame
+    volumes:
+      - ./extension:/aplazame
+    networks:
+      - internal
+      - public
+    ports:
+      - "80:80"
+
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=magento
+    networks:
+      - internal
+
+networks:
+  internal:
+  public:
