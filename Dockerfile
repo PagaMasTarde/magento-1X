@@ -1,4 +1,4 @@
-FROM paylater/docker-php70
+FROM php:5.6-apache
 
 ENV MAGENTO_VERSION=1.9.2.4
 
