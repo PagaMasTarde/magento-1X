@@ -13,105 +13,99 @@
                     <expanded>1</expanded>
                     <fields>
                         <active translate="label">
-                            <label>Testing or Production</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>pmt/enabled</source_model>
-                            <sort_order>10</sort_order>
+                            <label>Enabled</label>
+                            <frontend_type>radios</frontend_type>
+                            <source_model>pmt/YesNo</source_model>
+                            <sort_order>09</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </active>
-                        <title translate="label">
-                            <label>Title</label>
+                        <PAYLATER_PROD translate="label">
+                            <label>Testing or Production</label>
+                            <frontend_type>radios</frontend_type>
+                            <source_model>pmt/Enabled</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </PAYLATER_PROD>
+                        <PAYLATER_PUBLIC_KEY_TEST translate="label">
+                            <label>TEST Public API Key</label>
                             <frontend_type>text</frontend_type>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </PAYLATER_PUBLIC_KEY_TEST>
+                        <PAYLATER_PRIVATE_KEY_TEST translate="label">
+                            <label>TEST Private API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </PAYLATER_PRIVATE_KEY_TEST>
+                        <PAYLATER_PUBLIC_KEY_PROD translate="label">
+                            <label>PROD Public API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </PAYLATER_PUBLIC_KEY_PROD>
+                        <PAYLATER_PRIVATE_KEY_PROD translate="label">
+                            <label>PROD Private API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </PAYLATER_PRIVATE_KEY_PROD>
+                        <PAYLATER_IFRAME translate="label">
+                            <label>How to open the payment</label>
+                            <frontend_type>radios</frontend_type>
+                            <source_model>pmt/Iframe</source_model>
                             <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </title>
-                        <sandbox translate="label">
-                            <label>Test Mode (Sandbox)</label>
+                        </PAYLATER_IFRAME>
+                        <PAYLATER_PRODUCT_HOOK translate="label">
+                            <label>Product simulator location</label>
                             <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <source_model>pmt/ProductSimulator</source_model>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </PAYLATER_PRODUCT_HOOK>
+                        <PAYLATER_PRODUCT_HOOK_TYPE translate="label">
+                            <label>Product simulator</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pmt/SimulatorType</source_model>
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </PAYLATER_PRODUCT_HOOK_TYPE>
+                        <PAYLATER_CHECKOUT_HOOK_TYPE translate="label">
+                            <label>Checkout simulator</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pmt/CheckoutSimulatorType</source_model>
+                            <sort_order>19</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </PAYLATER_CHECKOUT_HOOK_TYPE>
+                        <ORDER translate="label">
+                            <label>PaymentMethod Order</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </sandbox>
-                        <secret_api_key translate="label">
-                            <label>Private API Key</label>
-                            <frontend_type>text</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </secret_api_key>
-                        <public_api_key translate="label">
-                            <label>Public API Key</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>35</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </public_api_key>
-                        <button>
-                            <label>Paga+Tarde Button CSS Selector</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </button>
-                        <allowspecific translate="label">
-                            <label>Payment from Applicable Countries</label>
-                            <frontend_type>allowspecific</frontend_type>
-                            <sort_order>50</sort_order>
-                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </allowspecific>
-                        <specificcountry translate="label">
-                            <label>Payment from Specific Countries</label>
-                            <frontend_type>multiselect</frontend_type>
-                            <sort_order>55</sort_order>
-                            <source_model>adminhtml/system_config_source_country</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <can_be_empty>1</can_be_empty>
-                        </specificcountry>
-                        <instructions translate="label">
-                            <label>Instructions</label>
-                            <frontend_type>textarea</frontend_type>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </instructions>
-                        <sort_order translate="label">
-                            <label>Sort Order</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>70</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </sort_order>
-                        <autoinvoice translate="label comment tooltip">
-                            <label>Automatic invoice generation</label>
-                            <!-- <comment></comment> -->
-                            <tooltip>Applicable only if the payment was successful.</tooltip>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>250</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <active>1</active>
-                            </depends>
-                        </autoinvoice>
+                        </ORDER>
                     </fields>
                 </pmt>
             </groups>
