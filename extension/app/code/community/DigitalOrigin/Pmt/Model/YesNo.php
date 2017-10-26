@@ -12,11 +12,11 @@ class DigitalOrigin_Pmt_Model_YesNo
     {
         return array(
             array(
-                'label' => ' Yes',
+                'label' => Mage::helper('pmt')->__(' Yes'),
                 'value' => self::YES,
             ),
             array(
-                'label' => ' No',
+                'label' => Mage::helper('pmt')->__(' No'),
                 'value' => self::NO,
             )
         );

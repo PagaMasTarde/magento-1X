@@ -12,11 +12,11 @@ class DigitalOrigin_Pmt_Model_Enabled
     {
         return array(
             array(
-                'label' => ' Production',
+                'label' => Mage::helper('pmt')->__(' Production'),
                 'value' => self::PRODUCTION,
             ),
             array(
-                'label' => ' Testing',
+                'label' => Mage::helper('pmt')->__(' Testing'),
                 'value' => self::TESTING,
             )
         );

@@ -15,23 +15,23 @@ class DigitalOrigin_Pmt_Model_CheckoutSimulatorType
     {
         return array(
             array(
-                'label' => ' Mini',
+                'label' => Mage::helper('pmt')->__(' Mini'),
                 'value' => self::MINI,
             ),
             array(
-                'label' => ' Complete',
+                'label' => Mage::helper('pmt')->__(' Complete'),
                 'value' => self::COMPLETE,
             ),
             array(
-                'label' => ' Selector',
+                'label' => Mage::helper('pmt')->__(' Selector'),
                 'value' => self::SELECTOR,
             ),
             array(
-                'label' => ' Descriptive Text',
+                'label' => Mage::helper('pmt')->__(' Descriptive Text'),
                 'value' => self::TEXT,
             ),
             array(
-                'label' => ' Don not show',
+                'label' => Mage::helper('pmt')->__(' Do not show'),
                 'value' => self::NO,
             )
         );

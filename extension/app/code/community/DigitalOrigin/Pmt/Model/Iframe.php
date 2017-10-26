@@ -12,11 +12,11 @@ class DigitalOrigin_Pmt_Model_Iframe
     {
         return array(
             array(
-                'label' => ' Iframe',
+                'label' => Mage::helper('pmt')->__(' Iframe'),
                 'value' => self::IFRAME,
             ),
             array(
-                'label' => ' Redirect',
+                'label' => Mage::helper('pmt')->__(' Redirect'),
                 'value' => self::REDIRECT,
             )
         );

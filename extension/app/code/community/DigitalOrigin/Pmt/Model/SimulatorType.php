@@ -14,20 +14,20 @@ class DigitalOrigin_Pmt_Model_SimulatorType
     {
         return array(
             array(
-                'label' => ' Mini',
+                'label' => Mage::helper('pmt')->__(' Mini'),
                 'value' => self::MINI,
             ),
             array(
-                'label' => ' Complete',
+                'label' => Mage::helper('pmt')->__(' Complete'),
                 'value' => self::COMPLETE,
             ),
             array(
-                'label' => ' Selector',
+                'label' => Mage::helper('pmt')->__(' Selector'),
                 'value' => self::SELECTOR,
             ),
             array(
-                'label' => ' Descriptive Text',
-                'value' => self::TEXT,
+                'label' => Mage::helper('pmt')->__(' Descriptive Text'),
+                'value' => self::SELECTOR
             )
         );
     }
