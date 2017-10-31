@@ -3,10 +3,10 @@
   <modules>
       <DigitalOrigin_Pmt>
           <active>true</active>
-          <codePool>community</codePool>
-          <depends>
-              <Mage_Catalog/>
-          </depends>
+              <codePool>community</codePool>
+              <depends>
+                  <Mage_Payment/>
+              </depends>
       </DigitalOrigin_Pmt>
   </modules>
 </config>

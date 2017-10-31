@@ -1,73 +1,42 @@
 <?xml version="1.0"?>
 <config>
+
     <modules>
         <DigitalOrigin_Pmt>
-            <version>0.4.5</version>
+            <version>0.0.0.1</version>
         </DigitalOrigin_Pmt>
     </modules>
+
     <global>
-        <models>
-            <pmt>
-                <class>DigitalOrigin_Pmt_Model</class>
-            </pmt>
-        </models>
-        <blocks>
-            <pmt>
-                <class>DigitalOrigin_Pmt_Block</class>
-            </pmt>
-            <checkout>
-                <rewrite>
-                    <onepage_billing>DigitalOrigin_Pmt_Block_Checkout_Onepage_Billing</onepage_billing>
-                    <onepage_shipping>DigitalOrigin_Pmt_Block_Checkout_Onepage_Shipping</onepage_shipping>
-                </rewrite>
-            </checkout>
-        </blocks>
+
         <helpers>
             <pmt>
                 <class>DigitalOrigin_Pmt_Helper</class>
             </pmt>
         </helpers>
+
+        <blocks>
+            <pmt>
+                <class>DigitalOrigin_Pmt_Block</class>
+            </pmt>
+        </blocks>
+
+        <models>
+            <pmt>
+                <class>DigitalOrigin_Pmt_Model</class>
+            </pmt>
+        </models>
+
+        <resources>
+            <payment_custom_setup>
+                <setup>
+                    <module>DigitalOrigin_Pmt</module>
+                </setup>
+            </payment_custom_setup>
+        </resources>
     </global>
 
-    <admin>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <config>
-                                    <children>
-                                        <customconfig_options>
-                                            <title>Custom Configuration Section</title>
-                                        </customconfig_options>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <DigitalOrigin_Pmt after="Mage_Adminhtml">DigitalOrigin_Pmt_AdminHtml</DigitalOrigin_Pmt>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
-    </admin>
-
     <adminhtml>
-        <layout>
-            <updates>
-                <pmt>
-                    <file>pmt.xml</file>
-                </pmt>
-            </updates>
-        </layout>
         <translate>
             <modules>
                 <DigitalOrigin_Pmt>
@@ -77,26 +46,6 @@
                 </DigitalOrigin_Pmt>
             </modules>
         </translate>
-        <events>
-            <order_cancel_after>
-                <observers>
-                    <Pmt>
-                        <type>singleton</type>
-                        <class>pmt/observer</class>
-                        <method>salesOrderPaymentCancel</method>
-                    </Pmt>
-                </observers>
-            </order_cancel_after>
-            <sales_order_payment_refund>
-                <observers>
-                    <Pmt>
-                        <type>singleton</type>
-                        <class>pmt/observer</class>
-                        <method>salesOrderPaymentRefund</method>
-                    </Pmt>
-                </observers>
-            </sales_order_payment_refund>
-        </events>
     </adminhtml>
 
     <frontend>
@@ -109,7 +58,6 @@
                 </args>
             </pmt>
         </routers>
-
         <layout>
             <updates>
                 <pmt>
@@ -117,22 +65,18 @@
                 </pmt>
             </updates>
         </layout>
-
     </frontend>
+
     <default>
         <payment>
-            <pmt>
-                <active>0</active>
-                <sandbox>0</sandbox>
-                <model>pmt/payment</model>
-                <title>Financialo con Paga+Tarde</title>
-                <secret_api_key backend_model="adminhtml/system_config_backend_encrypted"/>
-                <button>dt:has(input#p_method_pmt)</button>
-                <instructions><![CDATA[Fracciona tu compra con <a href="https://pmt.com" target="_blank">Pmt</a>.
-Obtén financiación al instante sólo con tu Nombre y Apellidos, DNI/NIE, Teléfono.
-Sin comisiones ocultas ni letra pequeña.]]>
-                </instructions>
-            </pmt>
+            <paylater>
+                <active>1</active>
+                <title>Finance with Paga+Tarde</title>
+                <model>pmt/paylater</model>
+                <order_status>processing</order_status>
+                <allowspecific>0</allowspecific>
+                <payment_action>sale</payment_action>
+            </paylater>
         </payment>
     </default>
 
