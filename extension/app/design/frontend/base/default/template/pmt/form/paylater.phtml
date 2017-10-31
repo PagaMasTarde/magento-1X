@@ -1,5 +1,24 @@
-<ul class="form-list" id="payment_form_<?php echo $this->__($this->getMethodCode()); ?>">
-    <li>
-        <?php echo $this->__($this->getMethodCode()); ?>
-    </li>
-</ul>
+<fieldset class="form-list">
+    <?php $_code = $this->getMethodCode() ?>
+</fieldset>
+<div id="payment_form_<?php echo $_code ?>" style="display: none">
+    <div id="innerpagantis">
+        <input type="hidden" class="pagantisradio" name="paymentdetail[]" value="financiacion">
+        <div class="PmtSimulator PmtSimulatorSelectable--claim" style="left:-10px; top: 5px;"
+             data-pmt-num-quota="4" data-pmt-style="neutral" data-pmt-type="3"
+             data-pmt-amount="<?=$this->total?>" data-pmt-expanded="no" data-pmt-max-ins="12"></div>
+    </div>
+</div>
+
+<style>
+    #innerpagantis {margin-left: 20px; height: 50px;}
+    .pagantisradio {margin-right:10px}
+</style>
+
+<script>
+    jQuery( document ).ready(function() {
+        pmtClient.setPublicKey("<?=$this->public_key?>");
+        pmtClient.events.send("checkout", { basketAmount: <?=$this->total?> } );
+        pmtClient.simulator.reload();
+    });
+</script>
