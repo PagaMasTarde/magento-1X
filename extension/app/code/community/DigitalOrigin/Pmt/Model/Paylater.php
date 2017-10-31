@@ -1,8 +1,8 @@
 <?php
 
-class DigitalOrigin_Pmt_Model_Payment extends Mage_Payment_Model_Method_Abstract {
+class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstract {
 
-    protected $_code  = 'pmt';
+    protected $_code  = 'paylater';
     protected $_formBlockType = 'pmt/form_paylater';
     protected $_infoBlockType = 'pmt/info_paylater';
 
