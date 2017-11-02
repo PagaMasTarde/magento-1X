@@ -5,12 +5,34 @@
  */
 class DigitalOrigin_Pmt_Model_CheckoutSimulatorType
 {
+    /**
+     * NO
+     */
     const NO = 0;
+
+    /**
+     * MINI
+     */
     const MINI = 1;
+
+    /**
+     * COMPLETE
+     */
     const COMPLETE = 2;
+
+    /**
+     * SELECTOR
+     */
     const SELECTOR = 3;
+
+    /**
+     * TEXT
+     */
     const TEXT = 4;
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

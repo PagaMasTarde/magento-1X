@@ -5,10 +5,8 @@
  */
 class DigitalOrigin_Pmt_Block_Form_Paylater extends Mage_Payment_Block_Form
 {
-    /*
-     * Constructor for the form.
-     *
-     * Fetch data from configuration and send it to the view
+    /**
+     * Form constructor
      */
     protected function _construct()
     {
@@ -36,15 +34,5 @@ class DigitalOrigin_Pmt_Block_Form_Paylater extends Mage_Payment_Block_Form
         );
 
         return parent::_construct();
-    }
-
-    /**
-     * @return Mage_Core_Block_Abstract
-     */
-    protected function _prepareLayout()
-    {
-
-
-        return parent::_prepareLayout();
     }
 }

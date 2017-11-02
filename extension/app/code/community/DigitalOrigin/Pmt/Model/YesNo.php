@@ -5,9 +5,19 @@
  */
 class DigitalOrigin_Pmt_Model_YesNo
 {
+    /**
+     * YES
+     */
     const YES = 1;
+
+    /**
+     * NO
+     */
     const NO = 0;
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

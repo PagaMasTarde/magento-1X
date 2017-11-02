@@ -5,9 +5,19 @@
  */
 class DigitalOrigin_Pmt_Model_Enabled
 {
+    /**
+     * PRODUCTION
+     */
     const PRODUCTION = 1;
+
+    /**
+     * TESTING
+     */
     const TESTING = 0;
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
