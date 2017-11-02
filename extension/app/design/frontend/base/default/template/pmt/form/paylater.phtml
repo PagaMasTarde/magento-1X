@@ -3,28 +3,26 @@
 $_code = $this->getMethodCode();
 ?>
 <fieldset class="form-list">
-<script type="text/javascript" src="https://cdn.pagamastarde.com/pmt-js-client-sdk/3/js/client-sdk.min.js"></script>
 <script type="text/javascript">
     if (typeof pmtClient !== 'undefined') {
-        pmtClient.setPublicKey(<?=$this->publicKey?>);
-        pmtClient.events.send('checkout', { basketAmount: <?=$this->amount?> } );
+        pmtClient.setPublicKey('<?=$publicKey?>');
+        pmtClient.events.send('checkout', { basketAmount: '<?=$amount?>' } );
     }
 </script>
-<?php //if($this->simulatorType) { ?>
+<?php if($simulatorType) { ?>
 <div id="payment_form_<?=$_code?>" style="display: none">
     <div id="paylater-checkout">
         <div class="PmtSimulator"
              data-pmt-num-quota="4" data-pmt-max-ins="12"
-             data-pmt-type="<?php if($this->simulatorType != 1) echo 1; else echo 2;?>"
-             data-pmt-amount="<?=$this->amount?>" data-pmt-expanded="<?php if ($this->simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
+             data-pmt-type="<?=$simulatorType?>"
+             data-pmt-amount="<?=$amount?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    alert('hola');
     if (typeof pmtClient !== 'undefined') {
-        pmtClient.simulator.init();
+        pmtClient.simulator.reload();
     }
 </script>
-<?php //} ?>
+<?php } ?>
 </fieldset>
