@@ -13,7 +13,7 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
     /**
      * @var string
      */
-    protected $_formBlockType = 'pmt/form_paylater';
+    protected $_formBlockType = 'pmt/checkout_paylater';
 
     /**
      * @param mixed $data

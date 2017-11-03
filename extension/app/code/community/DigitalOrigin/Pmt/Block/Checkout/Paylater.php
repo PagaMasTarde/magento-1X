@@ -3,7 +3,7 @@
 /**
  * Class DigitalOrigin_Pmt_Block_Form_Paylater
  */
-class DigitalOrigin_Pmt_Block_Form_Paylater extends Mage_Payment_Block_Form
+class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
 {
     /**
      * Form constructor
@@ -27,7 +27,7 @@ class DigitalOrigin_Pmt_Block_Form_Paylater extends Mage_Payment_Block_Form
             ]
         );
 
-        $this->setTemplate('pmt/form/paylater.phtml')->setMethodTitle(
+        $this->setTemplate('pmt/checkout/paylater.phtml')->setMethodTitle(
             Mage::helper('pmt')->__($config['title'] .
             ' '.
             $config['TITLE_EXTRA'])
