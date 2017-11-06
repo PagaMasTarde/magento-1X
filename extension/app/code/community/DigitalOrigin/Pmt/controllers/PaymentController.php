@@ -15,16 +15,48 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $checkoutSession = Mage::getSingleton('checkout/session');
         /** @var Mage_Customer_Model_Session $customerSession */
         $customerSession = Mage::getSingleton('customer/session');
-
         $orderId = $checkoutSession->getLastRealOrderId();
         $customer = $customerSession->getCustomer();
         $customer->getAttributes();
+        /** @var Mage_Sales_Model_Order $order */
         $order = $salesOrder->loadByIncrementId($orderId);
+        /** @var Mage_Core_Helper_Data $mageCore */
+        $mageCore = Mage::helper('core');
+
+
+        if (is_object($order) && $order->getState() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
+            $this->_redirect('checkout/cart');
+        }
+
+
+
+            $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
+        $customerData = json_decode($mageCore->jsonEncode($customer->getData()), true);
+        $itemsData = json_decode($mageCore->jsonEncode($order->getItemsCollection()->getData()), true);
+        $addressData = json_decode($mageCore->jsonEncode($order->getAddressesCollection()->getData()), true);
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
 
         echo '<pre>';
-        var_dump(
-            $orderId,
-            $customer->getEmail()
+        echo (
+            json_encode([
+                'order' => $orderData,
+                'customer' => $customerData,
+                'items' => $itemsData,
+                'address' => $addressData,
+                'module' => $moduleConfig,
+                'url' => [
+                    'ok' => Mage::getUrl('pmt/notify'),
+                    'ko' => Mage::getUrl('checkout/cart'),
+                    'callback' => Mage::getUrl('pmt/notify'),
+                    'cancelled' => Mage::getUrl('checkout/cart'),
+                ],
+                'metadata' => [
+                    'magento' => Mage::getVersion(),
+                    'pmt' => (string) Mage::getConfig()->getNode()->modules->DigitalOrigin_Pmt->version,
+                    'php' => phpversion(),
+                ]
+
+            ])
         );
 
         die();

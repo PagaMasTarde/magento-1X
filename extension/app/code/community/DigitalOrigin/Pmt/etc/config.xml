@@ -73,7 +73,7 @@
                 <active>1</active>
                 <title>Finance with Paga+Tarde</title>
                 <model>pmt/paylater</model>
-                <order_status>processing</order_status>
+                <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>
                 <payment_action>sale</payment_action>
             </paylater>

@@ -44,6 +44,6 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
      */
     public function getOrderPlaceRedirectUrl()
     {
-        return Mage::getUrl('pmt/paylater/redirect', array('_secure' => false));
+        return Mage::getUrl('pmt/payment', array('_secure' => false));
     }
 }
