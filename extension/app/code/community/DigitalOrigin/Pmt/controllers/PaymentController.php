@@ -1,5 +1,7 @@
 <?php
 
+require_once('lib/DigitalOrigin/autoload.php');
+
 /**
  * Class DigitalOrigin_Pmt_PaymentController
  */
@@ -23,14 +25,11 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         /** @var Mage_Core_Helper_Data $mageCore */
         $mageCore = Mage::helper('core');
 
-
-        if (is_object($order) && $order->getState() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            $this->_redirect('checkout/cart');
+        if (!is_object($order) || $order->getState() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
+            return $this->_redirect('checkout/cart');
         }
 
-
-
-            $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
+        $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
         $customerData = json_decode($mageCore->jsonEncode($customer->getData()), true);
         $itemsData = json_decode($mageCore->jsonEncode($order->getItemsCollection()->getData()), true);
         $addressData = json_decode($mageCore->jsonEncode($order->getAddressesCollection()->getData()), true);
@@ -59,6 +58,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             ])
         );
 
+        $magentoObjectModule = new \ShopperLibrary\ObjectModule\MagentoObjectModule();
         die();
     }
 

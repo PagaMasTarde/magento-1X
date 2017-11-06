@@ -47,7 +47,7 @@ CMD ["apache2-foreground"]
 #COPY ./extension/ /var/www/html/
 
 RUN ln -s /pmt/app/code/community/DigitalOrigin /var/www/html/app/code/community/DigitalOrigin \
-    && ln -s /pmt/lib/pmt /var/www/html/lib/DigitalOrigin \
+    && ln -s /pmt/lib/DigitalOrigin /var/www/html/lib/DigitalOrigin \
     && ln -s /pmt/app/etc/modules/DigitalOrigin_Pmt.xml /var/www/html/app/etc/modules/DigitalOrigin_Pmt.xml \
     && ln -s /pmt/app/design/adminhtml/default/default/layout/pmt.xml /var/www/html/app/design/adminhtml/default/default/layout/pmt.xml \
     && ln -s /pmt/app/design/adminhtml/default/default/template/pmt /var/www/html/app/design/adminhtml/default/default/template/pmt \

@@ -35,7 +35,10 @@
         "facebook/webdriver": "^1.4"
     },
     "autoload": {
-        "classmap": ["extension"]
+        "classmap": ["extension/lib/DigitalOrigin"]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "config": {
+        "vendor-dir": "extension/lib/DigitalOrigin"
+    }
 }

@@ -1,4 +1,4 @@
-/vendor/
+/extension/lib/DigitalOrigin
 /node_modules
 extension/var/connect/*
 !extension/var/connect/DigitalOrigin_Pmt.xml

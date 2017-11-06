@@ -34,6 +34,18 @@
                 </setup>
             </payment_custom_setup>
         </resources>
+
+        <events>
+            <resource_get_tablename>
+                <observers>
+                    <autoloader>
+                        <type>singleton</type>
+                        <class>pmt/observer</class>
+                        <method>addAutoloader</method>
+                    </autoloader>
+                </observers>
+            </resource_get_tablename>
+        </events>
     </global>
 
     <adminhtml>

@@ -138,16 +138,16 @@
         },
         {
             "name": "pagamastarde/shopper-library",
-            "version": "v1.0.6",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PagaMasTarde/shopperLibrary.git",
-                "reference": "87906d414d6ac7fbe6b6dc5856d254061ba10f9a"
+                "reference": "d255ffe262d03b18044760c58e9e1cdf49427847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PagaMasTarde/shopperLibrary/zipball/87906d414d6ac7fbe6b6dc5856d254061ba10f9a",
-                "reference": "87906d414d6ac7fbe6b6dc5856d254061ba10f9a",
+                "url": "https://api.github.com/repos/PagaMasTarde/shopperLibrary/zipball/d255ffe262d03b18044760c58e9e1cdf49427847",
+                "reference": "d255ffe262d03b18044760c58e9e1cdf49427847",
                 "shasum": ""
             },
             "require": {
@@ -173,7 +173,7 @@
                 }
             ],
             "description": "Library with the models of the shop modules and shopper client",
-            "time": "2017-08-08T10:06:18+00:00"
+            "time": "2017-11-06T09:22:04+00:00"
         }
     ],
     "packages-dev": [
