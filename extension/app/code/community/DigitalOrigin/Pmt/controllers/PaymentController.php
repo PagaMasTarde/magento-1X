@@ -45,9 +45,9 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $addressData = json_decode($mageCore->jsonEncode($order->getAddressesCollection()->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $url = array(
-            'ok' => Mage::getUrl('pmt/notify'),
+            'ok' => Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id']))),
             'ko' => Mage::getUrl('checkout/cart'),
-            'callback' => Mage::getUrl('pmt/notify'),
+            'callback' => Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id']))),
             'cancelled' => Mage::getUrl('checkout/cart'),
         );
         $metadata = array(
@@ -68,20 +68,18 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             ->setMetadata($metadata)
         ;
 
-        $url = 'https://form.pagamastarde.com/form/2616418d48784c558396f4d292e8f964';
-
-        //$shopperClient = new \ShopperLibrary\ShopperClient(self::SHOPPER_URL);
-        //$shopperClient->setObjectModule($magentoObjectModule);
-        //$paymentForm = $shopperClient->getPaymentForm();
-        //$shopperResponse = json_decode($paymentForm);
-        //$url = $shopperResponse->data->url;
+        $shopperClient = new \ShopperLibrary\ShopperClient(self::SHOPPER_URL);
+        $shopperClient->setObjectModule($magentoObjectModule);
+        $paymentForm = $shopperClient->getPaymentForm();
+        $shopperResponse = json_decode($paymentForm);
+        $url = $shopperResponse->data->url;
 
         //Redirect
         if (!$moduleConfig['PAYLATER_IFRAME']) {
             return $this->_redirectUrl($url);
         }
 
-        //Iframe
+        //iframe
         $this->loadLayout();
         $block = $this->getLayout()->createBlock(
             'Mage_Core_Block_Template',
