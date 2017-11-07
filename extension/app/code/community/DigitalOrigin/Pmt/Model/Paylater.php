@@ -46,4 +46,19 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
     {
         return Mage::getUrl('pmt/payment', array('_secure' => false));
     }
+
+    /**
+     * @param null $quote
+     *
+     * @return bool
+     */
+    public function isAvailable($quote = null)
+    {
+        $this->_minOrderTotal = $this->getConfigData('MIN_AMOUNT');
+        if ($quote && $quote->getBaseGrandTotal() < $this->_minOrderTotal) {
+            return false;
+        }
+
+        return parent::isAvailable();
+    }
 }

@@ -20,11 +20,11 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
         $simulatorType = $config['PAYLATER_CHECKOUT_HOOK_TYPE'];
 
         $this->assign(
-            [
+            array(
                 'amount' => $amount,
                 'publicKey' => $publicKey,
                 'simulatorType' => $simulatorType
-            ]
+            )
         );
 
         $template = $this->setTemplate('pmt/checkout/paylater.phtml');

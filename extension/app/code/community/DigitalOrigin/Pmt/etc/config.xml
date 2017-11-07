@@ -83,7 +83,7 @@
         <payment>
             <paylater translate="title" module="pmt">
                 <active>1</active>
-                <title>Finance with Paga+Tarde</title>
+                <title>Financiar con Paga+Tarde</title>
                 <model>pmt/paylater</model>
                 <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>

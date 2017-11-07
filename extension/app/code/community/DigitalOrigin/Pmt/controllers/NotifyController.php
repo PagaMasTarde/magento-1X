@@ -97,7 +97,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
 
         if ($this->getIsOrderInPmtPayed($orderId, $privateKey)) {
-            if ($this->getOrderAmountInPmt($orderId, $privateKey)) {
+            if (intval($order->getGrandTotal()*100) == $this->getOrderAmountInPmt($orderId, $privateKey)) {
                 if ($order->canInvoice()) {
                     $invoice = $order->prepareInvoice();
                     if ($invoice->getGrandTotal() > 0) {

@@ -1,0 +1,22 @@
+<?php
+$config = Mage::getStoreConfig('payment/paylater');
+$publicKey = $config['PAYLATER_PUBLIC_KEY_PROD'];
+$simulatorType = $config['PAYLATER_PRODUCT_HOOK_TYPE'];
+
+$productBlock = new Mage_Catalog_Block_Product;
+//$amount = $_product->getFinalPrice()
+?>
+
+<?php if($simulatorType) { ?>
+<div class="PmtSimulator"
+     data-pmt-num-quota="4" data-pmt-max-ins="12"
+     data-pmt-type="<?=$simulatorType?>"
+     data-pmt-amount="<?=$amount?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
+</div>
+<script type="text/javascript">
+    if (typeof pmtClient !== 'undefined') {
+        pmtClient.setPublicKey('<?=$publicKey?>')
+        pmtClient.simulator.reload();
+    }
+</script>
+<?php } ?>

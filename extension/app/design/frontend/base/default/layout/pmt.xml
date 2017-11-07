@@ -11,4 +11,11 @@
             </block>
         </reference>
     </default>
+    <catalog_product_view>
+        <reference name="product.info.options.wrapper">
+            <block type="catalog/product" output="toHtml" name="Product/Simulator" template="pmt/product/simulator.phtml"/>
+        </reference>
+    </catalog_product_view>
+
+
 </layout>
