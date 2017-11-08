@@ -6,6 +6,11 @@
 class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Action
 {
     /**
+     *
+     */
+    const CODE = 'paylater';
+
+    /**
      * @var string $message
      */
     protected $message;
@@ -15,6 +20,23 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     protected $error = false;
 
     /**
+     * Cancel order
+     *
+     * @var bool
+     */
+    protected $toCancel = false;
+
+    /**
+     * Cancel action
+     */
+    public function cancelAction()
+    {
+        $this->toCancel = true;
+
+        return $this->indexAction();
+    }
+
+    /**
      * Index action
      */
     public function indexAction()
@@ -22,9 +44,12 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $orderId = Mage::app()->getRequest()->getParam('order');
         $order = Mage::getModel('sales/order')->load($orderId);
         $status = $order->getStatus();
+        $payment = $order->getPayment();
+        $code = $payment->getMethodInstance()->getCode();
 
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
-            $status == Mage_Sales_Model_Order::STATE_COMPLETE
+            $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
+            $code != self::CODE
         ) {
             return $this->_redirect('sales/order/view/', array('order_id' => $order->getId()));
         }
@@ -74,10 +99,21 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     public function redirect()
     {
         $orderId = Mage::app()->getRequest()->getParam('order');
+        /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->load($orderId);
 
         if ($this->error) {
             $this->restoreCart($order);
+            if ($this->toCancel) {
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    null,
+                    false
+                );
+                $order->save();
+
+            }
             $this->_redirect('checkout/cart');
         } else {
             $this->_redirect('checkout/onepage/success');

@@ -44,11 +44,14 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $itemsData = json_decode($mageCore->jsonEncode($order->getItemsCollection()->getData()), true);
         $addressData = json_decode($mageCore->jsonEncode($order->getAddressesCollection()->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
+        $backCancel = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $orderData['entity_id'])));
+
         $url = array(
-            'ok' => Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id']))),
-            'ko' => Mage::getUrl('checkout/cart'),
-            'callback' => Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id']))),
-            'cancelled' => Mage::getUrl('checkout/cart'),
+            'ok' => $back,
+            'ko' => $backCancel,
+            'callback' => $back,
+            'cancelled' => $backCancel,
         );
         $metadata = array(
             'magento' => Mage::getVersion(),
@@ -89,7 +92,10 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         $block->assign(array(
             'url' => $url,
-            'checkoutUrl' => Mage::getUrl('checkout/cart'),
+            'checkoutUrl' => Mage::getUrl(
+                'pmt/notify',
+                array('_query' => array('order' => $orderData['entity_id']))
+            ),
             'css' => self::CSS_URL,
         ));
 
