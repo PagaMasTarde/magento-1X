@@ -30,10 +30,11 @@ class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
 
             return;
         }
-
-        $userId = Mage::app()->getRequest()->getParam('user_id');
-        $from = Mage::app()->getRequest()->getParam('from');
-        $payment = Mage::app()->getRequest()->getParam('payment');
+        /** @var Mage_Core_Controller_Request_Http $request */
+        $request = Mage::app()->getRequest();
+        $userId = $request->getParam('user_id');
+        $from = $request->getParam('from');
+        $payment = $request->getParam('payment');
 
         /** @var Mage_Catalog_Model_Resource_Collection_Abstract $orders */
         $orders = Mage::getModel('sales/order')->getCollection();

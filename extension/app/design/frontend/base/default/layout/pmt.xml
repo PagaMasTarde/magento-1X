@@ -13,7 +13,7 @@
     </default>
     <catalog_product_view>
         <reference name="product.info.options.wrapper">
-            <block type="pmt/product_simulator" as="pmt_simulator"  name="product_simulator" template="pmt/product/simulator.phtml" before="-"/>
+            <block type="pmt/product_simulator" as="pmt_simulator"  name="product_simulator" template="pmt/product/simulator.phtml"/>
         </reference>
     </catalog_product_view>
 </layout>

@@ -48,7 +48,7 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
     }
 
     /**
-     * @param null $quote
+     * @param Mage_Sales_Model_Quote $quote = null
      *
      * @return bool
      */
@@ -58,9 +58,9 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
             return false;
         }
 
-        $this->_minOrderTotal = $this->getConfigData('MIN_AMOUNT');
+        $min = $this->getConfigData('MIN_AMOUNT');
 
-        if ($quote && $quote->getBaseGrandTotal() < $this->_minOrderTotal) {
+        if ($quote && $quote->getBaseGrandTotal() < $min) {
             return false;
         }
 

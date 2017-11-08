@@ -34,6 +34,6 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
             $config['TITLE_EXTRA'])
         );
 
-        return parent::_construct();
+        parent::_construct();
     }
 }

@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var int $simulatorType
+ * @var bool $enabled
+ * @var string $publicKey
+ */
+?>
+
 <?php if($simulatorType && $enabled) { ?>
 <div class="PmtSimulator"
      data-pmt-num-quota="4" data-pmt-max-ins="12"
@@ -6,7 +14,7 @@
 </div>
 <script type="text/javascript">
     if (typeof pmtClient !== 'undefined') {
-        pmtClient.setPublicKey('<?=$publicKey?>')
+        pmtClient.setPublicKey('<?=$publicKey?>');
         pmtClient.simulator.reload();
     }
 </script>

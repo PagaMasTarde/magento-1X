@@ -31,7 +31,7 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
             )
         );
 
-        return parent::_construct();
+        parent::_construct();
     }
 
     /**

@@ -28,8 +28,8 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         /** @var Mage_Customer_Model_Session $customerSession */
         $customerSession = Mage::getSingleton('customer/session');
         $orderId = $checkoutSession->getLastRealOrderId();
+        /** @var Mage_Customer_Model_Session $customer */
         $customer = $customerSession->getCustomer();
-        $customer->getAttributes();
         /** @var Mage_Sales_Model_Order $order */
         $order = $salesOrder->loadByIncrementId($orderId);
         /** @var Mage_Core_Helper_Data $mageCore */
@@ -39,10 +39,15 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             return $this->_redirect('checkout/cart');
         }
 
+        /** @var Mage_Sales_Model_Order  $itemCollection */
+        $itemCollection = $order->getItemsCollection();
+        /** @var Mage_Sales_Model_Order  $addressCollection */
+        $addressCollection = $order->getAddressesCollection();
+
         $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
         $customerData = json_decode($mageCore->jsonEncode($customer->getData()), true);
-        $itemsData = json_decode($mageCore->jsonEncode($order->getItemsCollection()->getData()), true);
-        $addressData = json_decode($mageCore->jsonEncode($order->getAddressesCollection()->getData()), true);
+        $itemsData = json_decode($mageCore->jsonEncode($itemCollection->getData()), true);
+        $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
         $backCancel = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $orderData['entity_id'])));
@@ -53,9 +58,13 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             'callback' => $back,
             'cancelled' => $backCancel,
         );
+
+        $node = Mage::getConfig()->getNode();
+
+        /** @var Mage_Customer_Model_Customer $customer*/
         $metadata = array(
             'magento' => Mage::getVersion(),
-            'pmt' => (string) Mage::getConfig()->getNode()->modules->DigitalOrigin_Pmt->version,
+            'pmt' => (string) $node->modules->DigitalOrigin_Pmt->version,
             'php' => phpversion(),
             'member_since' => $customer->getCreatedAtTimestamp(),
         );
@@ -84,6 +93,8 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         //iframe
         $this->loadLayout();
+
+        /** @var Mage_Core_Block_Template $block */
         $block = $this->getLayout()->createBlock(
             'Mage_Core_Block_Template',
             'custompaymentmethod',
@@ -97,6 +108,6 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         ));
 
         $this->getLayout()->getBlock('content')->append($block);
-        $this->renderLayout();
+        return $this->renderLayout();
     }
 }

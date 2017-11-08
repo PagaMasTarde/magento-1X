@@ -61,9 +61,9 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
             $this->error = true;
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->jsonResponse();
+            return $this->jsonResponse();
         } else {
-            $this->redirect();
+            return $this->redirect();
         }
     }
 
@@ -85,7 +85,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
             header('HTTP/1.1 200 Ok', true, 200);
         }
         header('Content-Type: application/json', true);
-        header('Content-Length: ' . Tools::strlen($result));
+        header('Content-Length: ' . strlen($result));
 
         return $this->_response($result);
     }
@@ -112,7 +112,6 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                     false
                 );
                 $order->save();
-
             }
             $this->_redirect('checkout/cart');
         } else {
