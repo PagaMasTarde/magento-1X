@@ -1,4 +1,4 @@
-# Magento 1X Module (NON-STABLE) <img src="https://pagamastarde.com/img/icons/logo.svg" width="100" align="right">
+# Magento 1X Module <img src="https://pagamastarde.com/img/icons/logo.svg" width="100" align="right">
 
 [![Build Status](https://travis-ci.org/PagaMasTarde/magento-1X.svg?branch=master)](https://travis-ci.org/PagaMasTarde/magento-1X)
 [![Latest Stable Version](https://poser.pugx.org/pagamastarde/magento-1x/v/stable)](https://packagist.org/packages/pagamastarde/magento-1x)
