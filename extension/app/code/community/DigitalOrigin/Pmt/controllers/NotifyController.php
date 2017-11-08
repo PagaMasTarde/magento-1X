@@ -132,7 +132,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
 
-        if ($this->getIsOrderInPmtPayed($orderId, $privateKey)) {
+        if ($this->getOrderInPmtPayed($orderId, $privateKey)) {
             if (intval($order->getGrandTotal()*100) == $this->getOrderAmountInPmt($orderId, $privateKey)) {
                 if ($order->canInvoice()) {
                     $invoice = $order->prepareInvoice();
@@ -191,7 +191,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
      *
      * @return bool
      */
-    protected function getIsOrderInPmtPayed($orderId, $privateKey)
+    protected function getOrderInPmtPayed($orderId, $privateKey)
     {
         $pmtClient = new \PagaMasTarde\PmtApiClient($privateKey);
 
