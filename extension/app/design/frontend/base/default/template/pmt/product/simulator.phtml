@@ -1,4 +1,4 @@
-<?php if($simulatorType) { ?>
+<?php if($simulatorType && $enabled) { ?>
 <div class="PmtSimulator"
      data-pmt-num-quota="4" data-pmt-max-ins="12"
      data-pmt-type="<?=$simulatorType?>"
@@ -11,4 +11,3 @@
     }
 </script>
 <?php } ?>
-

@@ -10,7 +10,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
     /**
      * Shopper Url
      */
-    const SHOPPER_URL = 'https://shopper-staging.pagamastarde.com/magento/';
+    const SHOPPER_URL = 'https://shopper.pagamastarde.com/magento/';
 
     /**
      * CSS URL

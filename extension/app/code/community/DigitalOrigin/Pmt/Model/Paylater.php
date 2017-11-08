@@ -54,7 +54,12 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
      */
     public function isAvailable($quote = null)
     {
+        if ($this->getConfigData('enabled') == 'no') {
+            return false;
+        }
+
         $this->_minOrderTotal = $this->getConfigData('MIN_AMOUNT');
+
         if ($quote && $quote->getBaseGrandTotal() < $this->_minOrderTotal) {
             return false;
         }
