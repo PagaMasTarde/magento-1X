@@ -92,10 +92,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         $block->assign(array(
             'url' => $url,
-            'checkoutUrl' => Mage::getUrl(
-                'pmt/notify',
-                array('_query' => array('order' => $orderData['entity_id']))
-            ),
+            'checkoutUrl' => $backCancel,
             'css' => self::CSS_URL,
         ));
 
