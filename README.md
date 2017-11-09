@@ -22,12 +22,10 @@ Si tienes alguna duda o pregunta no tienes más que escribirnos un email a [sopo
 ## Development Instructions:
 
 To develop or improve this module you need to have installed in your environment
-    * NPM
     * Composer
     
 To make the module operative you need to download the dependencies, 
 
-    npm install
     composer install
     
 Once both dependencies are ready you can generate the specific module files using
