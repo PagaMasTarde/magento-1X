@@ -26,7 +26,7 @@ before_script:
   - 'composer install'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
   - 'docker-compose up -d'
-  - 'sleep 30'
+  - 'sleep 60'
 
 script:
   - 'set -e'
