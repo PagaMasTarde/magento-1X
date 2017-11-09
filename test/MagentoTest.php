@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class MagentoTest extends TestCase
 {
-    const MAGENTO_URL = 'http://magento19.docker';
-    const BACKOFFICE_FOLDER = '/admin';
+    const MAGENTO_URL = 'http://magento-test';
+    const BACKOFFICE_FOLDER = '/index.php/admin';
 
     /**
      * @var array
