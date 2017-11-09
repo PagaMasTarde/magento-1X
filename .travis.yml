@@ -26,6 +26,7 @@ before_script:
   - 'npm install'
   - 'composer install'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
+  - 'docker-compose up -d'
 
 
 script:
