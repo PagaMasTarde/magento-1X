@@ -26,11 +26,10 @@ before_script:
   - 'composer install'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
   - 'docker-compose up -d'
-  - 'sleep 180'
+  - 'sleep 100'
 
 script:
   - 'docker ps -a'
-  - 'wget magento19.docker:8080'
   - 'set -e'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
   - 'extension/lib/DigitalOrigin/bin/phpunit'
