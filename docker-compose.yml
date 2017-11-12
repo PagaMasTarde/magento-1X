@@ -68,7 +68,9 @@ services:
       - internal
 
   selenium:
-    image: selenium/standalone-chrome:3.4.0
+    image: selenium/standalone-chrome
+    volumes:
+      - .dev/shm:/dev/shm
     networks:
       - public
     ports:

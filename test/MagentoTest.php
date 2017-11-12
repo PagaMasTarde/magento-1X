@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class MagentoTest extends TestCase
 {
-    const MAGENTO_URL = 'http://magento-test';
-    const BACKOFFICE_FOLDER = '/index.php/admin';
+    const MAGENTO_URL = 'http://magento-test/index.php';
+    const BACKOFFICE_FOLDER = '/admin';
 
     /**
      * @var array

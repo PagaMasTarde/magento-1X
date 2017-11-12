@@ -7,7 +7,7 @@
 ?>
 
 <?php if($simulatorType && $enabled) { ?>
-<div class="PmtSimulator"
+<div id="pmt-simulator-product-page" class="PmtSimulator"
      data-pmt-num-quota="4" data-pmt-max-ins="12"
      data-pmt-type="<?=$simulatorType?>"
      data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
