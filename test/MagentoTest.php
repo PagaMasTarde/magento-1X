@@ -13,25 +13,28 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class MagentoTest extends TestCase
 {
-    //const MAGENTO_URL = 'http://magento-test/index.php';
-    const MAGENTO_URL = 'http://magento19.docker:8080/index.php';
+    const MAGENTO_URL = 'http://magento-test/index.php';
+    //const MAGENTO_URL = 'http://magento19.docker:8080/index.php';
     const BACKOFFICE_FOLDER = '/admin';
 
     /**
      * @var array
      */
     protected $configuration = array(
+        'backofficeUsername' => 'admin',
+        'backofficePassword' => 'password123',
         'username'      => 'demo@prestashop.com',
         'password'      => 'prestashop_demo',
         'publicKey'     => 'tk_fd53cd467ba49022e4f8215e',
         'secretKey'     => '21e57baa97459f6a',
         'birthdate'     => '05/05/2005',
         'firstname'     => 'John',
-        'lastname'      => 'Doe',
+        'lastname'      => 'Doe Martinez',
         'email'         => 'john.doe@digitalorigin.com',
         'company'       => 'Digital Origin SL',
         'zip'           => '08023',
         'city'          => 'Barcelona',
+        'street'        => 'Av Diagonal 585, planta 7',
         'phone'         => '600123123',
         'dni'           => '09422447Z'
     );

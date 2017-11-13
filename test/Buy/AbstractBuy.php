@@ -71,6 +71,10 @@ abstract class AbstractBuy extends MagentoTest
                 $checkoutStepLoginSearch
             )
         );
+
+        $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
+            $checkoutStepLoginSearch
+        ));
     }
 
     /**
