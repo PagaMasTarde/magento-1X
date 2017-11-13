@@ -26,10 +26,12 @@ before_script:
   - 'composer install'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
   - 'docker-compose up -d'
-  - 'sleep 100'
+  - 'sleep 120'
 
 script:
   - 'docker ps -a'
   - 'set -e'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
-  - 'extension/lib/DigitalOrigin/bin/phpunit'
+  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-basic'
+  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice'
+  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered'
