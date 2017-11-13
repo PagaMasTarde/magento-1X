@@ -33,5 +33,6 @@ script:
   - 'set -e'
   - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
   - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-basic'
+  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-install'
   - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice'
   - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered'

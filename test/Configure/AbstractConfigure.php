@@ -96,6 +96,36 @@ abstract class AbstractConfigure extends MagentoTest
     /**
      * goToSystemConfig
      */
+    public function getToModuleAdd()
+    {
+        $this->findByLinkText('System')->click();
+        $this->findByLinkText('Magento Connect')->click();
+        $this->findByLinkText('Magento Connect Manager')->click();
+
+        try {
+            $this->findById('username')->clear()->sendKeys($this->configuration['backofficeUsername']);
+            $this->findById('password')->clear()->sendKeys($this->configuration['backofficePassword']);
+            $this->findByName('form_key')->submit();
+        } catch (\Exception $exception) {
+            echo 'already magento connect';
+        }
+
+        $fileFormSearch = WebDriverBy::id('file');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                $fileFormSearch
+            )
+        );
+
+        $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
+            $fileFormSearch
+        ));
+    }
+
+
+    /**
+     * goToSystemConfig
+     */
     public function goToPaymentMethodsAndSeePMT()
     {
         $paymentMethodsLinkElement = $this->findByLinkText('Payment Methods');
