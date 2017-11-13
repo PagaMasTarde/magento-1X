@@ -2,6 +2,7 @@
 
 namespace Test\ProductPage;
 
+use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Test\MagentoTest;
@@ -20,25 +21,18 @@ class SimulatorTest extends MagentoTest
     const PRODUCT_NAME = 'Linen Blazer';
 
     /**
-     * Simulator sentence
-     */
-    const SIMULATOR_SENTENCE = 'Simula aquí tu financiación';
-
-    /**
      * testSimulatorDivExists
      */
-    public function testSimulgatorDivExists()
+    public function testSimulatorDivExists()
     {
-        $this->gotToProductPage();
+        $this->goToProductPage();
         $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::elementTextIs(
-                WebDriverBy::className('PmtSimulator-textClaim'),
-                self::SIMULATOR_SENTENCE
+            WebDriverExpectedCondition::presenceOfElementLocated(
+                WebDriverBy::className('PmtSimulator')
             )
         );
-        $this->assertTrue((bool) WebDriverExpectedCondition::elementTextIs(
-            WebDriverBy::className('PmtSimulator-textClaim'),
-            self::SIMULATOR_SENTENCE
+        $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
+            WebDriverBy::className('PmtSimulator')
         ));
 
         $this->quit();
@@ -47,15 +41,25 @@ class SimulatorTest extends MagentoTest
     /**
      * Go to the product page
      */
-    public function gotToProductPage()
+    public function goToProductPage()
     {
         $this->webDriver->get(self::MAGENTO_URL);
+
+        /** @var WebDriverBy $productGrid */
+        $productGridSearch = WebDriverBy::className('products-grid');
+        /** @var WebDriverBy $productLink */
+        $productLinkSearch = $productGridSearch->linkText(strtoupper(self::PRODUCT_NAME));
+
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable(
-                WebDriverBy::linkText(strtoupper(self::PRODUCT_NAME))
+                $productLinkSearch
             )
         );
-        $this->findByLinkText(strtoupper(self::PRODUCT_NAME))->click();
+
+        $productLinkElement = $this->webDriver->findElement($productLinkSearch);
+        $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($productLinkElement));
+        $productLinkElement->click();
+
         $this->assertSame(
             self::PRODUCT_NAME,
             $this->webDriver->getTitle()

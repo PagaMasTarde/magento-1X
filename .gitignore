@@ -1,4 +1,4 @@
 /extension/lib/DigitalOrigin
 extension/var/connect/*
 !extension/var/connect/DigitalOrigin_Pmt.xml
-
+.dev
