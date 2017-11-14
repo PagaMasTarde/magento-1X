@@ -70,7 +70,7 @@ services:
       - internal
 
   selenium:
-    image: selenium/standalone-chrome
+    image: selenium/standalone-firefox
     volumes:
       - .dev/shm:/dev/shm
     networks:
