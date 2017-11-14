@@ -9,7 +9,7 @@ composer install
 npm install
 
 # Build Package todo
-grunt
+sudo grunt
 
 # Run test
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
