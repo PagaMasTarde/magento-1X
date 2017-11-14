@@ -23,16 +23,6 @@ before_install:
 
 before_script:
   - 'phpenv config-rm xdebug.ini'
-  - 'composer install'
-  - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
-  - 'docker-compose up -d'
-  - 'sleep 120'
 
 script:
-  - 'docker ps -a'
-  - 'set -e'
-  - 'sudo chmod -R 777 extension/lib/DigitalOrigin/'
-  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-basic'
-  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-install'
-  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice'
-  - 'extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered'
+  - './generate.sh'
