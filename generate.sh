@@ -4,7 +4,7 @@
 set -e
 docker-compose down
 docker-compose up -d
-sleep 200
+sleep 60
 composer install
 
 # Build Package todo
