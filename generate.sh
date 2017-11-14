@@ -7,9 +7,9 @@ docker-compose up -d
 sleep 60
 composer install
 npm install
-grunt
 
 # Build Package todo
+grunt
 
 # Run test
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
