@@ -71,8 +71,8 @@ services:
 
   selenium:
     image: selenium/standalone-chrome
-    volumes:
-      - .dev/shm:/dev/shm
+    #volumes:
+    #  - .dev/shm:/dev/shm
     networks:
       - public
     ports:
