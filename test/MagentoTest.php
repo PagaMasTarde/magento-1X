@@ -55,7 +55,7 @@ abstract class MagentoTest extends TestCase
      */
     protected function setUp()
     {
-        $capabilities = array(WebDriverCapabilityType::BROWSER_NAME => 'chrome');
+        $capabilities = array(WebDriverCapabilityType::BROWSER_NAME => 'firefox');
         $this->webDriver = RemoteWebDriver::create('http://localhost:4444/wd/hub', $capabilities);
     }
 
