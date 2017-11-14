@@ -6,6 +6,8 @@ docker-compose down
 docker-compose up -d
 sleep 60
 composer install
+npm install
+grunt
 
 # Build Package todo
 
