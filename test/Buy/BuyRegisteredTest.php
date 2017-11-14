@@ -16,5 +16,6 @@ class BuyRegisteredTest extends AbstractBuy
     public function testBuyUnregistered()
     {
         $this->prepareProductAndCheckout();
+        $this->webDriver->quit();
     }
 }

@@ -23,6 +23,7 @@ class InstallTest extends AbstractConfigure
         $this->getBackofficeLoggedIn();
         $this->getToModuleAdd();
         $this->addModuleAndInstall();
+        $this->webDriver->quit();
     }
 
     /**

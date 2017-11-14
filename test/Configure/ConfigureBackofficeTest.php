@@ -22,6 +22,7 @@ class ConfigureBackofficeTest extends AbstractConfigure
         $this->goToSystemConfig();
         $this->goToPaymentMethodsAndSeePMT();
         $this->configureAndSave();
+        $this->webDriver->quit();
     }
 
     /**

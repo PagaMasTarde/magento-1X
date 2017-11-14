@@ -50,6 +50,8 @@ services:
     networks:
       - internal
       - public
+    ports:
+      - "8082:80"
 
   db:
     image: mysql
