@@ -34,7 +34,7 @@ class InstallTest extends AbstractConfigure
         // Push latest version of module form extension/var/connect
         $fileInput = $this->findById('file');
         $fileInput->setFileDetector(new LocalFileDetector());
-        $latestVersion = 'DigitalOrigin_Pmt-0.0.0.0.tgz';
+        $latestVersion = 'DigitalOrigin_Pmt-v0.0.0.0.tgz';
         $files =scandir(__DIR__.'/../../extension/var/connect');
         foreach ($files as $dirFile) {
             if (substr($dirFile, -3, 3) == 'tgz' &&
