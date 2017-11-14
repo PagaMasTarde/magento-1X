@@ -2,3 +2,4 @@
 extension/var/connect/*
 !extension/var/connect/DigitalOrigin_Pmt.xml
 .dev
+node_modules
