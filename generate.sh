@@ -10,6 +10,7 @@ npm install
 
 # Build Package todo
 grunt
+ls -lshc extension/var/connect/
 
 # Run test
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
