@@ -12,7 +12,7 @@ grunt
 ls -lshc extension/var/connect/
 
 # Time to boot and install magento
-sleep 30
+sleep 150
 
 # Run test
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
