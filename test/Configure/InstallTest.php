@@ -56,6 +56,10 @@ class InstallTest extends AbstractConfigure
             // Submit and verify
             $fileInput->submit();
 
+            sleep(20);
+
+            var_dump($pageSource = $this->webDriver->getPageSource());
+            
             //Verify
             $successMessageSearch = WebDriverBy::className('success-msg');
             $this->webDriver->wait()->until(
