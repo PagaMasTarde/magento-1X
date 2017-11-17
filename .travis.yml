@@ -2,6 +2,8 @@ language: php
 
 sudo: required
 
+dist: precise
+
 services:
   - docker
 
