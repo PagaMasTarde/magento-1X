@@ -70,9 +70,7 @@ services:
       - internal
 
   selenium:
-    image: selenium/standalone-chrome
-    #volumes:
-    #  - .dev/shm:/dev/shm
+    image: selenium/standalone-chrome:3.7.1
     networks:
       - public
     ports:
