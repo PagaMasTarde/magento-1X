@@ -18,7 +18,7 @@ sleep 30
 
 #copy
 
-docker cp extension/var/connect/DigitalOrigin_Pmt.tgz magento1x_magento-test_1:/tmp
+docker cp extension/var/connect/DigitalOrigin_Pmt.tgz magento1x_magento-test_1:/tmp/DigitalOrigin_Pmt.tgz
 docker exec -it magento1x_magento-test_1 sh -c "chmod +x mage"
 docker exec -it magento1x_magento-test_1 sh -c "./mage channel-add http://connect20.magentocommerce.com/community"
 docker exec -it magento1x_magento-test_1 sh -c "./mage install-file /tmp/DigitalOrigin_Pmt.tgz"
