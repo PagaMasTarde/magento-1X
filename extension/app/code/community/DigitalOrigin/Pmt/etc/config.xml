@@ -88,6 +88,11 @@
                 <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>
                 <payment_action>sale</payment_action>
+                <PAYLATER_PROD>0</PAYLATER_PROD>
+                <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
+                <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
+                <MIN_AMOUNT>10</MIN_AMOUNT>
+                <ORDER>1</ORDER>
             </paylater>
         </payment>
     </default>

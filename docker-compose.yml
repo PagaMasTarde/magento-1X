@@ -1,9 +1,9 @@
 version: "2"
 
 services:
-  web:
+  magento19:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-Dev
       context: ./
     depends_on:
       - db
@@ -27,6 +27,32 @@ services:
     ports:
       - "8080:80"
 
+  magento-test:
+    build:
+      dockerfile: Dockerfile-Dev
+      context: ./
+    depends_on:
+      - db-test
+    environment:
+      - MAGENTO_LOCALE=es_ES
+      - MAGENTO_TIMEZONE=Europe/Madrid
+      - MAGENTO_DEFAULT_CURRENCY=EUR
+      - MAGENTO_ADMIN_FIRSTNAME=Owner
+      - MAGENTO_ADMIN_LASTNAME=Store
+      - MAGENTO_ADMIN_EMAIL=admin@example.com
+      - MAGENTO_ADMIN_USERNAME=admin
+      - MAGENTO_ADMIN_PASSWORD=password123
+      - MAGENTO_DB_HOST=db-test
+      - MAGENTO_DB_PASSWORD=password
+      - MAGENTO_URL=magento-test
+    volumes:
+      - ./extension:/pmt
+    networks:
+      - internal
+      - public
+    ports:
+      - "8082:80"
+
   db:
     image: mysql
     environment:
@@ -34,6 +60,21 @@ services:
       - MYSQL_DATABASE=magento
     networks:
       - internal
+
+  db-test:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=magento
+    networks:
+      - internal
+
+  selenium:
+    image: selenium/standalone-chrome:3.7.1
+    networks:
+      - public
+    ports:
+      - "4444:4444"
 
 networks:
   internal:
