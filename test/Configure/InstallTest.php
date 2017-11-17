@@ -47,19 +47,23 @@ class InstallTest extends AbstractConfigure
 
             return true;
         } else {
-            $fileInput->sendKeys(__DIR__.'/../../extension/var/connect/'. $latestVersion);
+            $file = __DIR__.'/../../extension/var/connect/'. $latestVersion;
+
+            //Check file exists
+            $this->assertFileExists($file);
+            $fileInput->sendKeys($file);
 
             // Submit and verify
             $fileInput->submit();
 
             //Verify
-            //$successMessageSearch = WebDriverBy::className('success-msg');
-            //$this->webDriver->wait()->until(
-            //    WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
-            //);
-            //$this->assertTrue(
-            //    (bool) WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
-            //);
+            $successMessageSearch = WebDriverBy::className('success-msg');
+            $this->webDriver->wait()->until(
+                WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
+            );
+            $this->assertTrue(
+                (bool) WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
+            );
         }
     }
 }
