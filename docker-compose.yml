@@ -29,7 +29,7 @@ services:
 
   magento-test:
     build:
-      dockerfile: Dockerfile-Test
+      dockerfile: Dockerfile-Dev
       context: ./
     depends_on:
       - db-test
