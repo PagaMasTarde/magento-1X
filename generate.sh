@@ -19,6 +19,6 @@ set -e
 
 # Run test
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
-#extension/lib/DigitalOrigin/bin/phpunit --group magento-install
+extension/lib/DigitalOrigin/bin/phpunit --group magento-install
 extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice
 extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
