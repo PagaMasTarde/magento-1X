@@ -11,14 +11,8 @@ grunt
 sleep 30
 set -e
 
-#try different
-tar -xvzf DigitalOrigin_Pmt.tgz
-tar -cvf DigitalOrigin_Pmt.tgz app lib package.xml
-docker exec -it magento1x_magento-test_1 sh -c "chmod -R 777 /var/www"
-docker exec -it magento1x_magento-test_1 sh -c "chmod -R 777 /pmt"
-docker exec -it magento1x_magento-test_1 sh -c "ls -lshc /pmt/var/connect/"
-docker exec -it magento1x_magento-test_1 sh -c "ls -lshc /pmt/var/connect/"
 # CLI install (maybe you want to try it also, otherwise it will be installed with backOffice)
+docker exec -it magento1x_magento-test_1 sh -c "ls -lshc /pmt/var/connect/"
 docker exec -it magento1x_magento-test_1 sh -c "chmod +x mage"
 docker exec -it magento1x_magento-test_1 sh -c "./mage channel-add http://connect20.magentocommerce.com/community"
 docker exec -it magento1x_magento-test_1 sh -c "./mage install-file /pmt/var/connect/DigitalOrigin_Pmt.tgz"
