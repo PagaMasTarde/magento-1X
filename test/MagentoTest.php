@@ -110,6 +110,16 @@ abstract class MagentoTest extends TestCase
     }
 
     /**
+     * @param $link
+     *
+     * @return \Facebook\WebDriver\Remote\RemoteWebElement
+     */
+    public function findByPartialLinkText($link)
+    {
+        return $this->webDriver->findElement(WebDriverBy::partialLinkText($link));
+    }
+
+    /**
      * Quit browser
      */
     protected function quit()
