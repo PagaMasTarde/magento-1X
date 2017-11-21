@@ -47,4 +47,5 @@ CMD ["apache2-foreground"]
 #COPY ./extension/ /var/www/html/
 
 RUN mkdir -p /var/www/html/app/locale/es_ES/ \
+    && ln -s /pmt/var/connect /var/www/html/var/connect \
     && chown www-data:www-data -R /var/www/html
