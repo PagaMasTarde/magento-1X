@@ -1,5 +1,6 @@
 /extension/lib/DigitalOrigin
 extension/var/connect/*
 !extension/var/connect/DigitalOrigin_Pmt.xml
+!extension/var/connect/package.xml
 .dev
 node_modules
