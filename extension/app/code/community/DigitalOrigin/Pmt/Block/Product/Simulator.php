@@ -22,13 +22,15 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $publicKey = $isProduction ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'];
         $simulatorType = $config['PAYLATER_PRODUCT_HOOK_TYPE'];
         $enabled = $config['active'];
+        $promotionProductExtra = $config['PAYLATER_PROMOTION_EXTRA'];
 
         $this->assign(
             array(
                 'enabled' => $enabled,
                 'amount' => 10,
                 'publicKey' => $publicKey,
-                'simulatorType' => $simulatorType
+                'simulatorType' => $simulatorType,
+                'promotionProductExtra' => $promotionProductExtra,
             )
         );
 
@@ -69,6 +71,7 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
 
     /**
      * @return float
+     * @throws Mage_Core_Model_Store_Exception
      */
     public function getFinalPrice()
     {
