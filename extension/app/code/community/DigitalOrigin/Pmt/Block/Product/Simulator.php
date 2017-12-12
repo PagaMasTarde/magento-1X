@@ -5,6 +5,7 @@
  */
 class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Product_View
 {
+    const PROMOTIONS_CATEGORY = 'paylater-promotion-product';
 
     /**
      * @var Mage_Catalog_Model_Product $_product
@@ -46,6 +47,26 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
 
         return $this->_product;
     }
+
+    /**
+     * Is product in promotion
+     *
+     * @return bool
+     */
+    public function isProductInPromotion()
+    {
+        $categoryIds = $this->getProduct()->getCategoryIds();
+        foreach ($categoryIds as $categoryId) {
+            /** @var Mage_Catalog_Model_Category $category */
+            $category = Mage::getModel('catalog/category')->load($categoryId);
+            if ($category->getName() == self::PROMOTIONS_CATEGORY) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @return float
      */

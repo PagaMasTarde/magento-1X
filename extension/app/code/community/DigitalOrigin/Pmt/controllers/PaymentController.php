@@ -47,6 +47,9 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
         $customerData = json_decode($mageCore->jsonEncode($customer->getData()), true);
         $itemsData = json_decode($mageCore->jsonEncode($itemCollection->getData()), true);
+        //TODO workout send category to shopper
+        //TODO CREATE CATEGORY
+        //TODO TEST PPP
         $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
