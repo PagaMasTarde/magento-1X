@@ -91,7 +91,7 @@
                 <PAYLATER_PROD>0</PAYLATER_PROD>
                 <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
                 <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
-                <PAYLATER_PROMOTION_EXTRA>Fináncialo 100% gratis</PAYLATER_PROMOTION_EXTRA>
+                <PAYLATER_PROMOTION_EXTRA>Promoción: fináncialo SIN intereses</PAYLATER_PROMOTION_EXTRA>
                 <MIN_AMOUNT>10</MIN_AMOUNT>
                 <ORDER>1</ORDER>
             </paylater>

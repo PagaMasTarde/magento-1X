@@ -7,6 +7,8 @@ require_once('lib/DigitalOrigin/autoload.php');
  */
 class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Action
 {
+    const PROMOTIONS_CATEGORY = 'paylater-promotion-product';
+
     /**
      * Shopper Url
      */
@@ -22,6 +24,11 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
      */
     public function indexAction()
     {
+
+        $paylaterPromotionProducts = array();
+        $promotionCategory = Mage::getResourceModel('catalog/category_collection')
+            ->addFieldToFilter('name', self::PROMOTIONS_CATEGORY)->getFirstItem();
+        $promotionCategoryId = $promotionCategory->entity_id;
         $salesOrder = Mage::getModel('sales/order');
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $checkoutSession = Mage::getSingleton('checkout/session');
@@ -39,17 +46,20 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             return $this->_redirect('checkout/cart');
         }
 
-        /** @var Mage_Sales_Model_Order  $itemCollection */
-        $itemCollection = $order->getItemsCollection();
+        /** @var Mage_Sales_Model_Order_Item[]  $itemCollection */
+        $itemCollection = $order->getAllVisibleItems();
         /** @var Mage_Sales_Model_Order  $addressCollection */
         $addressCollection = $order->getAddressesCollection();
-
         $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
         $customerData = json_decode($mageCore->jsonEncode($customer->getData()), true);
-        $itemsData = json_decode($mageCore->jsonEncode($itemCollection->getData()), true);
-        //@TODO workout send category to shopper
+        $itemsData = array();
+
+        foreach ($itemCollection as $item) {
+            $itemsData[$item->product_id] = $item->getData();
+            $promotionProduct = in_array($promotionCategoryId, $categories = $item->getProduct()->getCategoryIds());
+            $itemsData[$item->product_id][self::PROMOTIONS_CATEGORY] = $promotionProduct;
+        }
         //@TODO CREATE CATEGORY
-        //@TODO TEST PPP
         $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
