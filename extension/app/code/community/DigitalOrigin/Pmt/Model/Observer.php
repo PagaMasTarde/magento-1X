@@ -39,8 +39,10 @@ class DigitalOrigin_Pmt_Model_Observer
                 $category->setIsActive(0);
                 $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
                 $category->setIsAnchor(0);
-                $category->setDescription(Mage::helper('pmt')->__('Los productos con esta categoría tienen
-                 financiacion gratis asumida por el comercio. Úsalo para promocionar tus productos.'));
+                $category->setDescription(Mage::helper('pmt')->__(
+                    'Los productos con esta categoría tienen financiación gratis asumida por el comercio. Úsalo para
+                     promocionar tus productos o marcas.'
+                ));
                 $category->setStoreId(Mage::app()->getStore()->getId());
                 $parentId = Mage_Catalog_Model_Category::TREE_ROOT_ID;
                 $parentCategory = Mage::getModel('catalog/category')->load($parentId);
