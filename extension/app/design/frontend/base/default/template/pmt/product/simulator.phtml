@@ -9,6 +9,7 @@ if ($simulatorType && $enabled) {
             echo '<span class="pmt-promotion" id="pmt-promotion-extra">'.$promotionProductExtra.'</span>';
         }
 ?>
+
 <div id="pmt-simulator-product-page" class="PmtSimulator"
      data-pmt-num-quota="4" data-pmt-max-ins="12"
      data-pmt-type="<?=$simulatorType?>"
@@ -24,3 +25,11 @@ if ($simulatorType && $enabled) {
 <?php
 }
 ?>
+<style>
+    .pmt-promotion {
+        text-align: center;
+        font-weight: bold;
+        color: black;
+        font-size: medium;
+    }
+</style>
