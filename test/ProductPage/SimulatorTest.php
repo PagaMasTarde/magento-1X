@@ -26,14 +26,26 @@ class SimulatorTest extends MagentoTest
     public function testSimulatorDivExists()
     {
         $this->goToProductPage();
+
+        $pmtSimulator = WebDriverBy::className('PmtSimulator');
+
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                WebDriverBy::className('PmtSimulator')
+                $pmtSimulator
             )
         );
         $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
-            WebDriverBy::className('PmtSimulator')
+            $pmtSimulator
         ));
+
+        $promotionMessage = $this->findByClass('pmt-promotion');
+
+        $this->assertTrue(
+            (bool) WebDriverExpectedCondition::visibilityOf($promotionMessage)
+        );
+
+        $discount = $this->webDriver->findElement($pmtSimulator)->getAttribute('data-pmt-discount');
+        $this->assertSame('1', $discount);
 
         $this->quit();
     }

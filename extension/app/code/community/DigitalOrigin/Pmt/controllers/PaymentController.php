@@ -59,7 +59,6 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             $promotionProduct = in_array($promotionCategoryId, $categories = $item->getProduct()->getCategoryIds());
             $itemsData[$item->product_id][self::PROMOTIONS_CATEGORY] = $promotionProduct;
         }
-        //@TODO CREATE CATEGORY
         $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
