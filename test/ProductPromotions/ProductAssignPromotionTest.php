@@ -86,6 +86,8 @@ class ProductAssignPromotionTest extends AbstractConfigure
         $categoryElement = $this->webDriver->findElement($categoryProductsSearch);
         $categoryElement->click();
 
+        sleep(2); // Ajax load of categories.
+
         $this->webDriver->executeScript('catalog_category_productsJsObject.resetFilter()');
 
         $productSearch = WebDriverBy::id('catalog_category_products_filter_name');
