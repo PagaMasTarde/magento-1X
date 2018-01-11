@@ -111,7 +111,11 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                     null,
                     false
                 );
-                $order->save();
+                try {
+                    $order->save();
+                } catch (\Exception $exception) {
+                    $this->_redirect('checkout/cart');
+                }
             }
             $this->_redirect('checkout/cart');
         } else {
@@ -154,8 +158,11 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                     true
                 );
                 $order->sendNewOrderEmail();
-                $order->save();
-
+                try {
+                    $order->save();
+                } catch (\Exception $exception) {
+                    throw new \Exception('Unable to save');
+                }
                 return true;
             }
             throw new \Exception('Amount is invalid');
@@ -182,6 +189,8 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         } catch (\Exception $e) {
             return false;
         }
+
+        return true;
     }
 
     /**

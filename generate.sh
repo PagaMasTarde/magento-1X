@@ -20,6 +20,8 @@ set -e
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
 #extension/lib/DigitalOrigin/bin/phpunit --group magento-install
 extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice
+extension/lib/DigitalOrigin/bin/phpunit --group magento-product-promotions-assign
+extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
 extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
 extension/lib/DigitalOrigin/bin/phpunit --group magento-register
 extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data

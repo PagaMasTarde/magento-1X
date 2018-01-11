@@ -3,7 +3,7 @@
 
     <modules>
         <DigitalOrigin_Pmt>
-            <version>0.0.0.1</version>
+            <version>6.2.0</version>
         </DigitalOrigin_Pmt>
     </modules>
 
@@ -45,6 +45,15 @@
                     </autoloader>
                 </observers>
             </resource_get_tablename>
+            <adminhtml_init_system_config>
+                <observers>
+                    <yourmodule>
+                        <type>singleton</type>
+                        <class>pmt/observer</class>
+                        <method>addCategory</method>
+                    </yourmodule>
+                </observers>
+            </adminhtml_init_system_config>
         </events>
     </global>
 
@@ -91,6 +100,7 @@
                 <PAYLATER_PROD>0</PAYLATER_PROD>
                 <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
                 <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
+                <PAYLATER_PROMOTION_EXTRA>Promoción: Fináncialo sin interéses</PAYLATER_PROMOTION_EXTRA>
                 <MIN_AMOUNT>10</MIN_AMOUNT>
                 <ORDER>1</ORDER>
             </paylater>

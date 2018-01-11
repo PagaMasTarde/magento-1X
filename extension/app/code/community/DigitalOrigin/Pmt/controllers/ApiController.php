@@ -75,8 +75,10 @@ class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
 
         return;
     }
+
     /**
-     * @return bool|null
+     * @return bool
+     * @throws Zend_Controller_Request_Exception
      */
     public function authorize()
     {
