@@ -24,8 +24,6 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
      */
     public function indexAction()
     {
-
-        $paylaterPromotionProducts = array();
         $promotionCategory = Mage::getResourceModel('catalog/category_collection')
             ->addFieldToFilter('name', self::PROMOTIONS_CATEGORY)->getFirstItem();
         $promotionCategoryId = $promotionCategory->entity_id;
@@ -56,7 +54,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         foreach ($itemCollection as $item) {
             $itemsData[$item->product_id] = $item->getData();
-            $promotionProduct = in_array($promotionCategoryId, $categories = $item->getProduct()->getCategoryIds());
+            $promotionProduct = in_array($promotionCategoryId, $item->getProduct()->getCategoryIds());
             $itemsData[$item->product_id][self::PROMOTIONS_CATEGORY] = $promotionProduct;
         }
         $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);

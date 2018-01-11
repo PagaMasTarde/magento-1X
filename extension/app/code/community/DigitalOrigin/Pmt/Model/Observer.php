@@ -40,8 +40,8 @@ class DigitalOrigin_Pmt_Model_Observer
                 $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
                 $category->setIsAnchor(0);
                 $category->setDescription(Mage::helper('pmt')->__(
-                    'Paga+Tarde: Los productos con esta categoría tienen financiación gratis asumida por el comercio. Úsalo para
-                     promocionar tus productos o marcas.'
+                    'Paga+Tarde: Los productos con esta categoría tienen financiación gratis asumida por el comercio.
+                     Úsalo para promocionar tus productos o marcas.'
                 ));
                 $category->setStoreId(Mage::app()->getStore()->getId());
                 $parentId = Mage_Catalog_Model_Category::TREE_ROOT_ID;
