@@ -50,7 +50,7 @@ class DigitalOrigin_Pmt_Model_Observer
                 $category->setPath($parentCategory->getPath());
                 $category->save();
             } catch (\Exception $e) {
-                echo "error al crear categoría";
+                return false;
             }
         }
 
