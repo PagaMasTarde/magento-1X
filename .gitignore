@@ -1,6 +1,4 @@
 /extension/lib/DigitalOrigin
-extension/var/connect/*
-!extension/var/connect/DigitalOrigin_Pmt.xml
-!extension/var/connect/package.xml
+extension/var/connect/*.tgz
 .dev
 node_modules

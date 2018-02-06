@@ -26,9 +26,8 @@ class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
             header('HTTP/1.1 403 Forbidden', true, 403);
             header('Content-Type: application/json', true);
             header('Content-Length: ' . strlen($result));
-            echo $result;
 
-            return;
+            return $this->_response($result);
         }
         /** @var Mage_Core_Controller_Request_Http $request */
         $request = Mage::app()->getRequest();
@@ -71,9 +70,7 @@ class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
         header('Content-Type: application/json', true);
         header('Content-Length: ' . strlen($result));
 
-        echo $result;
-
-        return;
+        return $this->_response($result);
     }
 
     /**
