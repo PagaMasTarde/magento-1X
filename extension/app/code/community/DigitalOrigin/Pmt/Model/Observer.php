@@ -28,6 +28,7 @@ class DigitalOrigin_Pmt_Model_Observer
      */
     public function addCategory()
     {
+        return true;
         $promotionCategory = Mage::getResourceModel('catalog/category_collection')
             ->addFieldToFilter('name', self::PROMOTIONS_CATEGORY)->getFirstItem();
         if (!$promotionCategory instanceof Mage_Catalog_Model_Category || !$promotionCategory->getEntityId()) {
