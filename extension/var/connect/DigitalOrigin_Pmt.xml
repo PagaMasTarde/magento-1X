@@ -1,6 +1,5 @@
 <_>
    <form_key>NvdPWFIY8QCcnb5E</form_key>
-   <_create/>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -42,7 +41,7 @@
             <max/>
          </max>
          <files>
-            <files>                                            </files>
+            <files>                                             </files>
          </files>
       </package>
       <extension>
