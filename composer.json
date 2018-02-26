@@ -35,10 +35,10 @@
         "facebook/webdriver": "^1.4"
     },
     "autoload": {
-        "classmap": ["extension"]
+        "psr-4": {"": "extension/"}
     },
     "autoload-dev": {
-        "classmap": ["test"]
+        "psr-4": {"": "test/"}
     },
     "minimum-stability": "stable",
     "config": {
