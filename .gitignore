@@ -1,4 +1,3 @@
 /extension/lib/DigitalOrigin
-extension/var/connect/*.tgz
 .dev
 node_modules
