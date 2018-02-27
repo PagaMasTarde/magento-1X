@@ -128,7 +128,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     public function processValidation()
     {
         $orderId = Mage::app()->getRequest()->getParam('order');
-        /** @var Mage_Sales_Model_Order$order */
+        /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->load($orderId);
         $payment = $order->getPayment();
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
@@ -136,7 +136,8 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
 
         if ($this->getOrderInPmtPayed($orderId, $privateKey)) {
-            if (intval($order->getGrandTotal()*100) == $this->getOrderAmountInPmt($orderId, $privateKey)) {
+            $pmtAmount = $this->getOrderAmountInPmt($orderId, $privateKey);
+            if (intval($order->getGrandTotal()*100) == $pmtAmount) {
                 if ($order->canInvoice()) {
                     $invoice = $order->prepareInvoice();
                     if ($invoice->getGrandTotal() > 0) {
@@ -165,7 +166,8 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 }
                 return true;
             }
-            throw new \Exception('Amount is invalid');
+            $this->triggerAmountPaymentError($order, $pmtAmount);
+            return true;
         }
         throw new \Exception('Payment not processed');
     }
@@ -219,5 +221,26 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $latestCharge = array_shift($payments);
 
         return $latestCharge->getAmount();
+    }
+
+    /**
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @throws Exception
+     */
+    protected function triggerAmountPaymentError(Mage_Sales_Model_Order $order, $amount)
+    {
+        $order->setState(
+            Mage_Sales_Model_Order::STATUS_FRAUD,
+            Mage_Sales_Model_Order::STATUS_FRAUD,
+            'There is a difference between PMT and Magento, please conciliate manually in PMT backoffice.
+             (pmt-amount: ' . $amount . ')',
+            false
+        );
+        try {
+            $order->save();
+        } catch (\Exception $exception) {
+            throw new \Exception('Unable to save');
+        }
     }
 }
