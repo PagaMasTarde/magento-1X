@@ -24,6 +24,7 @@ class BuyRegisteredTest extends AbstractBuy
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
         $this->completeOrderAndGoToPMT();
+        $this->verifyUTF8();
         $this->quit();
     }
 
@@ -37,6 +38,21 @@ class BuyRegisteredTest extends AbstractBuy
         $condition = WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepShippingMethodSearch);
         $this->webDriver->wait()->until($condition);
         $this->assertTrue((bool) $condition);
+    }
+
+    /**
+     * Verify That UTF Encoding is working
+     */
+    public function verifyUTF8()
+    {
+        $paymentFormElement = WebDriverBy::className('FieldsPreview-desc');
+        $condition = WebDriverExpectedCondition::visibilityOfElementLocated($paymentFormElement);
+        $this->webDriver->wait()->until($condition);
+        $this->assertTrue((bool) $condition);
+        $this->assertSame(
+            $this->configuration['firstname'] . ' ' . $this->configuration['lastname'],
+            $this->findByClass('FieldsPreview-desc')->getText()
+        );
     }
 
     /**
