@@ -117,7 +117,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                     $this->_redirect('checkout/cart');
                 }
             }
-            $this->_redirect('checkout/cart');
+            $this->_redirect('checkout/onepage/');
         } else {
             $this->_redirect('checkout/onepage/success');
         }
