@@ -2,6 +2,7 @@
 
 namespace Test;
 
+use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Facebook\WebDriver\WebDriverBy;
@@ -34,9 +35,9 @@ abstract class MagentoTest extends TestCase
         'publicKey'     => 'tk_fd53cd467ba49022e4f8215e',
         'secretKey'     => '21e57baa97459f6a',
         'birthdate'     => '05/05/2005',
-        'firstname'     => 'John',
-        'lastname'      => 'Doe Martinez',
-        'email'         => 'john.doe@digitalorigin.com',
+        'firstname'     => 'Jøhn',
+        'lastname'      => 'Dōè Martínez',
+        'email'         => 'john_mg@digitalorigin.com',
         'company'       => 'Digital Origin SL',
         'zip'           => '08023',
         'city'          => 'Barcelona',
@@ -55,8 +56,12 @@ abstract class MagentoTest extends TestCase
      */
     protected function setUp()
     {
-        $capabilities = array(WebDriverCapabilityType::BROWSER_NAME => 'chrome');
-        $this->webDriver = RemoteWebDriver::create('http://localhost:4444/wd/hub', $capabilities);
+        $this->webDriver = RemoteWebDriver::create(
+            'http://localhost:4444/wd/hub',
+            DesiredCapabilities::chrome(),
+            60000,
+            60000
+        );
     }
 
     /**

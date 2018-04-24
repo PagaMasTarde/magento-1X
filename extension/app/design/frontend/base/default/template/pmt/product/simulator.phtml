@@ -18,6 +18,41 @@ if ($simulatorType && $enabled) {
      data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
 </div>
 <script type="text/javascript">
+    function changePrice(miliseconds=1000)
+    {
+        setTimeout(
+            function() {
+                var newPrice = document.querySelector('[id^="product-price"]').innerText.replace('.','');
+                var currentPrice = document.getElementsByClassName('PmtSimulator')[0].getAttribute('data-pmt-amount');
+                if (newPrice != currentPrice && typeof newPrice !== 'undefined') {
+                    for (simulator of document.getElementsByClassName('PmtSimulator'))
+                    {
+                        simulator.setAttribute('data-pmt-amount', newPrice);
+                    }
+
+                    if (typeof pmtClient !== 'undefined') {
+                        pmtClient.simulator.reload();
+                    }
+                }
+            }
+            ,miliseconds)
+    }
+
+    changePrice(0); //Load the screen price into simulator to avoid the reload event
+    window.onload = function() {
+        var productAttributeModifiers = document.getElementById('product-options-wrapper').querySelectorAll('input, select, a, textarea');
+        productAttributeModifiers.forEach(function(modifier, index) {
+            switch(modifier.tagName)
+            {
+                case 'A': { var eventType = 'click'; break;}
+                case 'SELECT': { var eventType = 'change'; break;}
+                case 'INPUT': { var eventType = 'focusout'; break;}
+                case 'TEXTAREA': { var eventType = 'focusout'; break;}
+            }
+            modifier.addEventListener(eventType, changePrice);
+        });
+    }
+
     if (typeof pmtClient !== 'undefined') {
         pmtClient.setPublicKey('<?=$publicKey?>');
         pmtClient.simulator.reload();

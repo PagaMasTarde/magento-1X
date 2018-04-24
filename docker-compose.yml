@@ -54,7 +54,7 @@ services:
       - "8082:80"
 
   db:
-    image: mysql
+    image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=magento
@@ -62,7 +62,7 @@ services:
       - internal
 
   db-test:
-    image: mysql
+    image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=magento
@@ -70,7 +70,7 @@ services:
       - internal
 
   selenium:
-    image: selenium/standalone-chrome:3.7.1
+    image: selenium/standalone-chrome
     networks:
       - public
     ports:
