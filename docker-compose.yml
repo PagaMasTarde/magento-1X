@@ -1,4 +1,4 @@
-version: "2"
+version: "3.5"
 
 services:
   magento19:
@@ -24,6 +24,7 @@ services:
     networks:
       - internal
       - public
+      - shopper
     ports:
       - "8080:80"
 
@@ -77,5 +78,7 @@ services:
       - "4444:4444"
 
 networks:
-  internal:
-  public:
+    internal:
+    public:
+    shopper:
+      name: shopper-network
