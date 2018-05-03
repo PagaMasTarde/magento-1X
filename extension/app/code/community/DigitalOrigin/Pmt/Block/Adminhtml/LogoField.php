@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class DigitalOrigin_Pmt_Block_Form_Paylater
+ * Class DigitalOrigin_Pmt_Block_Adminhtml_LogoField
  */
 class DigitalOrigin_Pmt_Block_Adminhtml_LogoField extends Mage_Adminhtml_Block_System_Config_Form_Fieldset
 {

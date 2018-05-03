@@ -1,5 +1,5 @@
 <_>
-   <form_key>WXpsj5izRF1puE4F</form_key>
+   <form_key>zp6ZKMjOGCFEgFyQ</form_key>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -10,10 +10,14 @@
    <description>Paga+Tarde, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Paga+Tarde, la solución líder en España de financiación omnicanal instantánea.</description>
    <license>GPL</license>
    <license_uri/>
-   <version>6.2.4</version>
+   <version>6.2.5</version>
    <stability>stable</stability>
-   <notes>* multi price simulator
-* back url improved
+   <notes>* Logo + copy
+* URL reviewed
+* Back to shop review
+* Cancel order review
+* Restore cart
+
 </notes>
    <authors>
       <name>
@@ -43,7 +47,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                    </files>
+            <files>                                                       </files>
          </files>
       </package>
       <extension>
@@ -68,6 +72,10 @@
          <target>magelocale</target>
          <target>mageetc</target>
          <target>magelib</target>
+         <target>magedesign</target>
+         <target>mageskin</target>
+         <target>mageskin</target>
+         <target>mageskin</target>
       </target>
       <path>
          <path/>
@@ -78,6 +86,10 @@
          <path/>
          <path>modules/DigitalOrigin_Pmt.xml</path>
          <path>lib</path>
+         <path>adminhtml/default/default/layout/pmt.xml</path>
+         <path>adminhtml/default/default/images/pmt</path>
+         <path>frontend/base/default/images/pmt</path>
+         <path>adminhtml/base/default/admin.css</path>
       </path>
       <type>
          <type>file</type>
@@ -87,6 +99,10 @@
          <type>dir</type>
          <type>dir</type>
          <type>file</type>
+         <type>file</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>dir</type>
          <type>file</type>
       </type>
       <include>
@@ -98,8 +114,16 @@
          <include>#DigitalOrigin_Pmt.csv#</include>
          <include/>
          <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
       </include>
       <ignore>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
          <ignore/>
          <ignore/>
          <ignore/>
