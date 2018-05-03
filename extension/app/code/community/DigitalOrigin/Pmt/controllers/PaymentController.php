@@ -36,7 +36,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $mageCore = Mage::helper('core');
 
         if ($order->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            return $this->_redirect(Mage::helper('checkout/url')->getCheckoutUrl());
+            return $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl());
         }
 
         /** @var Mage_Sales_Model_Order_Item[]  $itemCollection */
@@ -92,7 +92,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         if (empty($url)) {
             //@todo, inform customer that PMT is not working.
-            return $this->_redirect(Mage::helper('checkout/url')->getCheckoutUrl());
+            return $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl());
         }
 
         //Redirect
