@@ -6,7 +6,7 @@ docker-compose up -d
 composer install
 
 # Time to boot and install magento
-sleep 20
+sleep 30
 set -e
 
 # Run test
