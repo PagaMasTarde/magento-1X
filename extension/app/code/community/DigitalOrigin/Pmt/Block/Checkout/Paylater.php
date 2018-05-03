@@ -19,6 +19,11 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
         $publicKey = $isProduction ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'];
         $simulatorType = $config['PAYLATER_CHECKOUT_HOOK_TYPE'];
 
+        $logoTemplateClass = Mage::getConfig()->getBlockClassName('core/template');
+        $logoTemplate = new $logoTemplateClass;
+        $logoTemplate->setTemplate('pmt/checkout/logo.phtml');
+        $logoHtml = $logoTemplate->toHtml();
+
         $this->assign(
             array(
                 'amount' => $amount,
@@ -29,7 +34,8 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
 
         $template = $this->setTemplate('pmt/checkout/paylater.phtml');
         $template
-            ->setMethodTitle($config['TITLE_EXTRA'])
+            ->setMethodTitle($config['title'] . ' ' . $config['TITLE_EXTRA'])
+            ->setMethodLabelAfterHtml($logoHtml);
         ;
 
         parent::_construct();
