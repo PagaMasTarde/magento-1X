@@ -15,7 +15,6 @@ $_code = $this->getMethodCode();
         pmtClient.events.send('checkout', { basketAmount: '<?=$amount?>' } );
     }
 </script>
-<img id="logo" src="<?php echo $this->getSkinUrl('images/pmt/logopagamastarde.png') ?>"/>
 <?php if($simulatorType) { ?>
 <div id="payment_form_<?=$_code?>" style="display: none">
     <div id="paylater-checkout">
