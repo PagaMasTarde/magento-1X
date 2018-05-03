@@ -162,7 +162,7 @@ abstract class AbstractBuy extends MagentoTest
     {
         $this->webDriver->executeScript('review.save()');
         $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pmt')
+            WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
         );
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable(
