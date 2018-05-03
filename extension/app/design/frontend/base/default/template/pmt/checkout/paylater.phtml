@@ -29,9 +29,11 @@ $_code = $this->getMethodCode();
     </div>
 </div>
 <script type="text/javascript">
-    if (typeof pmtClient !== 'undefined') {
-        pmtClient.simulator.reload();
-    }
+    jQuery(document).ready(function() {
+        if (typeof pmtClient !== 'undefined') {
+            pmtClient.simulator.reload();
+        }
+    });
 </script>
 <?php } ?>
 </fieldset>

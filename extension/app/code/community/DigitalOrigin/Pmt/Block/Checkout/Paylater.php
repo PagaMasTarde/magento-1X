@@ -32,9 +32,14 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
             )
         );
 
+        $title = $config['TITLE_EXTRA'];
+        if (empty($title)) {
+            $title = $config['title'];
+        }
+
         $template = $this->setTemplate('pmt/checkout/paylater.phtml');
         $template
-            ->setMethodTitle($config['title'] . ' ' . $config['TITLE_EXTRA'])
+            ->setMethodTitle($title)
             ->setMethodLabelAfterHtml($logoHtml);
         ;
 
