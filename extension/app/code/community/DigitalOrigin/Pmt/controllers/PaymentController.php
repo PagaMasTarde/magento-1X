@@ -36,7 +36,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $mageCore = Mage::helper('core');
 
         if ($order->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            return $this->_redirect('checkout/cart');
+            return $this->_redirect(Mage::helper('checkout/url')->getCheckoutUrl());
         }
 
         /** @var Mage_Sales_Model_Order_Item[]  $itemCollection */
@@ -53,14 +53,14 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
-        $backCancel = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $orderData['entity_id'])));
+        $callback = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
+        $back = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $orderData['entity_id'])));
 
         $url = array(
-            'ok' => $back,
-            'ko' => $backCancel,
-            'callback' => $back,
-            'cancelled' => $backCancel,
+            'ok' => $callback,
+            'ko' => $back,
+            'callback' => $callback,
+            'cancelled' => $back,
         );
 
         $node = Mage::getConfig()->getNode();
@@ -90,6 +90,11 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $shopperResponse = json_decode($paymentForm);
         $url = $shopperResponse->data->url;
 
+        if (empty($url)) {
+            //@todo, inform customer that PMT is not working.
+            return $this->_redirect(Mage::helper('checkout/url')->getCheckoutUrl());
+        }
+
         //Redirect
         if (!$moduleConfig['PAYLATER_IFRAME']) {
             return $this->_redirectUrl($url);
@@ -107,7 +112,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         $block->assign(array(
             'url' => $url,
-            'checkoutUrl' => $backCancel,
+            'checkoutUrl' => $back,
             'css' => self::CSS_URL,
         ));
 
