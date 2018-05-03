@@ -7,9 +7,9 @@
     "npm": "^6.0.0"
   },
   "devDependencies": {
-    "grunt": "^1",
-    "grunt-contrib-compress": "^1",
-    "grunt-shell": "^2"
+    "grunt": "*",
+    "grunt-contrib-compress": "*",
+    "grunt-shell": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
