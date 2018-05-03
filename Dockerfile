@@ -46,6 +46,18 @@ CMD ["apache2-foreground"]
 
 #COPY ./extension/ /var/www/html/
 
-RUN mkdir -p /var/www/html/app/locale/es_ES/ \
+RUN ln -s /pmt/app/code/community/DigitalOrigin /var/www/html/app/code/community/DigitalOrigin \
+    && ln -s /pmt/lib/DigitalOrigin /var/www/html/lib/DigitalOrigin \
+    && ln -s /pmt/app/etc/modules/DigitalOrigin_Pmt.xml /var/www/html/app/etc/modules/DigitalOrigin_Pmt.xml \
+    && ln -s /pmt/app/design/adminhtml/default/default/layout/pmt.xml /var/www/html/app/design/adminhtml/default/default/layout/pmt.xml \
+    && ln -s /pmt/app/design/adminhtml/default/default/template/pmt /var/www/html/app/design/adminhtml/default/default/template/pmt \
+    && ln -s /pmt/app/design/frontend/base/default/layout/pmt.xml /var/www/html/app/design/frontend/base/default/layout/pmt.xml \
+    && ln -s /pmt/app/design/frontend/base/default/template/pmt /var/www/html/app/design/frontend/base/default/template/pmt \
+    && mkdir -p /var/www/html/skin/adminhtml/base/default/ \
+    && ln -s /pmt/skin/adminhtml/base/default/admin.css /var/www/html/skin/adminhtml/base/default/admin.css \
+    && ln -s /pmt/skin/adminhtml/default/default/images/pmt /var/www/html/skin/adminhtml/default/default/images/pmt \
+    && ln -s /pmt/skin/frontend/base/default/images/pmt /var/www/html/skin/frontend/base/default/images/pmt \
+    && mkdir -p /var/www/html/app/locale/es_ES/ \
+    && ln -s /pmt/app/locale/es_ES/DigitalOrigin_Pmt.csv /var/www/html/app/locale/es_ES/DigitalOrigin_Pmt.csv \
     && ln -s /pmt/var/connect /var/www/html/var/connect \
     && chown www-data:www-data -R /var/www/html

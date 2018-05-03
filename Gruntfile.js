@@ -15,6 +15,7 @@ module.exports = function(grunt) {
                 files: [
                     {expand: 'true', cwd:'extension/', src: ['app/**'], dest: '/', filter: 'isFile'},
                     {expand: 'true', cwd:'extension/', src: ['lib/**'], dest: '/', filter: 'isFile'},
+                    {expand: 'true', cwd:'extension/', src: ['skin/**'], dest: '/', filter: 'isFile'},
                     {expand: 'true', cwd:'extension/var/connect/', src: ['package.xml'], dest: '/', filter: 'isFile'},
                 ]
 

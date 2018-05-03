@@ -1,12 +1,14 @@
 <?php
 
+require_once('lib/DigitalOrigin/autoload.php');
+
 /**
  * Class DigitalOrigin_Pmt_NotifyController
  */
 class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Action
 {
     /**
-     *
+     * Code
      */
     const CODE = 'paylater';
 
@@ -14,6 +16,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
      * @var string $message
      */
     protected $message;
+
     /**
      * @var bool $error
      */
@@ -89,6 +92,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
 
         return $this->_response($result);
     }
+
     /**
      * We receive a redirection
      *
@@ -102,7 +106,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->load($orderId);
 
-        if ($this->error) {
+        if ($this->error || $this->toCancel) {
             $this->restoreCart($order);
             if ($this->toCancel) {
                 $order->setState(
@@ -114,12 +118,15 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 try {
                     $order->save();
                 } catch (\Exception $exception) {
-                    $this->_redirect('checkout/cart');
+                    $this->_redirectUrl(Mage::helper('checkout/cart')->getCartUrl());
                 }
             }
-            $this->_redirect('checkout/onepage/');
+            $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl());
         } else {
-            $this->_redirect('checkout/onepage/success');
+            //@todo dinamic success
+            //$this->_redirect('checkout/onepage/success');
+            $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl() . 'success/');
+
         }
     }
     /**

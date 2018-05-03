@@ -3,7 +3,7 @@ version: "3.5"
 services:
   magento19:
     build:
-      dockerfile: Dockerfile-Dev
+      dockerfile: Dockerfile
       context: ./
     depends_on:
       - db
@@ -30,7 +30,7 @@ services:
 
   magento-test:
     build:
-      dockerfile: Dockerfile-Dev
+      dockerfile: Dockerfile
       context: ./
     depends_on:
       - db-test

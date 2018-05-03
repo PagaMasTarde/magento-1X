@@ -4,8 +4,6 @@
 docker-compose down
 docker-compose up -d
 composer install
-npm install
-grunt
 
 # Time to boot and install magento
 sleep 30
@@ -13,9 +11,7 @@ set -e
 
 # Run test
 extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
-#extension/lib/DigitalOrigin/bin/phpunit --group magento-install
 extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice
-extension/lib/DigitalOrigin/bin/phpunit --group magento-product-promotions-assign
 extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
 extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
 extension/lib/DigitalOrigin/bin/phpunit --group magento-register

@@ -3,18 +3,13 @@
  * @var int $simulatorType
  * @var bool $enabled
  * @var string $publicKey
- * @var string $promotionProductExtra
  */
 if ($simulatorType && $enabled) {
-        if ($this->isProductInPromotion()) {
-            echo '<span class="pmt-promotion" id="pmt-promotion-extra">'.$promotionProductExtra.'</span>';
-        }
 ?>
 
 <div id="pmt-simulator-product-page" class="PmtSimulator"
      data-pmt-num-quota="4" data-pmt-max-ins="12"
      data-pmt-type="<?=$simulatorType?>"
-     data-pmt-discount ="<?echo $this->isProductInPromotion()?>"
      data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
 </div>
 <script type="text/javascript">
@@ -61,11 +56,3 @@ if ($simulatorType && $enabled) {
 <?php
 }
 ?>
-<style>
-    .pmt-promotion {
-        text-align: center;
-        font-weight: bold;
-        color: black;
-        font-size: medium;
-    }
-</style>

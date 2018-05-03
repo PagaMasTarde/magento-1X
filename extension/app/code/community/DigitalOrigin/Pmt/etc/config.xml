@@ -3,7 +3,7 @@
 
     <modules>
         <DigitalOrigin_Pmt>
-            <version>6.2.4</version>
+            <version>6.2.5</version>
         </DigitalOrigin_Pmt>
     </modules>
 
@@ -34,27 +34,6 @@
                 </setup>
             </payment_custom_setup>
         </resources>
-
-        <events>
-            <resource_get_tablename>
-                <observers>
-                    <autoloader>
-                        <type>singleton</type>
-                        <class>pmt/observer</class>
-                        <method>addAutoloader</method>
-                    </autoloader>
-                </observers>
-            </resource_get_tablename>
-            <adminhtml_init_system_config>
-                <observers>
-                    <yourmodule>
-                        <type>singleton</type>
-                        <class>pmt/observer</class>
-                        <method>addCategory</method>
-                    </yourmodule>
-                </observers>
-            </adminhtml_init_system_config>
-        </events>
     </global>
 
     <adminhtml>
@@ -67,6 +46,13 @@
                 </DigitalOrigin_Pmt>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <bar>
+                    <file>pmt.xml</file>
+                </bar>
+            </updates>
+        </layout>
     </adminhtml>
 
     <frontend>
@@ -92,7 +78,7 @@
         <payment>
             <paylater translate="title" module="pmt">
                 <active>1</active>
-                <title>Financiar con Paga+Tarde</title>
+                <title>Paga+Tarde</title>
                 <model>pmt/paylater</model>
                 <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>
@@ -100,8 +86,8 @@
                 <PAYLATER_PROD>0</PAYLATER_PROD>
                 <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
                 <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
-                <PAYLATER_PROMOTION_EXTRA>Promoción: Fináncialo sin interéses</PAYLATER_PROMOTION_EXTRA>
                 <MIN_AMOUNT>10</MIN_AMOUNT>
+                <TITLE_EXTRA>Financiación instantánea - 100% online</TITLE_EXTRA>
                 <ORDER>1</ORDER>
             </paylater>
         </payment>

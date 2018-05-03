@@ -38,17 +38,6 @@ class SimulatorTest extends MagentoTest
             $pmtSimulator
         ));
 
-        /*** TODO UNCOMMENT THIS WHEN PPP
-        $promotionMessage = $this->findByClass('pmt-promotion');
-
-        $this->assertTrue(
-            (bool) WebDriverExpectedCondition::visibilityOf($promotionMessage)
-        );
-
-        $discount = $this->webDriver->findElement($pmtSimulator)->getAttribute('data-pmt-discount');
-        $this->assertSame('1', $discount);
-        ***/
-
         $this->quit();
     }
 

@@ -8,6 +8,9 @@
 
 $_code = $this->getMethodCode();
 ?>
+<style>
+    #logo {height:25px; margin-right: 10px;}
+</style>
 <fieldset class="form-list">
 <script type="text/javascript">
     if (typeof pmtClient !== 'undefined') {
@@ -26,6 +29,7 @@ $_code = $this->getMethodCode();
     </div>
 </div>
 <script type="text/javascript">
+    document.querySelectorAll('[value="paylater"]','[type="radio"]')[0].addEventListener('click', function() { pmtClient.simulator.reload(); });
     if (typeof pmtClient !== 'undefined') {
         pmtClient.simulator.reload();
     }
