@@ -1,5 +1,7 @@
 <?php
 
+require_once('lib/DigitalOrigin/autoload.php');
+
 /**
  * Class DigitalOrigin_Pmt_NotifyController
  */

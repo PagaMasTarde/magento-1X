@@ -28,11 +28,9 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
         );
 
         $template = $this->setTemplate('pmt/checkout/paylater.phtml');
-        $template->setMethodTitle(
-            Mage::helper('pmt')->__($config['title'] .
-            ' '.
-            $config['TITLE_EXTRA'])
-        );
+        $template
+            ->setMethodTitle($config['TITLE_EXTRA'])
+        ;
 
         parent::_construct();
     }

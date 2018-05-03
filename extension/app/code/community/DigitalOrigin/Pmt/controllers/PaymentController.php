@@ -7,8 +7,6 @@ require_once('lib/DigitalOrigin/autoload.php');
  */
 class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Action
 {
-    const PROMOTIONS_CATEGORY = 'paylater-promotion-product';
-
     /**
      * Shopper Url
      */
@@ -24,9 +22,6 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
      */
     public function indexAction()
     {
-        $promotionCategory = Mage::getResourceModel('catalog/category_collection')
-            ->addFieldToFilter('name', self::PROMOTIONS_CATEGORY)->getFirstItem();
-        $promotionCategoryId = $promotionCategory->entity_id;
         $salesOrder = Mage::getModel('sales/order');
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $checkoutSession = Mage::getSingleton('checkout/session');
@@ -54,9 +49,8 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         foreach ($itemCollection as $item) {
             $itemsData[$item->product_id] = $item->getData();
-            $promotionProduct = in_array($promotionCategoryId, $item->getProduct()->getCategoryIds());
-            $itemsData[$item->product_id][self::PROMOTIONS_CATEGORY] = $promotionProduct;
         }
+
         $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $back = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
