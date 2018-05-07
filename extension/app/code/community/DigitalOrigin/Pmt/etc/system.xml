@@ -98,14 +98,14 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </MIN_AMOUNT>
-                        <ORDER translate="label">
+                        <sort_order translate="label">
                             <label>PaymentMethod Order</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>21</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </ORDER>
+                        </sort_order>
                         <TITLE_EXTRA translate="label">
                             <label>Title Extra</label>
                             <frontend_type>text</frontend_type>
