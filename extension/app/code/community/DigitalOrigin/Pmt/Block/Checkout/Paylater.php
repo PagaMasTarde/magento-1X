@@ -28,7 +28,7 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
                 'simulatorType' => $simulatorType,
         ));
 
-        $title = $config['TITLE_EXTRA'];
+        $title = $config['PAYLATER_TITLE'];
         if (empty($title)) {
             $title = $config['title'];
         }
