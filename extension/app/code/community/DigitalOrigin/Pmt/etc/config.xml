@@ -3,7 +3,7 @@
 
     <modules>
         <DigitalOrigin_Pmt>
-            <version>6.2.5</version>
+            <version>6.2.6</version>
         </DigitalOrigin_Pmt>
     </modules>
 
@@ -87,8 +87,10 @@
                 <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
                 <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
                 <MIN_AMOUNT>10</MIN_AMOUNT>
-                <TITLE_EXTRA>Financiación instantánea - 100% online</TITLE_EXTRA>
-                <ORDER>1</ORDER>
+                <PAYLATER_TITLE>Financiación instantánea - 100% online</PAYLATER_TITLE>
+                <sort_order>1</sort_order>
+                <PAYLATER_KO_URL>checkout/cart/</PAYLATER_KO_URL>
+                <PAYLATER_OK_URL>checkout/onepage/success/</PAYLATER_OK_URL>
             </paylater>
         </payment>
     </default>
