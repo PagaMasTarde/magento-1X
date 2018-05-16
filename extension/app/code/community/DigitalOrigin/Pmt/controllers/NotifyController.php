@@ -45,16 +45,18 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     public function indexAction()
     {
         $orderId = Mage::app()->getRequest()->getParam('order');
-        $order = Mage::getModel('sales/order')->load($orderId);
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         $status = $order->getStatus();
         $payment = $order->getPayment();
         $code = $payment->getMethodInstance()->getCode();
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $successUrl = $moduleConfig['PAYLATER_KO_URL'];
 
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
             $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
             $code != self::CODE
         ) {
-            return $this->_redirect('sales/order/view/', array('order_id' => $order->getId()));
+            $this->_redirectUrl($successUrl);
         }
 
         try {
@@ -104,7 +106,10 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     {
         $orderId = Mage::app()->getRequest()->getParam('order');
         /** @var Mage_Sales_Model_Order $order */
-        $order = Mage::getModel('sales/order')->load($orderId);
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $successUrl = $moduleConfig['PAYLATER_KO_URL'];
+        $failureUrl = $moduleConfig['PAYLATER_OK_URL'];
 
         if ($this->error || $this->toCancel) {
             $this->restoreCart($order);
@@ -118,15 +123,12 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 try {
                     $order->save();
                 } catch (\Exception $exception) {
-                    $this->_redirectUrl(Mage::helper('checkout/cart')->getCartUrl());
+                    $this->_redirectUrl($failureUrl);
                 }
             }
-            $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl());
+            $this->_redirectUrl($failureUrl);
         } else {
-            //@todo dinamic success
-            //$this->_redirect('checkout/onepage/success');
-            $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl() . 'success/');
-
+            $this->_redirectUrl($successUrl);
         }
     }
     /**
@@ -136,7 +138,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     {
         $orderId = Mage::app()->getRequest()->getParam('order');
         /** @var Mage_Sales_Model_Order $order */
-        $order = Mage::getModel('sales/order')->load($orderId);
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         $payment = $order->getPayment();
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';

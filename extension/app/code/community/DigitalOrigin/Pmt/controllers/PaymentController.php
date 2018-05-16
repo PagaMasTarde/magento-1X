@@ -10,7 +10,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
     /**
      * Shopper Url
      */
-    const SHOPPER_URL = 'https://shopper.pagamastarde.com/magento/';
+    const SHOPPER_URL = 'http://shopper/magento/';
 
     /**
      * CSS URL
@@ -34,27 +34,27 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
         $order = $salesOrder->loadByIncrementId($orderId);
         /** @var Mage_Core_Helper_Data $mageCore */
         $mageCore = Mage::helper('core');
-
-        if ($order->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            return $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl());
-        }
-
         /** @var Mage_Sales_Model_Order_Item[]  $itemCollection */
         $itemCollection = $order->getAllVisibleItems();
         /** @var Mage_Sales_Model_Order  $addressCollection */
         $addressCollection = $order->getAddressesCollection();
+
         $orderData = json_decode($mageCore->jsonEncode($order->getData()), true);
         $customerData = json_decode($mageCore->jsonEncode($customer->getData()), true);
         $itemsData = array();
 
+        $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $callback = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['increment_id'])));
+        $back = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $orderData['increment_id'])));
+
+        if ($order->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
+            return $this->_redirectUrl($callback);
+        }
+
         foreach ($itemCollection as $item) {
             $itemsData[$item->product_id] = $item->getData();
         }
-
-        $addressData = json_decode($mageCore->jsonEncode($addressCollection->getData()), true);
-        $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $callback = Mage::getUrl('pmt/notify', array('_query' => array('order' => $orderData['entity_id'])));
-        $back = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $orderData['entity_id'])));
 
         $url = array(
             'ok' => $callback,
@@ -92,7 +92,7 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
 
         if (empty($url)) {
             //@todo, inform customer that PMT is not working.
-            return $this->_redirectUrl(Mage::helper('checkout/url')->getCheckoutUrl());
+            return $this->_redirectUrl($back);
         }
 
         //Redirect
