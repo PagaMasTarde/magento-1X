@@ -1,5 +1,5 @@
 <_>
-   <form_key>rk8S3i8yvdi8hqDc</form_key>
+   <form_key>14HBAIfJOrDUMHOl</form_key>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -12,12 +12,11 @@
    <license_uri/>
    <version>6.2.6</version>
    <stability>stable</stability>
-   <notes>* Logo + copy
-* URL reviewed
-* Back to shop review
-* Cancel order review
-* Restore cart
-
+   <notes>* Updated ID of order in PMT
+* Test API keys exist to show payment method
+* Dinamic url from backoffice
+* title editable
+* Simulator reload if price change
 </notes>
    <authors>
       <name>
@@ -47,7 +46,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                        </files>
+            <files>                                                         </files>
          </files>
       </package>
       <extension>
