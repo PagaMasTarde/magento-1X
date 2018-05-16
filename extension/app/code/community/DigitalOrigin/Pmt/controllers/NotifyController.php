@@ -36,7 +36,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     {
         $this->toCancel = true;
 
-        return $this->indexAction();
+        return $this->redirect();
     }
 
     /**
@@ -56,7 +56,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
             $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
             $code != self::CODE
         ) {
-            $this->_redirectUrl($successUrl);
+            $this->_redirectUrl(Mage::getUrl($successUrl));
         }
 
         try {
@@ -108,8 +108,8 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $successUrl = $moduleConfig['PAYLATER_KO_URL'];
-        $failureUrl = $moduleConfig['PAYLATER_OK_URL'];
+        $successUrl = $moduleConfig['PAYLATER_OK_URL'];
+        $failureUrl = $moduleConfig['PAYLATER_KO_URL'];
 
         if ($this->error || $this->toCancel) {
             $this->restoreCart($order);
@@ -123,12 +123,12 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 try {
                     $order->save();
                 } catch (\Exception $exception) {
-                    $this->_redirectUrl($failureUrl);
+                    $this->_redirectUrl(Mage::getUrl($failureUrl));
                 }
             }
-            $this->_redirectUrl($failureUrl);
+            $this->_redirectUrl(Mage::getUrl($failureUrl));
         } else {
-            $this->_redirectUrl($successUrl);
+            $this->_redirectUrl(Mage::getUrl($successUrl));
         }
     }
     /**
