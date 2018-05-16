@@ -89,7 +89,7 @@
                 <MIN_AMOUNT>10</MIN_AMOUNT>
                 <PAYLATER_TITLE>Financiación instantánea - 100% online</PAYLATER_TITLE>
                 <sort_order>1</sort_order>
-                <PAYLATER_KO_URL>checkout/onepage/</PAYLATER_KO_URL>
+                <PAYLATER_KO_URL>checkout/cart/</PAYLATER_KO_URL>
                 <PAYLATER_OK_URL>checkout/onepage/success/</PAYLATER_OK_URL>
             </paylater>
         </payment>
