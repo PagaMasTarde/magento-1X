@@ -47,6 +47,7 @@ if ($simulatorType && $enabled) {
             modifier.addEventListener(eventType, changePrice);
         });
     }
+    window.setInterval(function(){changePrice();}, 2000);
 
     if (typeof pmtClient !== 'undefined') {
         pmtClient.setPublicKey('<?=$publicKey?>');
