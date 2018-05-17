@@ -1,5 +1,5 @@
 <_>
-   <form_key>bC8TnIsf77cFzEZ3</form_key>
+   <form_key>fMqgFbKRIJxTdzzE</form_key>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -46,7 +46,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                          </files>
+            <files>                                                            </files>
          </files>
       </package>
       <extension>
@@ -70,7 +70,6 @@
          <target>magedesign</target>
          <target>magelocale</target>
          <target>mageetc</target>
-         <target>magelib</target>
          <target>magedesign</target>
          <target>mageskin</target>
          <target>mageskin</target>
@@ -84,7 +83,6 @@
          <path>frontend/base/default/template/pmt</path>
          <path/>
          <path>modules/DigitalOrigin_Pmt.xml</path>
-         <path>lib</path>
          <path>adminhtml/default/default/layout/pmt.xml</path>
          <path>adminhtml/default/default/images/pmt</path>
          <path>frontend/base/default/images/pmt</path>
@@ -97,7 +95,6 @@
          <type>file</type>
          <type>dir</type>
          <type>dir</type>
-         <type>file</type>
          <type>file</type>
          <type>file</type>
          <type>dir</type>
@@ -116,10 +113,8 @@
          <include/>
          <include/>
          <include/>
-         <include/>
       </include>
       <ignore>
-         <ignore/>
          <ignore/>
          <ignore/>
          <ignore/>
