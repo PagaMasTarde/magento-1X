@@ -44,27 +44,13 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
      */
     public function indexAction()
     {
-        $orderId = Mage::app()->getRequest()->getParam('order');
-        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-        $status = $order->getStatus();
-        $payment = $order->getPayment();
-        $code = $payment->getMethodInstance()->getCode();
-        $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $successUrl = $moduleConfig['PAYLATER_KO_URL'];
-
-        if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
-            $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
-            $code != self::CODE
-        ) {
-            $this->_redirectUrl(Mage::getUrl($successUrl));
-        }
-
         try {
             $this->processValidation();
         } catch (\Exception $exception) {
             $this->message = $exception->getMessage();
             $this->error = true;
         }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return $this->jsonResponse();
         } else {
@@ -92,7 +78,7 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         header('Content-Type: application/json', true);
         header('Content-Length: ' . strlen($result));
 
-        return $this->_response($result);
+        return $this->getResponse()->setBody($result);
     }
 
     /**
@@ -139,10 +125,20 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $orderId = Mage::app()->getRequest()->getParam('order');
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+        $status = $order->getStatus();
         $payment = $order->getPayment();
+        $code = $payment->getMethodInstance()->getCode();
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+
+        if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
+            $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
+            $code != self::CODE
+        ) {
+            $this->message = 'Payment already processed';
+            return true;
+        }
 
         if ($this->getOrderInPmtPayed($orderId, $privateKey)) {
             $pmtAmount = $this->getOrderAmountInPmt($orderId, $privateKey);
