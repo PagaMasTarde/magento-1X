@@ -16,6 +16,37 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
     protected $_formBlockType = 'pmt/checkout_paylater';
 
     /**
+     * @var bool
+     */
+    protected $_isInitializeNeeded      = true;
+
+    /**
+     * Get checkout session namespace
+     *
+     * @return Mage_Checkout_Model_Session
+     */
+    public function getCheckout()
+    {
+        return Mage::getSingleton('checkout/session');
+    }
+
+    /**
+     * Instantiate state and set it to state object
+     * @param string $paymentAction
+     * @param Varien_Object
+     */
+    public function initialize($paymentAction, $stateObject)
+    {
+        $state = Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
+        $paymentDetailArray = Mage::app()->getRequest()->getPost('paymentdetail');
+        $paymentDetail = $paymentDetailArray[0];
+        $this->getCheckout()->setPaymentMethodDetail($paymentDetail);
+        $stateObject->setState($state);
+        $stateObject->setStatus('pending_payment');
+        $stateObject->setIsNotified(false);
+    }
+
+    /**
      * @param mixed $data
      *
      * @return $this
