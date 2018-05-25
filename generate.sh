@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Prepare environment and build package
+docker-compose pull
 docker-compose down
-docker-compose up -d
+docker-compose up -d --build
 composer install
 
 # Time to boot and install magento
