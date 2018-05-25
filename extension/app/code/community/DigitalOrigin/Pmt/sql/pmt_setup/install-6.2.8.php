@@ -5,7 +5,7 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run('DROP TABLE IF EXISTS pmt_transactions');
+$installer->run('DROP TABLE IF EXISTS pmt_cart_process');
 $installer->run('CREATE TABLE `pmt_cart_process` (
   `id` INT NOT NULL ,
   `timestamp` INT NOT NULL ,
