@@ -3,7 +3,7 @@
 
     <modules>
         <DigitalOrigin_Pmt>
-            <version>6.2.7</version>
+            <version>6.2.8</version>
         </DigitalOrigin_Pmt>
     </modules>
 
@@ -39,11 +39,11 @@
         </models>
 
         <resources>
-            <payment_setup>
+            <pmt_setup>
                 <setup>
                     <module>DigitalOrigin_Pmt</module>
                 </setup>
-            </payment_setup>
+            </pmt_setup>
         </resources>
     </global>
 

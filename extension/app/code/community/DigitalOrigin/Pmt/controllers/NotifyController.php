@@ -13,6 +13,11 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     const CODE = 'paylater';
 
     /**
+     * Tablename
+     */
+    const CONCURRENCY_TABLE = 'pmt_cart_process';
+
+    /**
      * @var string $message
      */
     protected $message;
@@ -47,8 +52,12 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         try {
             $orderId = Mage::app()->getRequest()->getParam('order');
             $this->unblockConcurrency();
-            $this->processValidation();
-            $this->unblockConcurrency($orderId);
+            if (!$this->blockConcurrency($orderId)) {
+                $this->message = 'Validation in progress, try again later';
+            } else {
+                $this->processValidation();
+                $this->unblockConcurrency($orderId);
+            }
         } catch (\Exception $exception) {
             $this->message = $exception->getMessage();
             $this->error = true;
@@ -134,11 +143,6 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
-
-        if (!$this->blockConcurrency($orderId)) {
-            $this->message = 'Validation in progress, try again later';
-            return true;
-        }
 
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
             $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
@@ -264,6 +268,15 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
      */
     protected function blockConcurrency($orderId)
     {
+        $sql = "INSERT INTO " . self::CONCURRENCY_TABLE . " VALUE (" . $orderId. "," . time() . ")";
+
+        try {
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $conn->query($sql);
+        } catch (Exception $exception) {
+            return false;
+        }
+
         return true;
     }
 
@@ -274,6 +287,20 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
      */
     protected function unblockConcurrency($orderId = null)
     {
+        if ($orderId == null) {
+            $sql = "DELETE FROM " . self::CONCURRENCY_TABLE . " WHERE timestamp <" . (time() - 10);
+        } else {
+            $sql = "DELETE FROM " . self::CONCURRENCY_TABLE . " WHERE id  = " . $orderId;
+        }
+
+        try {
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $conn->query($sql);
+        } catch (Exception $exception) {
+            Mage::logException($exception);
+            return false;
+        }
+
         return true;
     }
 }
