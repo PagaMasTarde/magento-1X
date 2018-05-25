@@ -45,7 +45,10 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     public function indexAction()
     {
         try {
+            $orderId = Mage::app()->getRequest()->getParam('order');
+            $this->unblockConcurrency();
             $this->processValidation();
+            $this->unblockConcurrency($orderId);
         } catch (\Exception $exception) {
             $this->message = $exception->getMessage();
             $this->error = true;
@@ -131,6 +134,11 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+
+        if (!$this->blockConcurrency($orderId)) {
+            $this->message = 'Validation in progress, try again later';
+            return true;
+        }
 
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
             $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
@@ -247,5 +255,25 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         } catch (\Exception $exception) {
             throw new \Exception('Unable to save');
         }
+    }
+
+    /**
+     * @param $orderId
+     *
+     * @return bool
+     */
+    protected function blockConcurrency($orderId)
+    {
+        return true;
+    }
+
+    /**
+     * @param null $orderId
+     *
+     * @return bool
+     */
+    protected function unblockConcurrency($orderId = null)
+    {
+        return true;
     }
 }

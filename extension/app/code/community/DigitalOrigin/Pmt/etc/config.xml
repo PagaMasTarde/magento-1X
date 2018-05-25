@@ -9,6 +9,17 @@
 
     <global>
 
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <DigitalOrigin_Pmt>
+                        <class>pmt/observer</class>
+                        <method>cancelPendingOrders</method>
+                    </DigitalOrigin_Pmt>
+                </observers>
+            </sales_order_place_after>
+        </events>
+
         <helpers>
             <pmt>
                 <class>DigitalOrigin_Pmt_Helper</class>
@@ -28,11 +39,11 @@
         </models>
 
         <resources>
-            <payment_custom_setup>
+            <payment_setup>
                 <setup>
                     <module>DigitalOrigin_Pmt</module>
                 </setup>
-            </payment_custom_setup>
+            </payment_setup>
         </resources>
     </global>
 
