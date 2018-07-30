@@ -1,5 +1,5 @@
 <_>
-   <form_key>Y0HZVlHKtbGdcoE4</form_key>
+   <form_key>R4lI2pT4KZdZ0g8i</form_key>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -10,11 +10,11 @@
    <description>Paga+Tarde, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Paga+Tarde, la solución líder en España de financiación omnicanal instantánea.</description>
    <license>GPL</license>
    <license_uri/>
-   <version>6.2.8</version>
+   <version>6.2.9</version>
    <stability>stable</stability>
-   <notes>* Orders cancelled after 1 hour
-* Order Concurrency validation avoid
-</notes>
+   <notes>* Notification error status 400
+* Loggin in /var/log/pmt.log
+* Secure download log action</notes>
    <authors>
       <name>
          <name>Digital Origin</name>
@@ -43,7 +43,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                  </files>
+            <files>                                                                    </files>
          </files>
       </package>
       <extension>
