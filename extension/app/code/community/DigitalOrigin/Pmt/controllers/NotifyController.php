@@ -45,6 +45,31 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
     }
 
     /**
+     * Download Logs with Private Key Action
+     */
+    public function downloadAction()
+    {
+        $secretKey = Mage::app()->getRequest()->getParam('secret');
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
+        $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+
+        $file = 'var/log/pmt.log';
+
+        if (file_exists($file) && $privateKey == $secretKey) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($file).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
+        }
+    }
+
+    /**
      * Index action
      */
     public function indexAction()
@@ -59,6 +84,17 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 $this->unblockConcurrency($orderId);
             }
         } catch (\Exception $exception) {
+            Mage::log(
+                json_encode(array(
+                    'order' => $orderId,
+                    'timestamp' => time(),
+                    'message' => $exception->getMessage(),
+                    'trace' => $exception->getTrace(),
+                )),
+                null,
+                'pmt.log',
+                true
+            );
             $this->message = $exception->getMessage();
             $this->error = true;
         }
@@ -83,12 +119,11 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
             'result' => $this->message,
         ));
         if ($this->error) {
-            header('HTTP/1.1 400 Bad Request', true, 400);
-        } else {
-            header('HTTP/1.1 200 Ok', true, 200);
+            $this->getResponse()->setHttpResponseCode(400);
         }
-        header('Content-Type: application/json', true);
-        header('Content-Length: ' . strlen($result));
+
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $this->getResponse()->setHeader('Content-Length', strlen($result));
 
         return $this->getResponse()->setBody($result);
     }
@@ -121,6 +156,17 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 try {
                     $order->save();
                 } catch (\Exception $exception) {
+                    Mage::log(
+                        json_encode(array(
+                            'order' => $orderId,
+                            'timestamp' => time(),
+                            'message' => $exception->getMessage(),
+                            'trace' => $exception->getTrace(),
+                        )),
+                        null,
+                        'pmt.log',
+                        true
+                    );
                     $this->_redirectUrl(Mage::getUrl($failureUrl));
                 }
             }
@@ -179,8 +225,20 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 try {
                     $order->save();
                 } catch (\Exception $exception) {
-                    throw new \Exception('Unable to save');
+                    Mage::log(
+                        json_encode(array(
+                            'order' => $orderId,
+                            'timestamp' => time(),
+                            'message' => $exception->getMessage(),
+                            'trace' => $exception->getTrace(),
+                        )),
+                        null,
+                        'pmt.log',
+                        true
+                    );
+                    throw new \Exception('Unable to save order');
                 }
+                $this->message = 'Payment Processed';
                 return true;
             }
             $this->triggerAmountPaymentError($order, $pmtAmount);
@@ -205,7 +263,18 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
                 }
                 $cart->save();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
+            Mage::log(
+                json_encode(array(
+                    'cartId' => $cart->getId(),
+                    'timestamp' => time(),
+                    'message' => $exception->getMessage(),
+                    'trace' => $exception->getTrace(),
+                )),
+                null,
+                'pmt.log',
+                true
+            );
             return false;
         }
 
@@ -255,9 +324,21 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
             false
         );
         try {
+            $this->message = 'Fraud in order, check magento backOffice';
             $order->save();
         } catch (\Exception $exception) {
-            throw new \Exception('Unable to save');
+            Mage::log(
+                json_encode(array(
+                    'order' => $order->getId(),
+                    'timestamp' => time(),
+                    'message' => $exception->getMessage(),
+                    'trace' => $exception->getTrace(),
+                )),
+                null,
+                'pmt.log',
+                true
+            );
+            throw new \Exception('Unable to save wrong amount order');
         }
     }
 
