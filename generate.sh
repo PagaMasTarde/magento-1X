@@ -3,7 +3,7 @@
 # Prepare environment and build package
 docker-compose pull
 docker-compose down
-docker-compose up -d --build
+docker-compose up -d --build magento-test db-test selenium
 composer install
 
 # Time to boot and install magento
