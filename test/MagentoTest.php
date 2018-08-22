@@ -16,7 +16,7 @@ abstract class MagentoTest extends TestCase
     /**
      * Magento URL
      */
-    const MAGENTO_URL = 'http://magento-test.docker:8082/index.php';
+    const MAGENTO_URL = 'http://magento19-test.docker:8082/index.php';
 
     /**
      * Magento Backoffice URL
