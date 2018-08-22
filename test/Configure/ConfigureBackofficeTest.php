@@ -49,7 +49,7 @@ class ConfigureBackofficeTest extends AbstractConfigure
              ->clear()
              ->sendKeys($this->configuration['secretKey'])
         ;
-        $this->findById('payment_paylater_PAYLATER_IFRAME1')->click();
+        $this->findById('payment_paylater_PAYLATER_IFRAME0')->click();
         $this->findById('payment_paylater_PAYLATER_TITLE')->clear()->sendKeys('extra');
 
         //Confirm and validate
