@@ -40,21 +40,6 @@ class BuyRegisteredTest extends AbstractBuy
     }
 
     /**
-     * Verify That UTF Encoding is working
-     */
-    public function verifyUTF8()
-    {
-        $paymentFormElement = WebDriverBy::className('FieldsPreview-desc');
-        $condition = WebDriverExpectedCondition::visibilityOfElementLocated($paymentFormElement);
-        $this->webDriver->wait()->until($condition);
-        $this->assertTrue((bool) $condition);
-        $this->assertSame(
-            $this->configuration['firstname'] . ' ' . $this->configuration['lastname'],
-            $this->findByClass('FieldsPreview-desc')->getText()
-        );
-    }
-
-    /**
      * Login
      */
     public function login()
