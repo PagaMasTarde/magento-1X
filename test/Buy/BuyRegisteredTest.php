@@ -23,8 +23,7 @@ class BuyRegisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->completeOrderAndGoToPMT();
-        $this->verifyUTF8();
+        $this->completeOrderAndGoToPMT(false);
         $this->quit();
     }
 

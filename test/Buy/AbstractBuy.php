@@ -5,6 +5,7 @@ namespace Test\Buy;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Test\MagentoTest;
+use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
 
 /**
  * Class AbstractBuy
@@ -31,6 +32,13 @@ abstract class AbstractBuy extends MagentoTest
      * Product name
      */
     const PRODUCT_NAME = 'Linen Blazer';
+
+    /**
+     * Correct purchase message
+     */
+    const CORRECT_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN RECEIVED.';
+
+
 
     /**
      * Buy unregistered
@@ -156,22 +164,46 @@ abstract class AbstractBuy extends MagentoTest
 
 
     /**
-     * Complete order and check amounts
+     * Complete order and check amounts iframe & redirect compatible
+     *
+     * @param bool $useIframe
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function completeOrderAndGoToPMT()
+    public function completeOrderAndGoToPMT($useIframe = true)
     {
         $this->webDriver->executeScript('review.save()');
+        // If use iFrame the test will end without finish the boy and test return
+        if($useIframe) {
+            $this->webDriver->wait()->until(
+                WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
+            );
+            $this->webDriver->wait()->until(
+                WebDriverExpectedCondition::elementToBeClickable(
+                    WebDriverBy::name('form-continue')
+                )
+            );
+            $this->assertContains(
+                'compra',
+                $this->findByClass('Form-heading1')->getText()
+            );
+            $this->verifyUTF8();
+            // Proccess complete, then return
+            return;
+        }
+        // complete the purchase with redirect
+        SeleniumHelper::finishForm($this->webDriver);
+
+        // Check if all goes good
         $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
-        );
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::elementToBeClickable(
-                WebDriverBy::name('form-continue')
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                WebDriverBy::cssSelector('.page-title h1')
             )
         );
+        $successMessage = $this->findByCss('.page-title h1');
         $this->assertContains(
-            'compra',
-            $this->findByClass('Form-heading1')->getText()
+            self::CORRECT_PURCHASE_MESSAGE,
+            $successMessage->getText()
         );
     }
 
