@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/PagaMasTarde/magento-1X.svg?branch=master)](https://travis-ci.org/PagaMasTarde/magento-1X)
 [![Latest Stable Version](https://poser.pugx.org/pagamastarde/magento-1x/v/stable)](https://packagist.org/packages/pagamastarde/magento-1x)
 [![composer.lock](https://poser.pugx.org/pagamastarde/magento-1x/composerlock)](https://packagist.org/packages/pagamastarde/magento-1x)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e9d4ec1224f2a37a7c59/maintainability)](https://codeclimate.com/github/PagaMasTarde/magento-1X/maintainability)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/PagaMasTarde/magento-1x/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PagaMasTarde/magento-1x/?branch=master)
 ## Instrucciones de Instalación
 1. Crea tu cuenta en pagamastarde.com si aún no la tienes [desde aquí](https://bo.pagamastarde.com/users/sign_up)
 2. Descarga el módulo de [aquí](https://github.com/pagamastarde/magento-1X/releases/latest)
