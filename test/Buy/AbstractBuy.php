@@ -5,7 +5,6 @@ namespace Test\Buy;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Test\MagentoTest;
-use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
 
 /**
  * Class AbstractBuy
@@ -38,6 +37,20 @@ abstract class AbstractBuy extends MagentoTest
      */
     const CORRECT_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN RECEIVED.';
 
+    /**
+     * Canceled purchase message
+     */
+    const CANCELED_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN CANCELED.';
+
+   /**
+     * Shopping cart message
+     */
+    const SHOPPING_CART_MESSAGE = 'SHOPPING CART';
+
+  /**
+     * Empty shopping cart message
+     */
+    const EMPTY_SHOPPING_CART = 'SHOPPING CART IS EMPTY';
 
 
     /**
@@ -164,13 +177,13 @@ abstract class AbstractBuy extends MagentoTest
 
 
     /**
-     * Complete order and check amounts iframe & redirect compatible
+     * Complete order and open PMT (redirect or iframe methods)
      *
      * @param bool $useIframe
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function completeOrderAndGoToPMT($useIframe = true)
+    public function goToPMT($useIframe = true)
     {
         $this->webDriver->executeScript('review.save()');
         // If use iFrame the test will end without finish the boy and test return
@@ -187,24 +200,9 @@ abstract class AbstractBuy extends MagentoTest
                 'compra',
                 $this->findByClass('Form-heading1')->getText()
             );
-            $this->verifyUTF8();
-            // Proccess complete, then return
+            // PMT opened successfully in iframe mode
             return;
         }
-        // complete the purchase with redirect
-        SeleniumHelper::finishForm($this->webDriver);
-
-        // Check if all goes good
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::visibilityOfElementLocated(
-                WebDriverBy::cssSelector('.page-title h1')
-            )
-        );
-        $successMessage = $this->findByCss('.page-title h1');
-        $this->assertContains(
-            self::CORRECT_PURCHASE_MESSAGE,
-            $successMessage->getText()
-        );
     }
 
     /**
@@ -220,6 +218,21 @@ abstract class AbstractBuy extends MagentoTest
         );
         $this->assertTrue(
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
+        );
+    }
+
+    /**
+     * Verify That UTF Encoding is working
+     */
+    public function verifyUTF8()
+    {
+        $paymentFormElement = WebDriverBy::className('FieldsPreview-desc');
+        $condition = WebDriverExpectedCondition::visibilityOfElementLocated($paymentFormElement);
+        $this->webDriver->wait()->until($condition);
+        $this->assertTrue((bool) $condition);
+        $this->assertSame(
+            $this->configuration['firstname'] . ' ' . $this->configuration['lastname'],
+            $this->findByClass('FieldsPreview-desc')->getText()
         );
     }
 }
