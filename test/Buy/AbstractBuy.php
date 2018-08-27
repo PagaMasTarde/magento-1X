@@ -33,6 +33,27 @@ abstract class AbstractBuy extends MagentoTest
     const PRODUCT_NAME = 'Linen Blazer';
 
     /**
+     * Correct purchase message
+     */
+    const CORRECT_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN RECEIVED.';
+
+    /**
+     * Canceled purchase message
+     */
+    const CANCELED_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN CANCELED.';
+
+   /**
+     * Shopping cart message
+     */
+    const SHOPPING_CART_MESSAGE = 'SHOPPING CART';
+
+  /**
+     * Empty shopping cart message
+     */
+    const EMPTY_SHOPPING_CART = 'SHOPPING CART IS EMPTY';
+
+
+    /**
      * Buy unregistered
      */
     public function prepareProductAndCheckout()
@@ -156,23 +177,32 @@ abstract class AbstractBuy extends MagentoTest
 
 
     /**
-     * Complete order and check amounts
+     * Complete order and open PMT (redirect or iframe methods)
+     *
+     * @param bool $useIframe
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function completeOrderAndGoToPMT()
+    public function goToPMT($useIframe = true)
     {
         $this->webDriver->executeScript('review.save()');
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
-        );
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::elementToBeClickable(
-                WebDriverBy::name('form-continue')
-            )
-        );
-        $this->assertContains(
-            'compra',
-            $this->findByClass('Form-heading1')->getText()
-        );
+        // If use iFrame the test will end without finish the boy and test return
+        if($useIframe) {
+            $this->webDriver->wait()->until(
+                WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
+            );
+            $this->webDriver->wait()->until(
+                WebDriverExpectedCondition::elementToBeClickable(
+                    WebDriverBy::name('form-continue')
+                )
+            );
+            $this->assertContains(
+                'compra',
+                $this->findByClass('Form-heading1')->getText()
+            );
+            // PMT opened successfully in iframe mode
+            return;
+        }
     }
 
     /**
@@ -188,6 +218,21 @@ abstract class AbstractBuy extends MagentoTest
         );
         $this->assertTrue(
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
+        );
+    }
+
+    /**
+     * Verify That UTF Encoding is working
+     */
+    public function verifyUTF8()
+    {
+        $paymentFormElement = WebDriverBy::className('FieldsPreview-desc');
+        $condition = WebDriverExpectedCondition::visibilityOfElementLocated($paymentFormElement);
+        $this->webDriver->wait()->until($condition);
+        $this->assertTrue((bool) $condition);
+        $this->assertSame(
+            $this->configuration['firstname'] . ' ' . $this->configuration['lastname'],
+            $this->findByClass('FieldsPreview-desc')->getText()
         );
     }
 }

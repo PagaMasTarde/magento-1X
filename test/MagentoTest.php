@@ -4,7 +4,6 @@ namespace Test;
 
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Facebook\WebDriver\WebDriverBy;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +16,7 @@ abstract class MagentoTest extends TestCase
     /**
      * Magento URL
      */
-    const MAGENTO_URL = 'http://magento-test/index.php';
+    const MAGENTO_URL = 'http://magento19-test.docker:8082/index.php';
 
     /**
      * Magento Backoffice URL

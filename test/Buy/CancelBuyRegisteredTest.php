@@ -6,14 +6,13 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
 
-
 /**
- * Class BuyRegisteredTest
+ * Class CancelBuyRegisteredTest
  * @package Test\Buy
  *
- * @group magento-buy-registered
+ * @group magento-cancel-buy-registered
  */
-class BuyRegisteredTest extends AbstractBuy
+class CancelBuyRegisteredTest extends AbstractBuy
 {
     /**
      * Test Buy Registered
@@ -26,8 +25,8 @@ class BuyRegisteredTest extends AbstractBuy
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
         $this->goToPMT(false);
-        $this->commitPurchase();
-        $this->checkCommitedPurchase();
+        $this->cancelPurchase();
+        $this->checkCanceledPurchase();
         $this->quit();
     }
 
@@ -59,21 +58,21 @@ class BuyRegisteredTest extends AbstractBuy
     }
 
     /**
-     * Commit Purchase
+     * Cancel Purchase
      * @throws \Exception
      */
-    public function commitPurchase()
+    public function cancelPurchase()
     {
         // complete the purchase with redirect
-        SeleniumHelper::finishForm($this->webDriver);
+        SeleniumHelper::cancelForm($this->webDriver);
     }
 
     /**
-     * Check Commited Purchase
+     * Check Canceled Purchase
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function checkCommitedPurchase()
+    public function checkCanceledPurchase()
     {
         // Check if all goes good
         $this->webDriver->wait()->until(
@@ -83,7 +82,7 @@ class BuyRegisteredTest extends AbstractBuy
         );
         $successMessage = $this->findByCss('.page-title h1');
         $this->assertContains(
-            self::CORRECT_PURCHASE_MESSAGE,
+            self::SHOPPING_CART_MESSAGE,
             $successMessage->getText()
         );
     }

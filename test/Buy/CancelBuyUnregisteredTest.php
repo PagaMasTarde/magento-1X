@@ -4,14 +4,16 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
+
 
 /**
  * Class BuyUnregisteredTest
  * @package Test\Buy
  *
- * @group magento-buy-unregistered
+ * @group magento-cancel-buy-unregistered
  */
-class BuyUnregisteredTest extends AbstractBuy
+class CancelBuyUnregisteredTest extends AbstractBuy
 {
     const AMOUNT = '497.54';
     /**
@@ -24,8 +26,9 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPMT();
-        $this->verifyUTF8();
+        $this->goToPMT(false);
+        $this->cancelPurchase();
+        $this->checkCanceledPurchase();
         $this->quit();
     }
 
@@ -83,4 +86,33 @@ class BuyUnregisteredTest extends AbstractBuy
         );
     }
 
+    /**
+     * Cancel Purchase
+     * @throws \Exception
+     */
+    public function cancelPurchase()
+    {
+        // complete the purchase with redirect
+        SeleniumHelper::cancelForm($this->webDriver);
+    }
+
+    /**
+     * Check Canceled Purchase
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function checkCanceledPurchase()
+    {
+        // Check if all goes good
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                WebDriverBy::cssSelector('.page-title h1')
+            )
+        );
+        $successMessage = $this->findByCss('.page-title h1');
+        $this->assertContains(
+            self::SHOPPING_CART_MESSAGE,
+            $successMessage->getText()
+        );
+    }
 }

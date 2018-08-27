@@ -143,4 +143,44 @@ abstract class AbstractConfigure extends MagentoTest
             $pmtHeaderSearch
         ));
     }
+
+    /**
+     * Configure and Save
+     */
+    public function configureAndSave(string $paylaterMode)
+    {
+        //Fill configuration for PMT
+        $this->findById('payment_paylater_active1')->click();
+        $this->findById('payment_paylater_PAYLATER_PROD0')->click();
+        $this->findById('payment_paylater_PAYLATER_PUBLIC_KEY_TEST')
+            ->clear()
+            ->sendKeys($this->configuration['publicKey'])
+        ;
+        $this->findById('payment_paylater_PAYLATER_PRIVATE_KEY_TEST')
+            ->clear()
+            ->sendKeys($this->configuration['secretKey'])
+        ;
+        $this->findById('payment_paylater_PAYLATER_PUBLIC_KEY_PROD')
+            ->clear()
+            ->sendKeys($this->configuration['publicKey'])
+        ;
+        $this->findById('payment_paylater_PAYLATER_PRIVATE_KEY_PROD')
+            ->clear()
+            ->sendKeys($this->configuration['secretKey'])
+        ;
+        $this->findById($paylaterMode)->click();
+        $this->findById('payment_paylater_PAYLATER_TITLE')->clear()->sendKeys('extra');
+
+        //Confirm and validate
+        $this->webDriver->executeScript('configForm.submit()');
+
+        //Verify
+        $successMessageSearch = WebDriverBy::className('success-msg');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
+        );
+        $this->assertTrue(
+            (bool) WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
+        );
+    }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5e42c65467d6b85bda3843c83ebd043",
+    "content-hash": "c3ce6ed830db00f5806c864fbf87ccaf",
     "packages": [
         {
             "name": "nategood/httpful",
@@ -446,6 +446,49 @@
                 "object graph"
             ],
             "time": "2017-10-19T19:58:43+00:00"
+        },
+        {
+            "name": "pagamastarde/selenium-form-utils",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PagaMasTarde/selenium-form-utils.git",
+                "reference": "4e6ecf61afd9eb0f099f67b738a29528277c8903"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PagaMasTarde/selenium-form-utils/zipball/4e6ecf61afd9eb0f099f67b738a29528277c8903",
+                "reference": "4e6ecf61afd9eb0f099f67b738a29528277c8903",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "facebook/webdriver": "^1.1",
+                "fzaninotto/faker": "^1.7",
+                "pagamastarde/orders-api-client": "^1.0",
+                "phpunit/phpunit": "^4.8",
+                "phpunit/phpunit-selenium": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PagaMasTarde\\SeleniumFormUtils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "DigitalOrigin",
+                    "email": "cromero@digitalorigin.com"
+                }
+            ],
+            "description": "Paga+Tarde PHP Library. Selenium helper to end a test purchase. Helper to test the payment validation and redirection",
+            "time": "2018-08-27T08:26:26+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
