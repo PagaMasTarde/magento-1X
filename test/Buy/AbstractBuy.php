@@ -186,11 +186,14 @@ abstract class AbstractBuy extends MagentoTest
     public function goToPMT($useIframe = true)
     {
         $this->webDriver->executeScript('review.save()');
+
         // If use iFrame the test will end without finish the boy and test return
         if($useIframe) {
             $this->webDriver->wait()->until(
                 WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
             );
+
+            $this->logoutFromPmt();
             $this->webDriver->wait()->until(
                 WebDriverExpectedCondition::elementToBeClickable(
                     WebDriverBy::name('form-continue')
@@ -202,6 +205,30 @@ abstract class AbstractBuy extends MagentoTest
             );
             // PMT opened successfully in iframe mode
             return;
+        }
+    }
+
+    /**
+     * Close previous pmt session if an user is logged in
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function logoutFromPmt()
+    {
+        // Wait the page to render (check the simulator is rendered)
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable(
+                WebDriverBy::name('minusButton')
+            )
+        );
+        // Check if user is logged in in PMT
+        $closeSession = $this->webDriver->findElements(WebDriverBy::name('one_click_return_to_normal'));
+        if (count($closeSession) !== 0) {
+            //Logged out
+            $continueButtonSearch = WebDriverBy::name('one_click_return_to_normal');
+            $continueButtonElement = $this->webDriver->findElement($continueButtonSearch);
+            $continueButtonElement->click();
         }
     }
 
