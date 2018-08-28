@@ -28,7 +28,7 @@ class CancelBuyUnregisteredTest extends AbstractBuy
         $this->fillPaymentMethod();
         $this->goToPMT(false);
         $this->cancelPurchase();
-        $this->checkCanceledPurchase();
+        $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
         $this->quit();
     }
 
@@ -96,23 +96,4 @@ class CancelBuyUnregisteredTest extends AbstractBuy
         SeleniumHelper::cancelForm($this->webDriver);
     }
 
-    /**
-     * Check Canceled Purchase
-     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
-     * @throws \Facebook\WebDriver\Exception\TimeOutException
-     */
-    public function checkCanceledPurchase()
-    {
-        // Check if all goes good
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::visibilityOfElementLocated(
-                WebDriverBy::cssSelector('.page-title h1')
-            )
-        );
-        $successMessage = $this->findByCss('.page-title h1');
-        $this->assertContains(
-            self::SHOPPING_CART_MESSAGE,
-            $successMessage->getText()
-        );
-    }
 }

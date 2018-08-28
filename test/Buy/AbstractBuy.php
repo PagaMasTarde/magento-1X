@@ -262,4 +262,53 @@ abstract class AbstractBuy extends MagentoTest
             $this->findByClass('FieldsPreview-desc')->getText()
         );
     }
+
+    /**
+     * Check if the purchase was in the myAccount panel and with Processing status
+     *
+     * @param string $statusText
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function checkLastPurchaseStatus($statusText = 'Processing')
+    {
+        $accountMenu = WebDriverBy::cssSelector('.account-cart-wrapper a.skip-link.skip-account');
+        $this->clickElement($accountMenu);
+
+        $myAccountMenu = WebDriverBy::cssSelector('#header-account .first a');
+        $this->clickElement($myAccountMenu);
+
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                WebDriverBy::cssSelector('.box-account.box-recent')
+            )
+        );
+
+        $status = $this->findByCss('.box-account.box-recent .data-table.orders .first .status em')->getText();
+        $this->assertTrue(($status == $statusText));
+    }
+
+    /**
+     * Check purchase return message
+     *
+     * @param string $message
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function checkPurchaseReturn($message = '')
+    {
+        // Check if all goes good
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                WebDriverBy::cssSelector('.page-title h1')
+            )
+        );
+        $successMessage = $this->findByCss('.page-title h1');
+        $this->assertContains(
+            $message,
+            $successMessage->getText()
+        );
+    }
 }
