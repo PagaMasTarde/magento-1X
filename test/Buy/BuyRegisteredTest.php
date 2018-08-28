@@ -27,7 +27,8 @@ class BuyRegisteredTest extends AbstractBuy
         $this->fillPaymentMethod();
         $this->goToPMT(false);
         $this->commitPurchase();
-        $this->checkCommitedPurchase();
+        $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
+        $this->checkLastPurchaseStatus('Processing');
         $this->quit();
     }
 
@@ -66,25 +67,5 @@ class BuyRegisteredTest extends AbstractBuy
     {
         // complete the purchase with redirect
         SeleniumHelper::finishForm($this->webDriver);
-    }
-
-    /**
-     * Check Commited Purchase
-     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
-     * @throws \Facebook\WebDriver\Exception\TimeOutException
-     */
-    public function checkCommitedPurchase()
-    {
-        // Check if all goes good
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::visibilityOfElementLocated(
-                WebDriverBy::cssSelector('.page-title h1')
-            )
-        );
-        $successMessage = $this->findByCss('.page-title h1');
-        $this->assertContains(
-            self::CORRECT_PURCHASE_MESSAGE,
-            $successMessage->getText()
-        );
     }
 }

@@ -5,6 +5,7 @@ namespace Test;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -121,6 +122,23 @@ abstract class MagentoTest extends TestCase
     public function findByPartialLinkText($link)
     {
         return $this->webDriver->findElement(WebDriverBy::partialLinkText($link));
+    }
+
+    /**
+     * @param $element
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function clickElement($element)
+    {
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable(
+                $element
+            )
+        );
+        $accountMenuElement = $this->webDriver->findElement($element);
+        $accountMenuElement->click();
     }
 
     /**
