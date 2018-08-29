@@ -25,10 +25,32 @@ class BuyRegisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
+
+        // get cart total price
+        $cartPrice = WebDriverBy::cssSelector('#checkout-review-table tfoot tr.last .price');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::presenceOfElementLocated(
+                $cartPrice
+            )
+        );
+        $cartPrice = $this->webDriver->findElement($cartPrice)->getText();
+        // --------------------
         $this->goToPMT(false);
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->checkLastPurchaseStatus('Processing');
+
+        // get registered purchase amount
+        $checkoutPrice = WebDriverBy::cssSelector('.box-account.box-recent .data-table.orders .first .total .price');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::presenceOfElementLocated(
+                $checkoutPrice
+            )
+        );
+        $checkoutPrice = $this->webDriver->findElement($checkoutPrice)->getText();
+        //----------------------
+
+        $this->assertTrue(($cartPrice == $checkoutPrice));
         $this->quit();
     }
 
