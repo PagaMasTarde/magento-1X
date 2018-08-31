@@ -20,6 +20,8 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $publicKey = $isProduction ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'];
         $simulatorType = $config['PAYLATER_PRODUCT_HOOK_TYPE'];
         $enabled = $config['active'];
+        $defaultInstallments = $config['DEFAULT_INSTALLMENTS'];
+        $maxInstallments = $config['MAX_INSTALLMENTS'];
 
         $this->assign(
             array(
@@ -27,6 +29,8 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
                 'amount' => 10,
                 'publicKey' => $publicKey,
                 'simulatorType' => $simulatorType,
+                'defaultInstallments' => $defaultInstallments,
+                'maxInstallments' => $maxInstallments
             )
         );
 

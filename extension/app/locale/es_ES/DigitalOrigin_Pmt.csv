@@ -11,7 +11,7 @@
 "PaymentMethod Order", "Posición en la página de checkout"
 " Do not show", " No mostrar"
 " Complete", " Completo"
-" Mini", " Mini"
+" Mini (Recomended)", " Mini (Recomendado)"
 " Selector", " Selector"
 " Descriptive Text", " Texto Descriptivo"
 "Minimum cart amount (ex: 24.99)", "Mínimo importe a financiar (ej: 24.99)"
@@ -20,3 +20,4 @@
 "Finance with Paga+Tarde", "Financiar con Paga+Tarde"
 "Success Url", "URL Confirmación"
 "Failure Url", "URL Fallo"
+"Number of default installments","Número de cuotas por defecto"

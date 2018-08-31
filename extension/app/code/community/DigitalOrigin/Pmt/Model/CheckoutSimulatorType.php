@@ -37,7 +37,7 @@ class DigitalOrigin_Pmt_Model_CheckoutSimulatorType
     {
         return array(
             array(
-                'label' => Mage::helper('pmt')->__(' Mini'),
+                'label' => Mage::helper('pmt')->__(' Mini (Recomended)'),
                 'value' => self::MINI,
             ),
             array(
@@ -48,10 +48,10 @@ class DigitalOrigin_Pmt_Model_CheckoutSimulatorType
                 'label' => Mage::helper('pmt')->__(' Selector'),
                 'value' => self::SELECTOR,
             ),
-            array(
-                'label' => Mage::helper('pmt')->__(' Descriptive Text'),
-                'value' => self::TEXT,
-            ),
+//            array(
+//                'label' => Mage::helper('pmt')->__(' Descriptive Text'),
+//                'value' => self::TEXT,
+//            ),
             array(
                 'label' => Mage::helper('pmt')->__(' Do not show'),
                 'value' => self::NO,

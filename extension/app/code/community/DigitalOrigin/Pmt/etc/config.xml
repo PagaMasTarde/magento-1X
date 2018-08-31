@@ -97,6 +97,8 @@
                 <PAYLATER_PROD>0</PAYLATER_PROD>
                 <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
                 <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
+                <DEFAULT_INSTALLMENTS>3</DEFAULT_INSTALLMENTS>
+                <MAX_INSTALLMENTS>12</MAX_INSTALLMENTS>
                 <MIN_AMOUNT>10</MIN_AMOUNT>
                 <PAYLATER_TITLE>Financiación instantánea - 100% online</PAYLATER_TITLE>
                 <sort_order>1</sort_order>

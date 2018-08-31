@@ -90,10 +90,26 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </PAYLATER_CHECKOUT_HOOK_TYPE>
+                        <DEFAULT_INSTALLMENTS translate="label">
+                            <label>Number of default installments</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </DEFAULT_INSTALLMENTS>
+                        <MAX_INSTALLMENTS translate="label">
+                            <label>Máximo número de pagos</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </MAX_INSTALLMENTS>
                         <MIN_AMOUNT translate="label">
                             <label>Minimum cart amount (ex: 24.99)</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
+                            <sort_order>22</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -101,7 +117,7 @@
                         <sort_order translate="label">
                             <label>PaymentMethod Order</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>21</sort_order>
+                            <sort_order>23</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -109,7 +125,7 @@
                         <PAYLATER_TITLE translate="label">
                             <label>Checkout Title</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>22</sort_order>
+                            <sort_order>24</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -117,7 +133,7 @@
                         <PAYLATER_OK_URL translate="label">
                             <label>Success Url</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>23</sort_order>
+                            <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -125,7 +141,7 @@
                         <PAYLATER_KO_URL translate="label">
                             <label>Failure Url</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>24</sort_order>
+                            <sort_order>26</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

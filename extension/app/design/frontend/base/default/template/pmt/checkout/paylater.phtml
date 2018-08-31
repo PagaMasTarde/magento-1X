@@ -22,7 +22,7 @@ $_code = $this->getMethodCode();
 <div id="payment_form_<?=$_code?>" style="display: none">
     <div id="paylater-checkout">
         <div class="PmtSimulator"
-             data-pmt-num-quota="4" data-pmt-max-ins="12"
+             data-pmt-num-quota="<?=$defaultInstallments?>" data-pmt-max-ins="<?=$maxInstallments?>"
              data-pmt-type="<?=$simulatorType?>"
              data-pmt-amount="<?=$amount?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
         </div>
