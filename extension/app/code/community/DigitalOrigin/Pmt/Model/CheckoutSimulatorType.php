@@ -40,10 +40,10 @@ class DigitalOrigin_Pmt_Model_CheckoutSimulatorType
                 'label' => Mage::helper('pmt')->__(' Mini (Recomended)'),
                 'value' => self::MINI,
             ),
-            array(
-                'label' => Mage::helper('pmt')->__(' Complete'),
-                'value' => self::COMPLETE,
-            ),
+//            array(
+//                'label' => Mage::helper('pmt')->__(' Complete'),
+//                'value' => self::COMPLETE,
+//            ),
             array(
                 'label' => Mage::helper('pmt')->__(' Selector'),
                 'value' => self::SELECTOR,
