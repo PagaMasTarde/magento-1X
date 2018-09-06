@@ -16,21 +16,14 @@ class DigitalOrigin_Pmt_Block_Product_Simulator extends Mage_Catalog_Block_Produ
     protected function _construct()
     {
         $config = Mage::getStoreConfig('payment/paylater');
-        $isProduction = $config['PAYLATER_PROD'];
-        $publicKey = $isProduction ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'];
-        $simulatorType = $config['PAYLATER_PRODUCT_HOOK_TYPE'];
-        $enabled = $config['active'];
-        $defaultInstallments = $config['DEFAULT_INSTALLMENTS'];
-        $maxInstallments = $config['MAX_INSTALLMENTS'];
-
         $this->assign(
             array(
-                'enabled' => $enabled,
-                'amount' => 10,
-                'publicKey' => $publicKey,
-                'simulatorType' => $simulatorType,
-                'defaultInstallments' => $defaultInstallments,
-                'maxInstallments' => $maxInstallments
+                'enabled' => $config['active'],
+                'publicKey' => ($config['PAYLATER_PROD']) ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'],
+                'simulatorType' => $config['PAYLATER_PRODUCT_HOOK_TYPE'],
+                'defaultInstallments' => $config['DEFAULT_INSTALLMENTS'],
+                'maxInstallments' => $config['MAX_INSTALLMENTS'],
+                'minAmount' => $config['MIN_AMOUNT']
             )
         );
 

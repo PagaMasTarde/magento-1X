@@ -169,6 +169,18 @@ abstract class AbstractConfigure extends MagentoTest
             ->sendKeys($this->configuration['secretKey'])
         ;
         $this->findById($paylaterMode)->click();
+        $this->findById('payment_paylater_DEFAULT_INSTALLMENTS')
+            ->clear()
+            ->sendKeys($this->configuration['defInstallments'])
+        ;
+        $this->findById('payment_paylater_MAX_INSTALLMENTS')
+            ->clear()
+            ->sendKeys($this->configuration['maxInstallments'])
+        ;
+        $this->findById('payment_paylater_MIN_AMOUNT')
+            ->clear()
+            ->sendKeys($this->configuration['minAmount'])
+        ;
         $this->findById('payment_paylater_PAYLATER_TITLE')->clear()->sendKeys('extra');
 
         //Confirm and validate

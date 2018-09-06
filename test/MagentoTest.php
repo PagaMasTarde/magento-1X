@@ -30,20 +30,23 @@ abstract class MagentoTest extends TestCase
     protected $configuration = array(
         'backofficeUsername' => 'admin',
         'backofficePassword' => 'password123',
-        'username'      => 'demo@prestashop.com',
-        'password'      => 'prestashop_demo',
-        'publicKey'     => 'tk_fd53cd467ba49022e4f8215e',
-        'secretKey'     => '21e57baa97459f6a',
-        'birthdate'     => '05/05/2005',
-        'firstname'     => 'Jøhn',
-        'lastname'      => 'Dōè Martínez',
-        'email'         => 'john_mg@digitalorigin.com',
-        'company'       => 'Digital Origin SL',
-        'zip'           => '08023',
-        'city'          => 'Barcelona',
-        'street'        => 'Av Diagonal 585, planta 7',
-        'phone'         => '600123123',
-        'dni'           => '09422447Z'
+        'username'           => 'demo@prestashop.com',
+        'password'           => 'prestashop_demo',
+        'publicKey'          => 'tk_fd53cd467ba49022e4f8215e',
+        'secretKey'          => '21e57baa97459f6a',
+        'birthdate'          => '05/05/2005',
+        'firstname'          => 'Jøhn',
+        'lastname'           => 'Dōè Martínez',
+        'email'              => 'john_mg@digitalorigin.com',
+        'company'            => 'Digital Origin SL',
+        'zip'                => '08023',
+        'city'               => 'Barcelona',
+        'street'             => 'Av Diagonal 585, planta 7',
+        'phone'              => '600123123',
+        'dni'                => '09422447Z',
+        'defInstallments'    => '3',
+        'maxInstallments'    => '12',
+        'minAmount'          => '1'
     );
 
     /**

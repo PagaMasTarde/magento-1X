@@ -5,12 +5,13 @@
  * @var string $publicKey
  */
 if ($simulatorType && $enabled) {
+    $display=($this->getFinalPrice() >= $minAmount)? 'block': 'none';
 ?>
 
 <div id="pmt-simulator-product-page" class="PmtSimulator"
      data-pmt-num-quota="<?=$defaultInstallments?>" data-pmt-max-ins="<?=$maxInstallments?>"
      data-pmt-type="<?=$simulatorType?>"
-     data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
+     data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>" style="display:<?=$display?>">
 </div>
 <script type="text/javascript">
     function changePrice(miliseconds=1000)
@@ -18,16 +19,25 @@ if ($simulatorType && $enabled) {
         setTimeout(
             function() {
                 var newPrice = document.querySelector('[id^="product-price"]').innerText.replace('.','');
+                window.newPrice = newPrice;
+                // String.fromCharCode(160) is a strange space
+                var newNumericPrice = parseFloat(newPrice.substring(0, newPrice.indexOf(String.fromCharCode(160))));
                 var currentPrice = document.getElementsByClassName('PmtSimulator')[0].getAttribute('data-pmt-amount');
-                if (newPrice != currentPrice && typeof newPrice !== 'undefined') {
-                    for (simulator of document.getElementsByClassName('PmtSimulator'))
-                    {
-                        simulator.setAttribute('data-pmt-amount', newPrice);
-                    }
+                if (newNumericPrice >= <?=$minAmount?>) {
+                    if (newPrice != currentPrice && typeof newPrice !== 'undefined') {
+                        document.getElementsByClassName('PmtSimulator')[0].style.display = 'block';
+                        for (simulator of document.getElementsByClassName('PmtSimulator'))
+                        {
+                            simulator.setAttribute('data-pmt-amount', newPrice);
+                        }
 
-                    if (typeof pmtClient !== 'undefined') {
-                        pmtClient.simulator.reload();
+                        if (typeof pmtClient !== 'undefined') {
+                            pmtClient.simulator.reload();
+                        }
                     }
+                }
+                else {
+                    document.getElementsByClassName('PmtSimulator')[0].style.display = 'none';
                 }
             }
             ,miliseconds)
