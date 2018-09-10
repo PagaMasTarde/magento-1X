@@ -14,7 +14,7 @@ if ($simulatorType && $enabled) {
      data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>" style="display:<?=$display?>">
 </div>
 <script type="text/javascript">
-    function changePrice(miliseconds=1000)
+    function changePrice(miliseconds=2000)
     {
         setTimeout(
             function() {

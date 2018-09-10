@@ -84,6 +84,21 @@ class DigitalOrigin_Pmt_PaymentController extends Mage_Core_Controller_Front_Act
             ->setMetadata($metadata)
         ;
 
+        if (count($magentoObjectModule->getItems()) == count($itemsData)) {
+            Mage::log(
+                json_encode(array(
+                    'reason' => 'Number of items in Cart and items in Order doesn\'t match ('.count($magentoObjectModule->getItems()).' vs '.count($itemsData).')',
+                    'orderData' => $orderData,
+                    'customerData' => $customerData,
+                    'timestamp' => time()
+                )),
+                null,
+                'pre-pmt.log',
+                true
+            );
+            return $this->_redirectUrl($back);
+        }
+
         $shopperClient = new \ShopperLibrary\ShopperClient(self::SHOPPER_URL);
         $shopperClient->setObjectModule($magentoObjectModule);
         $paymentForm = $shopperClient->getPaymentForm();

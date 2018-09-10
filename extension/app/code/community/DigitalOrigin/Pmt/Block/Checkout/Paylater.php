@@ -12,26 +12,26 @@ class DigitalOrigin_Pmt_Block_Checkout_Paylater extends Mage_Payment_Block_Form
     {
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $checkoutSession = Mage::getModel('checkout/session');
-        $quote = $checkoutSession->getQuote();
         $config = Mage::getStoreConfig('payment/paylater');
-        $amount=$quote->getGrandTotal();
-        $isProduction = $config['PAYLATER_PROD'];
-        $publicKey = $isProduction ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'];
-        $simulatorType = $config['PAYLATER_CHECKOUT_HOOK_TYPE'];
-        $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
-        $logoTemplate = new $classCoreTemplate;
-        $logoHtml = $logoTemplate->setTemplate('pmt/checkout/logo.phtml')->toHtml();
 
         $this->assign(array(
-                'amount' => $amount,
-                'publicKey' => $publicKey,
-                'simulatorType' => $simulatorType,
+            'enabled' => $config['active'],
+            'publicKey' => $config['PAYLATER_PROD'] ? $config['PAYLATER_PUBLIC_KEY_PROD'] : $config['PAYLATER_PUBLIC_KEY_TEST'],
+            'simulatorType' => $config['PAYLATER_CHECKOUT_HOOK_TYPE'],
+            'amount' => $checkoutSession->getQuote()->getGrandTotal(),
+            'defaultInstallments' => $config['DEFAULT_INSTALLMENTS'],
+            'maxInstallments' => $config['MAX_INSTALLMENTS'],
+            'minAmount' => $config['MIN_AMOUNT']
         ));
 
         $title = $config['PAYLATER_TITLE'];
         if (empty($title)) {
             $title = $config['title'];
         }
+
+        $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+        $logoTemplate = new $classCoreTemplate;
+        $logoHtml = $logoTemplate->setTemplate('pmt/checkout/logo.phtml')->toHtml();
 
         $template = $this->setTemplate('pmt/checkout/paylater.phtml');
         $template->setMethodTitle($title)->setMethodLabelAfterHtml($logoHtml);

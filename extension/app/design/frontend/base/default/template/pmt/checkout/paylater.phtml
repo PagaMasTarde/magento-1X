@@ -18,7 +18,8 @@ $_code = $this->getMethodCode();
         pmtClient.events.send('checkout', { basketAmount: '<?=$amount?>' } );
     }
 </script>
-<?php if($simulatorType) { ?>
+<?php
+if($simulatorType && $enabled) { ?>
 <div id="payment_form_<?=$_code?>" style="display: none">
     <div id="paylater-checkout">
         <div class="PmtSimulator"

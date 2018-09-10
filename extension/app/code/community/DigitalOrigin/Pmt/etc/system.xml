@@ -97,6 +97,8 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
+                            <validate>validate-number</validate>
                         </DEFAULT_INSTALLMENTS>
                         <MAX_INSTALLMENTS translate="label">
                             <label>Máximo número de pagos</label>
@@ -105,6 +107,8 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
+                            <validate>validate-number</validate>
                         </MAX_INSTALLMENTS>
                         <MIN_AMOUNT translate="label">
                             <label>Minimum cart amount (ex: 24.99)</label>
@@ -113,6 +117,8 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
+                            <validate>validate-number</validate>
                         </MIN_AMOUNT>
                         <sort_order translate="label">
                             <label>PaymentMethod Order</label>
@@ -121,30 +127,43 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
                         </sort_order>
                         <PAYLATER_TITLE translate="label">
-                            <label>Checkout Title</label>
+                            <label>Checkout Pay Option Title</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>24</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
                         </PAYLATER_TITLE>
-                        <PAYLATER_OK_URL translate="label">
-                            <label>Success Url</label>
+                        <title translate="label">
+                            <label>Checkout Progress Title</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </PAYLATER_OK_URL>
-                        <PAYLATER_KO_URL translate="label">
-                            <label>Failure Url</label>
+                            <validate>required-entry</validate>
+                        </title>
+                        <PAYLATER_OK_URL translate="label">
+                            <label>Success Url</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>26</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
+                        </PAYLATER_OK_URL>
+                        <PAYLATER_KO_URL translate="label">
+                            <label>Failure Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>27</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
                         </PAYLATER_KO_URL>
                     </fields>
                 </paylater>

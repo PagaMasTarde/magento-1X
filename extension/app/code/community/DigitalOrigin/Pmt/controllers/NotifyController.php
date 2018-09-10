@@ -190,6 +190,21 @@ class DigitalOrigin_Pmt_NotifyController extends Mage_Core_Controller_Front_Acti
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
 
+        // Check previous status is 'pending_payment'
+        $statusHistory = $order->getAllStatusHistory();
+        if (!(is_array($statusHistory) &&  is_object($statusHistory[0]) &&
+            $statusHistory[0]->getStatus() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)) {
+            $this->message = 'Payment already processed';
+            return true;
+        }
+
+        // Order has been processed at least once in the past.
+        foreach ($order->getAllStatusHistory() as $oStatus) {
+            if (in_array($oStatus->getStatus(),array(Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_COMPLETE))) {
+                $this->message = 'Order has been processed previously"';
+                return true;
+            }
+        }
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
             $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
             $code != self::CODE
