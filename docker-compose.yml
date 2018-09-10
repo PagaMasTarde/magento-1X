@@ -2,6 +2,7 @@ version: "3.5"
 
 services:
   magento19:
+    container_name: magento19Dev
     build:
       dockerfile: Dockerfile
       context: ./
@@ -29,6 +30,7 @@ services:
       - "magento19-dev.docker:127.0.0.1"
 
   magento-test:
+    container_name: magento19Test
     build:
       dockerfile: Dockerfile
       context: ./
@@ -56,18 +58,21 @@ services:
     - "magento19-test.docker:127.0.0.1"
 
   db-dev:
+    container_name: magento19DbDev
     image: mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=magento
+    - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_DATABASE=magento
 
   db-test:
+    container_name: Magento19DbTest
     image: mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=magento
+    - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_DATABASE=magento
 
   selenium:
+    container_name: magento19Selenium
     image: selenium/standalone-chrome:3.7.1
     ports:
       - "4444:4444"
