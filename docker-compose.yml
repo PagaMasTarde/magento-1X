@@ -65,7 +65,7 @@ services:
     - MYSQL_DATABASE=magento
 
   db-test:
-    container_name: Magento19DbTest
+    container_name: magento19DbTest
     image: mysql:5.7
     environment:
     - MYSQL_ROOT_PASSWORD=password
