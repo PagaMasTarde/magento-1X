@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class DigitalOrigin_Pmt_ApiController
+ * Class DigitalOrigin_Pmt_LogController
  */
 class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
 {
@@ -9,6 +9,7 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
      * @var string $message
      */
     protected $message;
+
     /**
      * @var bool $error
      */
@@ -16,6 +17,9 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
 
     /**
      * Controller index method:
+     *
+     * @return Mage_Core_Controller_Response_Http
+     * @throws Zend_Controller_Request_Exception
      */
     public function indexAction()
     {
@@ -40,7 +44,6 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
             if (file_exists($prepmtLogFile)) {
                 $result['result']['pre-pmt'] = file_get_contents($prepmtLogFile);
             }
-
         }
 
         $result = json_encode($result);
@@ -53,6 +56,8 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
     }
 
     /**
+     * Check if private key is provided and is equal than setted in backoffice
+     *
      * @return bool
      * @throws Zend_Controller_Request_Exception
      */
@@ -62,7 +67,8 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
         if ((Mage::app()->getRequest()->getParam('secret') == $privateKey ||
-            Mage::app()->getRequest()->getHeader('secret') == $privateKey)) {
+            Mage::app()->getRequest()->getHeader('secret') == $privateKey)
+            && !empty($privateKey)) {
             return true;
         }
 
@@ -70,7 +76,7 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
     }
 
     /**
-     * Return and print the response of request
+     * Return a printable response of the request
      *
      * @param string $result
      * @param array  $headers
