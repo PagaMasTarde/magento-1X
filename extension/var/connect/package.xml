@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>DigitalOrigin_Pmt</name>
-    <version>6.2.9</version>
+    <version>7.0.0</version>
     <stability>stable</stability>
     <license>GPL</license>
     <channel>community</channel>

@@ -10,7 +10,7 @@
    <description>Paga+Tarde, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Paga+Tarde, la solución líder en España de financiación omnicanal instantánea.</description>
    <license>GPL</license>
    <license_uri/>
-   <version>6.2.9</version>
+   <version>7.0.0</version>
    <stability>stable</stability>
    <notes>* Notification error status 400
 * Loggin in /var/log/pmt.log
