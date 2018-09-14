@@ -32,6 +32,7 @@ RUN buildDeps="libxml2-dev" \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
+        vim \
         --no-install-recommends && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) pdo_mysql mcrypt soap \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \

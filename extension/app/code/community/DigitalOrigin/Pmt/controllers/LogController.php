@@ -1,9 +1,12 @@
 <?php
 
+require_once('lib/DigitalOrigin/autoload.php');
+require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.php');
+
 /**
  * Class DigitalOrigin_Pmt_LogController
  */
-class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
+class DigitalOrigin_Pmt_LogController extends BaseController
 {
     /**
      * @var string $message
@@ -16,21 +19,16 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
     protected $error = false;
 
     /**
-     * Controller index method:
+     * Controller download method:
      *
      * @return Mage_Core_Controller_Response_Http
      * @throws Zend_Controller_Request_Exception
      */
-    public function indexAction()
+    public function downloadAction()
     {
         if (!$this->authorize()) {
-            $result = json_encode(array('timestamp' => time(), 'result' => 'Access Forbidden'));
-            $headers = array(
-                'HTTP/1.1 403 Forbidden' => 403,
-                'Content-Type' => 'application/json',
-                'Content-Length' => strlen($result)
-            );
-            return $this->response($result, $headers);
+            $result = array('timestamp' => time(), 'result' => 'Access Forbidden');
+            return $this->response($result, array(),403);
         }
 
         $result = array('timestamp' => time(), result => array());
@@ -46,13 +44,7 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        $result = json_encode($result);
-        $headers = array(
-            'HTTP/1.1 200 Ok' => 200,
-            'Content-Type' => 'application/json',
-            'Content-Length' => strlen($result)
-        );
-        return $this->response($result, $headers);
+        return $this->response($result, array(), 200);
     }
 
     /**
@@ -73,21 +65,5 @@ class DigitalOrigin_Pmt_LogController extends Mage_Core_Controller_Front_Action
         }
 
         return false;
-    }
-
-    /**
-     * Return a printable response of the request
-     *
-     * @param string $result
-     * @param array  $headers
-     * @return Mage_Core_Controller_Response_Http
-     */
-    public function response($result = '', $headers = array()) {
-        $response = $this->getResponse();
-        $response->setBody($result);
-        foreach ($headers as $key => $value) {
-            $response->setHeader($key, $value);
-        }
-        return $response;
     }
 }

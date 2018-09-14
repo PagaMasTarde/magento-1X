@@ -1,15 +1,22 @@
 <?php
 
 require_once('lib/DigitalOrigin/autoload.php');
-require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.php');
 
 /**
  * Class DigitalOrigin_Pmt_NotifyController
- *
- * Now with orders
  */
-class DigitalOrigin_Pmt_NotifyController extends BaseController
+class DigitalOrigin_Pmt_Notify_oldController extends Mage_Core_Controller_Front_Action
 {
+    /**
+     * Code
+     */
+    const CODE = 'paylater';
+
+    /**
+     * Tablename
+     */
+    const CONCURRENCY_TABLE = 'pmt_cart_process';
+
     /**
      * @var string $message
      */
@@ -35,6 +42,31 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
         $this->toCancel = true;
 
         return $this->redirect();
+    }
+
+    /**
+     * Download Logs with Private Key Action
+     */
+    public function downloadAction()
+    {
+        $secretKey = Mage::app()->getRequest()->getParam('secret');
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
+        $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+
+        $file = 'var/log/pmt.log';
+
+        if (file_exists($file) && $privateKey == $secretKey) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($file).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
+        }
     }
 
     /**
@@ -68,16 +100,32 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $result = array(
-                'timestamp' => time(),
-                'order_id' => $orderId,
-                'result' => $this->message,
-            );
-            $headers = array();
-            return $this->response($result, $headers, 400);
+            return $this->jsonResponse();
         } else {
             return $this->redirect();
         }
+    }
+
+    /**
+     * Send a jsonResponse
+     */
+    public function jsonResponse()
+    {
+        $orderId = Mage::app()->getRequest()->getParam('order');
+
+        $result = json_encode(array(
+            'timestamp' => time(),
+            'order_id' => $orderId,
+            'result' => $this->message,
+        ));
+        if ($this->error) {
+            $this->getResponse()->setHttpResponseCode(400);
+        }
+
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $this->getResponse()->setHeader('Content-Length', strlen($result));
+
+        return $this->getResponse()->setBody($result);
     }
 
     /**
@@ -140,7 +188,6 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
         $code = $payment->getMethodInstance()->getCode();
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
         $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-        $publicKey  = $moduleConfig['PAYLATER_PUBLIC_KEY_'.$env];
         $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
 
         // Check previous status is 'pending_payment'
@@ -158,12 +205,6 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
                 return true;
             }
         }
-
-        $orderClient = new \PagaMasTarde\OrdersApiClient\Client(
-            $publicKey,
-            $privateKey
-        );
-        var_dump($orderClient);die;
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
             $status == Mage_Sales_Model_Order::STATE_COMPLETE ||
             $code != self::CODE

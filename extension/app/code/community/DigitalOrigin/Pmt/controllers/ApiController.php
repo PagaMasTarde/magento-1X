@@ -1,9 +1,12 @@
 <?php
 
+require_once('lib/DigitalOrigin/autoload.php');
+require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.php');
+
 /**
  * Class DigitalOrigin_Pmt_ApiController
  */
-class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
+class DigitalOrigin_Pmt_ApiController extends DigitalOrigin_Pmt_BaseController
 {
     /**
      * @var string $message
