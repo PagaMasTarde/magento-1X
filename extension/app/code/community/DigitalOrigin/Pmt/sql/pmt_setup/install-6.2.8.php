@@ -5,8 +5,8 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run('DROP TABLE IF EXISTS pmt_cart_process');
-$installer->run('CREATE TABLE `pmt_cart_process` (
+$installer->run('DROP TABLE IF EXISTS pmt_cart_concurrency');
+$installer->run('CREATE TABLE `pmt_cart_concurrency` (
   `id` INT NOT NULL ,
   `timestamp` INT NOT NULL ,
   PRIMARY KEY (`id`)

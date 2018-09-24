@@ -9,11 +9,6 @@ require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.ph
 class DigitalOrigin_Pmt_LogController extends BaseController
 {
     /**
-     * @var string $message
-     */
-    protected $message;
-
-    /**
      * @var bool $error
      */
     protected $error = false;
@@ -27,24 +22,23 @@ class DigitalOrigin_Pmt_LogController extends BaseController
     public function downloadAction()
     {
         if (!$this->authorize()) {
-            $result = array('timestamp' => time(), 'result' => 'Access Forbidden');
-            return $this->response($result, array(),403);
+            $this->message = 'Access Forbidden';
+            $this->code = 403;
+            return $this->response();
         }
 
-        $result = array('timestamp' => time(), result => array());
+        $result = array();
         $logDir  = Mage::getBaseDir('var') . DIRECTORY_SEPARATOR . 'log';
         if (is_dir($logDir)) {
             $pmtLogFile = $logDir . DIRECTORY_SEPARATOR . 'pmt.log';
-            $prepmtLogFile = $logDir . DIRECTORY_SEPARATOR . 'pre-pmt.log';
             if (file_exists($pmtLogFile)) {
-                $result['result']['pmt'] = file_get_contents($pmtLogFile);
-            }
-            if (file_exists($prepmtLogFile)) {
-                $result['result']['pre-pmt'] = file_get_contents($prepmtLogFile);
+                $result['pmt'] = file_get_contents($pmtLogFile);
             }
         }
-
-        return $this->response($result, array(), 200);
+        echo file_get_contents($pmtLogFile);die;
+        $this->message = $result;
+        $this->code = 200;
+        return $this->response();
     }
 
     /**

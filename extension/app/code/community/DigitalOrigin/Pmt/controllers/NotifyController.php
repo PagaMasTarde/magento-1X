@@ -11,14 +11,20 @@ require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.ph
 class DigitalOrigin_Pmt_NotifyController extends BaseController
 {
     /**
-     * @var string $message
+     * @var string $merchantOrderId
      */
-    protected $message;
+    protected $merchantOrderId;
 
     /**
-     * @var bool $error
+     * @var Mage_Sales_Model_Order $merchantOrder
      */
-    protected $error = false;
+    protected $merchantOrder;
+
+    /**
+     * @var mixed $config
+     */
+    protected $config;
+
 
     /**
      * Cancel order
@@ -38,34 +44,126 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
     }
 
     /**
+     * @throws Exception
+     */
+    public function prepareVariables()
+    {
+        try {
+            $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
+            if ($this->merchantOrderId == '') {
+                $this->code = 404;
+                $this->message = BaseController::PV_NO_MERCHANT_ORDERID;
+                throw new \Exception($this->message,  $this->code);
+            }
+            $this->config = Mage::getStoreConfig('payment/paylater');
+        } catch (\Exception $exception) {
+            $this->code = 500;
+            $this->message = BaseController::PMO_ERR_MSG;
+
+            throw new \Exception($this->message,  $this->code);
+        }
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function checkConcurrency()
+    {
+        try {
+            $this->unblockConcurrency();
+            $this->blockConcurrency($this->merchantOrderId);
+            // $this->processValidation();
+            // $this->unblockConcurrency($orderId);
+        } catch (\Exception $exception) {
+            $this->code = 429;
+            $this->message = BaseController::CC_ERR_MSG;
+
+            throw new \Exception($this->message,  $this->code);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getMerchantOrder()
+    {
+        try {
+            /** @var Mage_Sales_Model_Order $order */
+            $this->merchantOrder = Mage::getModel('sales/order')->loadByIncrementId($this->merchantOrderId);
+        } catch (\Exception $exception) {
+            $this->code = 404;
+            $this->message = 'Unable to find merchant Order';
+
+            throw new \Exception($this->message,  $this->code);
+        }
+    }
+
+    private function getPmtOrder()
+    {
+        try {
+            $this->orderClient = new Client($this->config['public_key'], $this->config['secret_key']);
+            $this->pmtOrder = $this->orderClient->getOrder($this->pmtOrderId);
+        } catch (\Exception $e) {
+            $exceptionObject = new \stdClass();
+            $exceptionObject->method = __FUNCTION__;
+            $exceptionObject->status = '400';
+            $exceptionObject->result = self::GPO_ERR_MSG;
+            $exceptionObject->result_description = $e->getMessage();
+            throw new \Exception(serialize($exceptionObject));
+        }
+    }
+
+    private function getPmtOrderId()
+    {
+        try {
+            $this->getPmtOrderIdDb();
+            $this->getMagentoOrderId();
+        } catch (\Exception $e) {
+            $exceptionObject = new \stdClass();
+            $exceptionObject->method= __FUNCTION__;
+            $exceptionObject->status='404';
+            $exceptionObject->result= self::GPOI_ERR_MSG;
+            $exceptionObject->result_description = $e->getMessage();
+            throw new \Exception(serialize($exceptionObject));
+        }
+    }
+
+    /**
      * Index action
      */
     public function indexAction()
     {
+        //Flow Notify/OK Url
+        //------------------
+        //checkConcurrency()
+        //getMerchantOrder()
+        //getPmtOrderId()
+        //getPmtOrder()
+        //checkOrderStatus()
+        //checkMerchantOrderStatus()
+        //validateAmount()
+        //processMerchantOrder()
+        //ConfirmPmtOrder()
+
         try {
-            $orderId = Mage::app()->getRequest()->getParam('order');
-            $this->unblockConcurrency();
-            if (!$this->blockConcurrency($orderId)) {
-                $this->message = 'Validation in progress, try again later';
-            } else {
-                $this->processValidation();
-                $this->unblockConcurrency($orderId);
-            }
+            $this->prepareVariables();
+            $this->checkConcurrency();
+            $this->getPmtOrderId();
+
+
+
         } catch (\Exception $exception) {
-            Mage::log(
-                json_encode(array(
-                    'order' => $orderId,
-                    'timestamp' => time(),
-                    'message' => $exception->getMessage(),
-                    'trace' => $exception->getTrace(),
-                )),
-                null,
-                'pmt.log',
-                true
-            );
-            $this->message = $exception->getMessage();
-            $this->error = true;
+            $this->saveLog($exception, array(
+                'pmtMessage' => $this->message,
+                'order' => $this->orderId,
+            ));
+            $this->response(array('message' => $this->message), null, $this->code);
         }
+
+
+
+
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = array(
@@ -108,17 +206,14 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
                 try {
                     $order->save();
                 } catch (\Exception $exception) {
-                    Mage::log(
-                        json_encode(array(
-                            'order' => $orderId,
-                            'timestamp' => time(),
-                            'message' => $exception->getMessage(),
-                            'trace' => $exception->getTrace(),
-                        )),
-                        null,
-                        'pmt.log',
-                        true
+                    $data = array(
+                        'method' => __FUNCTION__,
                     );
+                    if ($magentoOrder) {
+                        $data['order_id'] = $orderId;
+                    }
+
+                    $this->saveLog($exception, $data);
                     $this->_redirectUrl(Mage::getUrl($failureUrl));
                 }
             }
@@ -132,6 +227,7 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
      */
     public function processValidation()
     {
+        die("processValidation");
         $orderId = Mage::app()->getRequest()->getParam('order');
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
@@ -238,17 +334,14 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
                 $cart->save();
             }
         } catch (\Exception $exception) {
-            Mage::log(
-                json_encode(array(
-                    'cartId' => $cart->getId(),
-                    'timestamp' => time(),
-                    'message' => $exception->getMessage(),
-                    'trace' => $exception->getTrace(),
-                )),
-                null,
-                'pmt.log',
-                true
+            $data = array(
+                'method' => __FUNCTION__,
             );
+            if ($magentoOrder) {
+                $data['cart_id'] = cartId;
+            }
+
+            $this->saveLog($exception, $data);
             return false;
         }
 
@@ -290,6 +383,7 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
      */
     protected function triggerAmountPaymentError(Mage_Sales_Model_Order $order, $amount)
     {
+        die("triggerAmountPaymentError");
         $order->setState(
             Mage_Sales_Model_Order::STATUS_FRAUD,
             Mage_Sales_Model_Order::STATUS_FRAUD,
@@ -325,14 +419,8 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
     {
         $sql = "INSERT INTO " . self::CONCURRENCY_TABLE . " VALUE (" . $orderId. "," . time() . ")";
 
-        try {
-            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $conn->query($sql);
-        } catch (Exception $exception) {
-            return false;
-        }
-
-        return true;
+        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $conn->query($sql);
     }
 
     /**
@@ -348,14 +436,7 @@ class DigitalOrigin_Pmt_NotifyController extends BaseController
             $sql = "DELETE FROM " . self::CONCURRENCY_TABLE . " WHERE id  = " . $orderId;
         }
 
-        try {
-            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $conn->query($sql);
-        } catch (Exception $exception) {
-            Mage::logException($exception);
-            return false;
-        }
-
-        return true;
+        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $conn->query($sql);
     }
 }

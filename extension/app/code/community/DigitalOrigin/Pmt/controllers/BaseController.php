@@ -6,14 +6,50 @@
 class BaseController extends Mage_Core_Controller_Front_Action
 {
     /**
-     * Tablename
+     * @var integer $code
      */
-    const CONCURRENCY_TABLE = 'pmt_cart_process';
+    protected $code;
+
+    /**
+     * @var string $message
+     */
+    protected $message;
+
+    /**
+     * Concurrency Tablename
+     */
+    const CONCURRENCY_TABLE = 'pmt_cart_concurrency';
+
+    /**
+     * Pmt Orders Tablename
+     */
+    const PMT_ORDERS_TABLE = 'pmt_orders';
 
     /**
      * Code
      */
     const CODE = 'paylater';
+
+    /**
+     * EXCEPTION RESPONSES
+     */
+    const CC_ERR_MSG = 'Unable to block resource';
+    const CC_NO_MERCHANT_ORDER_ID = 'Merchant Order Id not found';
+    const CC_NO_VALIDATE ='Validation in progress, try again later';
+
+    const GMO_ERR_MSG = 'Merchant Order Not Found';
+    const GPOI_ERR_MSG = 'Pmt Order Not Found';
+    const GPOI_NO_ORDERID = 'We can not get the PagaMasTarde identification in database.';
+    const GPO_ERR_MSG = 'Unable to get Order';
+    const COS_ERR_MSG = 'Order status is not authorized';
+    const COS_WRONG_STATUS = 'Invalid Pmt status';
+    const CMOS_ERR_MSG = 'Merchant Order status is invalid';
+    const CMOS_ALREADY_PROCESSED = 'Cart already processed.';
+    const VA_ERR_MSG = 'Amount conciliation error';
+    const VA_WRONG_AMOUNT = 'Wrong order amount';
+    const PMO_ERR_MSG = 'Unknown Error';
+    const CPO_ERR_MSG = 'Order not confirmed';
+    const CPO_OK_MSG = 'Order confirmed';
 
     /**
      * Return a printable response of the request
@@ -24,18 +60,24 @@ class BaseController extends Mage_Core_Controller_Front_Action
      *
      * @return Mage_Core_Controller_Response_Http
      */
-    public function response($result = '', $headers = array(), $statusCode = 200, $format = 'json') {
+    public function response($format = 'json', $headers = array()) {
         $response = $this->getResponse();
+
+        $output = json_encode(array(
+            'date' => date("Y-m-d H:i:s"),
+            'message' => $this->message,
+        ));
+
+
         if($format == 'json') {
-            $result = json_encode($result);
             $response->setHeader('Content-Type', 'application/json');
-            $response->setHeader('Content-Length', strlen($result));
+            $response->setHeader('Content-Length', strlen($output));
         }
 
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
-        $response->setHeader($protocol, $statusCode, $this->getHttpStatusCode($statusCode));
+        $response->setHeader($protocol, $this->code, $this->getHttpStatusCode($this->code));
+        $response->setBody($output);
 
-        $response->setBody($result);
         foreach ($headers as $key => $value) {
             $response->setHeader($key, $value);
         }
@@ -119,8 +161,26 @@ class BaseController extends Mage_Core_Controller_Front_Action
             510 => "Not Extended",
             511 => "Network Authentication Required",
             598 => "Network read timeout error",
-            599 => "Network connect timeout error"
+            599 => "Network connect timeout error",
         );
         return isset($httpStatusCodes)? $httpStatusCodes[$statusCode] : $httpStatusCodes[200];
+    }
+
+    public function saveLog(Exception $e = null , $data = array())
+    {
+        $data = array_merge($data, array(
+            'timestamp' => time(),
+            'date' => date("Y-m-d H:i:s"),
+            'message' => $e->getMessage(),
+            'class' => get_class($this),
+            'method' => __FUNCTION__,
+            'line' => $e->getLine(),
+        ));
+        Mage::log(
+            json_encode($data),
+            null,
+            'pmt.log',
+            true
+        );
     }
 }

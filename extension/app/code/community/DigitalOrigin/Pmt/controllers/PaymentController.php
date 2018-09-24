@@ -18,11 +18,12 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
         $checkoutSession = Mage::getSingleton('checkout/session');
         /** @var Mage_Customer_Model_Session $customerSession */
         $customerSession = Mage::getSingleton('customer/session');
-        $orderId = $checkoutSession->getLastRealOrderId();
+        /** @var integer $magentoOrderId */
+        $magentoOrderId = $checkoutSession->getLastRealOrderId();
         /** @var Mage_Customer_Model_Session $customer */
         $customer = $customerSession->getCustomer();
         /** @var Mage_Sales_Model_Order $order */
-        $magentoOrder = $salesOrder->loadByIncrementId($orderId);
+        $magentoOrder = $salesOrder->loadByIncrementId($magentoOrderId);
         /** @var Mage_Core_Helper_Data $mageCore */
         $mageCore = Mage::helper('core');
         /** @var Mage_Sales_Model_Order_Item[] $itemCollection */
@@ -56,7 +57,6 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
         }
 
         $node = Mage::getConfig()->getNode();
-        /** @var Mage_Customer_Model_Customer $customer */
         $metadata = array(
             'magento' => Mage::getVersion(),
             'pmt' => (string)$node->modules->DigitalOrigin_Pmt->version,
@@ -101,7 +101,7 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                 ->setFullName($orderShippingAddress->getFullName())
                 ->setBillingAddress($orderBillingAddress)
                 ->setDateOfBirth($customer->birthday)
-                ->setEmail($this->context->cookie->logged ? $this->context->cookie->email : $customer->email)
+                ->setEmail($customer->email ? $customer->email : $magentoOrderData['customer_email'])
                 ->setFixPhone($shippingAddress->phone)
                 ->setMobilePhone($shippingAddress->phone_mobile)
                 ->setShippingAddress($orderShippingAddress);
@@ -133,7 +133,7 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
             $orderShoppingCart = new \PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart();
             $orderShoppingCart
                 ->setDetails($details)
-                ->setOrderReference($orderId)
+                ->setOrderReference($magentoOrderId)
                 ->setPromotedAmount(0)
                 ->setTotalAmount(floatval($magentoOrder->getGrandTotal())*100);
 
@@ -167,19 +167,16 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                 ->setMetadata($metadataOrder)
                 ->setShoppingCart($orderShoppingCart)
                 ->setUser($orderUser);
-        } catch (\PagaMasTarde\OrdersApiClient\Exception\ValidationException $validationException) {
-            Mage::log(
-                json_encode(array(
-                    'code' => $validationException->getCode(),
-                    'exception' => $validationException->getMessage(),
-                    'magentoOrder' => json_encode($magentoOrder),
-                    'order' => json_encode($order),
-                    'timestamp' => time()
-                )),
-                null,
-                'pmt.log',
-                true
-            );
+        } catch (\PagaMasTarde\OrdersApiClient\Exception\ClientException $clientException) {
+            $data = array();
+            if ($magentoOrder) {
+                $data['magentoOrder'] = (array) $magentoOrder;
+            }
+            if ($order) {
+                $data['pmtOrder'] = (array) $order;
+            }
+
+            $this->saveLog($clientException, $data);
             return $this->_redirectUrl($cancelUrl);
         }
 
@@ -192,21 +189,17 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
             $order = $orderClient->createOrder($order);
             if ($order instanceof \PagaMasTarde\OrdersApiClient\Model\Order) {
                 $url = $order->getActionUrls()->getForm();
+                $this->insertRow($magentoOrderId, $order->getId());
             } else {
                 throw new \Exception('Order not created');
             }
         } catch (\Exception $exception) {
-            Mage::log(
-                json_encode(array(
-                    'code' => $validationException->getCode(),
-                    'exception' => $validationException->getMessage(),
-                    'order' => json_encode($order),
-                    'timestamp' => time()
-                )),
-                null,
-                'pmt.log',
-                true
-            );
+            $data = array();
+            if ($order) {
+                $data['pmtOrder'] = (array) $order;
+            }
+
+            $this->saveLog($exception, $data);
             return $this->_redirectUrl($cancelUrl);
         }
 
@@ -214,17 +207,12 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
             try {
                 return $this->_redirectUrl($url);
             } catch(\Exception $exception) {
-                Mage::log(
-                    json_encode(array(
-                        'code' => $exception->getCode(),
-                        'exception' => $exception->getMessage(),
-                        'order' => json_encode($order),
-                        'timestamp' => time()
-                    )),
-                    null,
-                    'pmt.log',
-                    true
-                );
+                $data = array();
+                if ($order) {
+                    $data['pmtOrder'] = (array) $order;
+                }
+
+                $this->saveLog($exception, $data);
                 return $this->_redirectUrl($cancelUrl);
             }
         }
@@ -246,5 +234,19 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
 
         $this->getLayout()->getBlock('content')->append($block);
         return $this->renderLayout();
+    }
+
+    /**
+     * @param $magentoOrderId
+     * @param $pmtOrderId
+     *
+     * @return int
+     */
+    private function insertRow($magentoOrderId, $pmtOrderId)
+    {
+        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $sql = 'INSERT INTO ' . self::PMT_ORDERS_TABLE . ' VALUE (\'' . $magentoOrderId. '\', \'' . $pmtOrderId . '\')';
+
+        $conn->query($sql);
     }
 }
