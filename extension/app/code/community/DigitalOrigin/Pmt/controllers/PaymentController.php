@@ -1,12 +1,26 @@
 <?php
 
 require_once('lib/DigitalOrigin/autoload.php');
-require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.php');
+require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractController.php');
+
+use PagaMasTarde\OrdersApiClient\Model\Order as PmtModelOrder;
+use PagaMasTarde\OrdersApiClient\Model\Order\User as PmtModelOrderUser;
+use PagaMasTarde\OrdersApiClient\Model\Order\User\Address as PmtModelOrderAddress;
+use PagaMasTarde\OrdersApiClient\Model\Order\User\OrderHistory as PmtModelOrderHistory;
+use PagaMasTarde\OrdersApiClient\Model\Order\Metadata as PmtModelOrderMetadata;
+use PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart as PmtModelOrderShoppingCart;
+use PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart\Details as PmtModelOrderShoppingCartDetails;
+use PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart\Details\Product as PmtModelOrderShoppingCartProduct;
+use PagaMasTarde\OrdersApiClient\Model\Order\Configuration as PmtModelOrderConfiguration;
+use PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Urls as PmtModelOrderUrls;
+use PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Channel as PmtModelOrderChannel;
+use PagaMasTarde\OrdersApiClient\Client as PmtClient;
+use PagaMasTarde\OrdersApiClient\Exception\ClientException as PmtClientException;
 
 /**
  * Class DigitalOrigin_Pmt_PaymentController
  */
-class DigitalOrigin_Pmt_PaymentController extends BaseController
+class DigitalOrigin_Pmt_PaymentController extends AbstractController
 {
     /**
      * Index action
@@ -64,17 +78,18 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
             'member_since' => $customer->getCreatedAt(),
         );
 
+        $orderShippingAddress = null;
         try {
             for ($i = 0; $i <= count($addressData); $i++) {
                 if (array_search('shipping', $addressData[$i])) {
-                    $userAddress = new \PagaMasTarde\OrdersApiClient\Model\Order\User\Address();
+                    $userAddress = new PmtModelOrderAddress();
                     $userAddress
                         ->setZipCode($addressData[$i]['postcode'])
                         ->setFullName($addressData[$i]['firstname'] . ' ' . $addressData[$i]['lastname'])
                         ->setCountryCode($addressData[$i]['country_id'])
                         ->setCity($addressData[$i]['city'])
                         ->setAddress($addressData[$i]['street']);
-                    $orderShippingAddress = new \PagaMasTarde\OrdersApiClient\Model\Order\User\Address();
+                    $orderShippingAddress = new PmtModelOrderAddress();
                     $orderShippingAddress
                         ->setZipCode($addressData[$i]['postcode'])
                         ->setFullName($addressData[$i]['firstname'] . ' ' . $addressData[$i]['lastname'])
@@ -85,7 +100,7 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                         ->setMobilePhone($addressData[$i]['street']);
                 }
                 if (array_search('billing', $addressData[$i])) {
-                    $orderBillingAddress = new \PagaMasTarde\OrdersApiClient\Model\Order\User\Address();
+                    $orderBillingAddress = new PmtModelOrderAddress();
                     $orderBillingAddress
                         ->setZipCode($addressData[$i]['postcode'])
                         ->setFullName($addressData[$i]['firstname'] . ' ' . $addressData[$i]['lastname'])
@@ -95,15 +110,30 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                 }
             }
 
-            $orderUser = new \PagaMasTarde\OrdersApiClient\Model\Order\User();
+            $orderUser = new PmtModelOrderUser();
+            $fullName = null;
+            $fixPhone = null;
+            $mobilePhone = null;
+            if ($orderShippingAddress) {
+                $fullName = $orderShippingAddress->getFullName();
+                $fixPhone = $orderShippingAddress->phone;
+                $mobilePhone = $orderShippingAddress->phone_mobile;
+            }
+            if (!$fullName) {
+                $fullName = $magentoOrderData['customer_firstname'] . ' ' . $magentoOrderData['customer_lastname'];
+                $fixPhone = $shippingAddress->phone;
+                $mobilePhone = $shippingAddress->phone_mobile;
+
+            }
+            $email = $customer->email ? $customer->email : $magentoOrderData['customer_email'];
             $orderUser
                 ->setAddress($userAddress)
-                ->setFullName($orderShippingAddress->getFullName())
+                ->setFullName($fullName)
                 ->setBillingAddress($orderBillingAddress)
                 ->setDateOfBirth($customer->birthday)
-                ->setEmail($customer->email ? $customer->email : $magentoOrderData['customer_email'])
-                ->setFixPhone($shippingAddress->phone)
-                ->setMobilePhone($shippingAddress->phone_mobile)
+                ->setEmail($email)
+                ->setFixPhone($fixPhone)
+                ->setMobilePhone($mobilePhone)
                 ->setShippingAddress($orderShippingAddress);
 
 
@@ -111,7 +141,7 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
             $orderCollection = $orderCollection->addFieldToFilter('customer_id', $customer->getId());
             foreach ($orderCollection as $cOrder) {
                 if ($cOrder->getState() == Mage_Sales_Model_Order::STATE_COMPLETE) {
-                    $orderHistory = new \PagaMasTarde\OrdersApiClient\Model\Order\User\OrderHistory();
+                    $orderHistory = new PmtModelOrderHistory();
                     $orderHistory
                         ->setAmount(floatval($cOrder->getGrandTotal())*100)
                         ->setDate((string)$cOrder->getCreatedAtFormated()->getDate());
@@ -119,10 +149,10 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                 }
             }
 
-            $details = new \PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart\Details();
+            $details = new PmtModelOrderShoppingCartDetails();
             $details->setShippingCost(floatval($magentoOrder->getShippingAmount())*100);
             foreach ($itemCollection as $item) {
-                $product = new \PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart\Details\Product();
+                $product = new PmtModelOrderShoppingCartProduct();
                 $product
                     ->setAmount(floatval($item->getRowTotalInclTax())*100)
                     ->setQuantity($item->getQtyToShip())
@@ -130,44 +160,44 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                 $details->addProduct($product);
             }
 
-            $orderShoppingCart = new \PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart();
+            $orderShoppingCart = new PmtModelOrderShoppingCart();
             $orderShoppingCart
                 ->setDetails($details)
                 ->setOrderReference($magentoOrderId)
                 ->setPromotedAmount(0)
                 ->setTotalAmount(floatval($magentoOrder->getGrandTotal())*100);
 
-            $orderConfigurationUrls = new \PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Urls();
+            $orderConfigurationUrls = new PmtModelOrderUrls();
             $orderConfigurationUrls
                 ->setCancel($cancelUrl)
                 ->setKo($cancelUrl)
                 ->setNotificationCallback($okUrl)
                 ->setOk($okUrl);
 
-            $orderChannel = new \PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Channel();
+            $orderChannel = new PmtModelOrderChannel();
             $orderChannel
                 ->setAssistedSale(false)
-                ->setType(\PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Channel::ONLINE)
+                ->setType(PmtModelOrderChannel::ONLINE)
             ;
 
-            $orderConfiguration = new \PagaMasTarde\OrdersApiClient\Model\Order\Configuration();
+            $orderConfiguration = new PmtModelOrderConfiguration();
             $orderConfiguration
                 ->setChannel($orderChannel)
                 ->setUrls($orderConfigurationUrls)
             ;
 
-            $metadataOrder = new \PagaMasTarde\OrdersApiClient\Model\Order\Metadata();
+            $metadataOrder = new PmtModelOrderMetadata();
             foreach ($metadata as $key => $metadatum) {
                 $metadataOrder->addMetadata($key, $metadatum);
             }
 
-            $order = new \PagaMasTarde\OrdersApiClient\Model\Order();
+            $order = new PmtModelOrder();
             $order
                 ->setConfiguration($orderConfiguration)
                 ->setMetadata($metadataOrder)
                 ->setShoppingCart($orderShoppingCart)
                 ->setUser($orderUser);
-        } catch (\PagaMasTarde\OrdersApiClient\Exception\ClientException $clientException) {
+        } catch (\Exception $exception) {
             $data = array();
             if ($magentoOrder) {
                 $data['magentoOrder'] = (array) $magentoOrder;
@@ -176,18 +206,19 @@ class DigitalOrigin_Pmt_PaymentController extends BaseController
                 $data['pmtOrder'] = (array) $order;
             }
 
-            $this->saveLog($clientException, $data);
+            $this->saveLog($exception, $data);
             return $this->_redirectUrl($cancelUrl);
         }
 
 
         try {
-            $orderClient = new \PagaMasTarde\OrdersApiClient\Client(
+            $orderClient = new PmtClient(
                 $publicKey,
                 $privateKey
             );
+
             $order = $orderClient->createOrder($order);
-            if ($order instanceof \PagaMasTarde\OrdersApiClient\Model\Order) {
+            if ($order instanceof PmtModelOrder) {
                 $url = $order->getActionUrls()->getForm();
                 $this->insertRow($magentoOrderId, $order->getId());
             } else {

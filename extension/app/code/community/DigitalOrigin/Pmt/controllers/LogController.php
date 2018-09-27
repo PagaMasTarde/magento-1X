@@ -1,12 +1,12 @@
 <?php
 
 require_once('lib/DigitalOrigin/autoload.php');
-require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.php');
+require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractController.php');
 
 /**
  * Class DigitalOrigin_Pmt_LogController
  */
-class DigitalOrigin_Pmt_LogController extends BaseController
+class DigitalOrigin_Pmt_LogController extends AbstractController
 {
     /**
      * @var bool $error
@@ -27,18 +27,24 @@ class DigitalOrigin_Pmt_LogController extends BaseController
             return $this->response();
         }
 
-        $result = array();
-        $logDir  = Mage::getBaseDir('var') . DIRECTORY_SEPARATOR . 'log';
-        if (is_dir($logDir)) {
-            $pmtLogFile = $logDir . DIRECTORY_SEPARATOR . 'pmt.log';
-            if (file_exists($pmtLogFile)) {
-                $result['pmt'] = file_get_contents($pmtLogFile);
-            }
+        $limit = Mage::app()->getRequest()->getParam('limit');
+        $from  = Mage::app()->getRequest()->getParam('from');
+        $to    = Mage::app()->getRequest()->getParam('to');
+        if (is_numeric($from) && is_numeric($to)) {
+            $sqlPart = ' and DATE_FORMAT(createdAt, \'%Y%m%d\') between ' . $from . ' and ' . $to;
         }
-        echo file_get_contents($pmtLogFile);die;
-        $this->message = $result;
-        $this->code = 200;
-        return $this->response();
+        $sql   = 'select log from ' . self::PMT_LOGS_TABLE
+            . ' where 1=1 ' . $sqlPart . ' order by id desc limit '
+            . (($limit && is_numeric($limit)) ? $limit : 200);
+
+        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $result = $conn->fetchAll($sql);
+        $output = array();
+        foreach ($result as $log) {
+            $output[] = json_decode($log['log']);
+        }
+        $this->statusCode = 200;
+        return $this->response($output);
     }
 
     /**
@@ -60,4 +66,6 @@ class DigitalOrigin_Pmt_LogController extends BaseController
 
         return false;
     }
+
+
 }

@@ -1,12 +1,12 @@
 <?php
 
 require_once('lib/DigitalOrigin/autoload.php');
-require_once('app/code/community/DigitalOrigin/Pmt/controllers/BaseController.php');
+require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractController.php');
 
 /**
  * Class DigitalOrigin_Pmt_ApiController
  */
-class DigitalOrigin_Pmt_ApiController extends DigitalOrigin_Pmt_BaseController
+class DigitalOrigin_Pmt_ApiController extends AbstractController
 {
     /**
      * @var string $message

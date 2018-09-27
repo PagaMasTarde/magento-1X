@@ -16,6 +16,7 @@ $installer->run('DROP TABLE IF EXISTS `pmt_logs`');
 $installer->run('CREATE TABLE `pmt_logs` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `log` TEXT,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
   )');
 
