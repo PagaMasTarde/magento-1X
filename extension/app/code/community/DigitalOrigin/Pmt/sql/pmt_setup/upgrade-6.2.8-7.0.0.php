@@ -7,9 +7,11 @@ $installer->startSetup();
 
 $installer->run('DROP TABLE IF EXISTS `pmt_orders`');
 $installer->run('CREATE TABLE `pmt_orders` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `mg_order_id` varchar(50) NOT NULL, 
   `pmt_order_id` varchar(50), 
-  PRIMARY KEY (`pmt_order_id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`mg_order_id`)
   )');
 
 $installer->run('DROP TABLE IF EXISTS `pmt_logs`');

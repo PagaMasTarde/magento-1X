@@ -185,13 +185,26 @@ abstract class AbstractBuy extends MagentoTest
      */
     public function goToPMT($useIframe = true)
     {
+        sleep(5);
         $this->webDriver->executeScript('review.save()');
 
-        // If use iFrame the test will end without finish the boy and test return
+        // If use iFrame the test will end without finish the buy and test return
         if($useIframe) {
-            $this->webDriver->wait()->until(
-                WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt('iframe-pagantis')
-            );
+            sleep(10);
+            $firstIframe = $this->webDriver->findElement(WebDriverBy::cssSelector("*[data-iframe-type='modal']"));
+            $condition = WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt($firstIframe);
+            $this->webDriver->wait()->until($condition);
+            $this->assertTrue((bool) $condition);
+
+            $pmtModal = WebDriverBy::id('pmtmodal');
+            $condition = WebDriverExpectedCondition::visibilityOfElementLocated($pmtModal);
+            $this->webDriver->wait()->until($condition);
+            $this->assertTrue((bool) $condition);
+
+            $iFrame = 'pmtmodal_iframe';
+            $condition = WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt($iFrame);
+            $this->webDriver->wait()->until($condition);
+            $this->assertTrue((bool) $condition);
 
             $this->logoutFromPmt();
             $this->webDriver->wait()->until(

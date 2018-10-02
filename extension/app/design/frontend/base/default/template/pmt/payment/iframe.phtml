@@ -7,10 +7,9 @@
 <script type="text/javascript" src="https://cdn.pagamastarde.com/pmt-js-client-sdk/3/js/client-sdk.min.js"></script>
 <script type="text/javascript">
     if (typeof pmtClient !== 'undefined') {
-        pmtClient.setPublicKey('<?=$pmtPublicKey;?>');
-        pmtClient.modal.open(
-            "<?=$orderUrl; ?>",
+        pmtClient.modal.open("<?=$orderUrl; ?>",
             {
+                id: 'iframe-pagantis',
                 closeOnBackDropClick: false,
                 closeOnEscPress: false,
                 backDropDark: false,
@@ -21,8 +20,5 @@
         pmtClient.modal.onClose(function() {
             window.location.href = "<?=$checkoutUrl; ?>";
         });
-    }
-    else {
-        console.log("pmtclient = UNDEFINED");
     }
 </script>

@@ -23,51 +23,103 @@ use PagaMasTarde\OrdersApiClient\Exception\ClientException as PmtClientException
 class DigitalOrigin_Pmt_PaymentController extends AbstractController
 {
     /**
-     * Index action
+     * @var integer $magentoOrderId
+     */
+    protected $magentoOrderId;
+
+    /**
+     * @var Mage_Sales_Model_Order $magentoOrder
+     */
+    protected $magentoOrder;
+
+    /**
+     * @var Mage_Customer_Model_Session $customer
+     */
+    protected $customer;
+
+    /**
+     * @var Mage_Sales_Model_Order $order
+     */
+    protected $order;
+
+    /**
+     * @var Mage_Sales_Model_Order_Item $itemCollection
+     */
+    protected $itemCollection;
+
+    /**
+     * @var Mage_Sales_Model_Order $addressCollection
+     */
+    protected $addressCollection;
+
+    /**
+     * @var String $publicKey
+     */
+    protected $publicKey;
+
+    /**
+     * @var String $privateKey
+     */
+    protected $privateKey;
+
+    /**
+     * @var boolean $iframe
+     */
+    protected $iframe;
+
+    /**
+     * @var string magentoOrderData
+     */
+    protected $magentoOrderData;
+
+    /**
+     * @var mixed $addressData
+     */
+    protected $addressData;
+
+    /**
+     * Find and init variables needed to process payment
+     */
+    public function prepareVariables()
+    {
+        $checkoutSession = Mage::getSingleton('checkout/session');
+        $this->magentoOrderId = $checkoutSession->getLastRealOrderId();
+
+        $salesOrder = Mage::getModel('sales/order');
+        $this->magentoOrder = $salesOrder->loadByIncrementId($this->magentoOrderId);
+
+        $mageCore = Mage::helper('core');
+        $this->magentoOrderData = json_decode($mageCore->jsonEncode($this->magentoOrder->getData()), true);
+
+        $this->okUrl = Mage::getUrl('pmt/notify', array('_query' => array(
+                'order' => $this->magentoOrderData['increment_id']))
+        );
+        $this->cancelUrl = Mage::getUrl('pmt/notify/cancel', array('_query' => array(
+                'order' => $this->magentoOrderData['increment_id']))
+        );
+
+        $this->itemCollection = $this->magentoOrder->getAllVisibleItems();
+        $addressCollection = $this->magentoOrder->getAddressesCollection();
+        $this->addressData = $addressCollection->getData();
+
+        $customerSession = Mage::getSingleton('customer/session');
+        $this->customer = $customerSession->getCustomer();
+
+        $moduleConfig = Mage::getStoreConfig('payment/paylater');
+        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
+        $this->publicKey = $moduleConfig['PAYLATER_PUBLIC_KEY_' . $env];
+        $this->privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_' . $env];
+        $this->iframe = $moduleConfig['PAYLATER_IFRAME'];
+    }
+
+    /**
+     * Default Action controller, launch in a new purchase.
      */
     public function indexAction()
     {
-        $salesOrder = Mage::getModel('sales/order');
-        /** @var Mage_Checkout_Model_Session $checkoutSession */
-        $checkoutSession = Mage::getSingleton('checkout/session');
-        /** @var Mage_Customer_Model_Session $customerSession */
-        $customerSession = Mage::getSingleton('customer/session');
-        /** @var integer $magentoOrderId */
-        $magentoOrderId = $checkoutSession->getLastRealOrderId();
-        /** @var Mage_Customer_Model_Session $customer */
-        $customer = $customerSession->getCustomer();
-        /** @var Mage_Sales_Model_Order $order */
-        $magentoOrder = $salesOrder->loadByIncrementId($magentoOrderId);
-        /** @var Mage_Core_Helper_Data $mageCore */
-        $mageCore = Mage::helper('core');
-        /** @var Mage_Sales_Model_Order_Item[] $itemCollection */
-        $itemCollection = $magentoOrder->getAllVisibleItems();
-        /** @var Mage_Sales_Model_Order $addressCollection */
-        $addressCollection = $magentoOrder->getAddressesCollection();
-        /** @var Array $moduleConfig */
-        $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        /** @var String $env */
-        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-        /** @var String $publicKey */
-        $publicKey = $moduleConfig['PAYLATER_PUBLIC_KEY_' . $env];
-        /** @var String $privateKey */
-        $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_' . $env];
-
-        $magentoOrderData = json_decode($mageCore->jsonEncode($magentoOrder->getData()), true);
-        $itemsData = array();
-
-        $addressData = $addressCollection->getData();
-        $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $okUrl = Mage::getUrl('pmt/notify', array('_query' => array('order' => $magentoOrderData['increment_id'])));
-        $cancelUrl = Mage::getUrl('pmt/notify/cancel', array('_query' => array('order' => $magentoOrderData['increment_id'])));
-
-        if ($magentoOrder->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            return $this->_redirectUrl($callback);
-        }
-
-
-        foreach ($itemCollection as $item) {
-            $itemsData[$item->getProductId()] = $item->getData();
+        $this->prepareVariables();
+        if ($this->magentoOrder->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
+            return $this->_redirectUrl($this->okUrl);
         }
 
         $node = Mage::getConfig()->getNode();
@@ -75,70 +127,80 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
             'magento' => Mage::getVersion(),
             'pmt' => (string)$node->modules->DigitalOrigin_Pmt->version,
             'php' => phpversion(),
-            'member_since' => $customer->getCreatedAt(),
+            'member_since' => $this->customer->getCreatedAt(),
         );
 
+        $fullName = null;
+        $telephone = null;
+        $userAddress = null;
         $orderShippingAddress = null;
+        $orderBillingAddress = null;
         try {
-            for ($i = 0; $i <= count($addressData); $i++) {
-                if (array_search('shipping', $addressData[$i])) {
+            for ($i = 0; $i <= count($this->addressData); $i++) {
+                if (array_search('shipping', $this->addressData[$i])) {
+                    $fullName = $this->addressData[$i]['firstname'] . ' ' . $this->addressData[$i]['lastname'];
+                    $telephone = $this->addressData[$i]['telephone'];
                     $userAddress = new PmtModelOrderAddress();
                     $userAddress
-                        ->setZipCode($addressData[$i]['postcode'])
-                        ->setFullName($addressData[$i]['firstname'] . ' ' . $addressData[$i]['lastname'])
-                        ->setCountryCode($addressData[$i]['country_id'])
-                        ->setCity($addressData[$i]['city'])
-                        ->setAddress($addressData[$i]['street']);
+                        ->setZipCode($this->addressData[$i]['postcode'])
+                        ->setFullName($fullName)
+                        ->setCountryCode($this->addressData[$i]['country_id'])
+                        ->setCity($this->addressData[$i]['city'])
+                        ->setAddress($this->addressData[$i]['street'])
+                        ->setMobilePhone($telephone);
                     $orderShippingAddress = new PmtModelOrderAddress();
                     $orderShippingAddress
-                        ->setZipCode($addressData[$i]['postcode'])
-                        ->setFullName($addressData[$i]['firstname'] . ' ' . $addressData[$i]['lastname'])
-                        ->setCountryCode($addressData[$i]['country_id'])
-                        ->setCity($addressData[$i]['city'])
-                        ->setAddress($addressData[$i]['street'])
-                        ->setFixPhone($addressData[$i]['street'])
-                        ->setMobilePhone($addressData[$i]['street']);
+                        ->setZipCode($this->addressData[$i]['postcode'])
+                        ->setFullName($fullName)
+                        ->setCountryCode($this->addressData[$i]['country_id'])
+                        ->setCity($this->addressData[$i]['city'])
+                        ->setAddress($this->addressData[$i]['street'])
+                        ->setMobilePhone($telephone);
                 }
-                if (array_search('billing', $addressData[$i])) {
+                if (array_search('billing', $this->addressData[$i])) {
                     $orderBillingAddress = new PmtModelOrderAddress();
                     $orderBillingAddress
-                        ->setZipCode($addressData[$i]['postcode'])
-                        ->setFullName($addressData[$i]['firstname'] . ' ' . $addressData[$i]['lastname'])
-                        ->setCountryCode($addressData[$i]['country_id'])
-                        ->setCity($addressData[$i]['city'])
-                        ->setAddress($addressData[$i]['street']);
+                        ->setZipCode($this->addressData[$i]['postcode'])
+                        ->setFullName($this->addressData[$i]['firstname'] . ' ' . $this->addressData[$i]['lastname'])
+                        ->setCountryCode($this->addressData[$i]['country_id'])
+                        ->setCity($this->addressData[$i]['city'])
+                        ->setAddress($this->addressData[$i]['street'])
+                        ->setMobilePhone($this->addressData[$i]['telephone']);
                 }
             }
 
-            $orderUser = new PmtModelOrderUser();
-            $fullName = null;
-            $fixPhone = null;
-            $mobilePhone = null;
-            if ($orderShippingAddress) {
-                $fullName = $orderShippingAddress->getFullName();
-                $fixPhone = $orderShippingAddress->phone;
-                $mobilePhone = $orderShippingAddress->phone_mobile;
+            if (is_null($fullName)) {
+                $fullName = $this->magentoOrderData['customer_firstname'] . ' ' . $this->magentoOrderData['customer_lastname'];
             }
-            if (!$fullName) {
-                $fullName = $magentoOrderData['customer_firstname'] . ' ' . $magentoOrderData['customer_lastname'];
-                $fixPhone = $shippingAddress->phone;
-                $mobilePhone = $shippingAddress->phone_mobile;
 
+            if (is_null($telephone)) {
+                $addr =  $this->customer->getPrimaryShippingAddress();
+                $telephone = $addr->getTelephone();
             }
-            $email = $customer->email ? $customer->email : $magentoOrderData['customer_email'];
+            $email = $this->customer->email ? $this->customer->email : $this->magentoOrderData['customer_email'];
+            $orderUser = new PmtModelOrderUser();
+
+            // Hook. This will be deleted when orders validate the empty address as a correct field.
+            if (is_null($orderShippingAddress)) {
+                $orderShippingAddress = $orderBillingAddress;
+            }
+            if (is_null($userAddress)) {
+                $userAddress = $orderBillingAddress;
+            }
+            // -------------------------------------------------------------------------------------
+
             $orderUser
-                ->setAddress($userAddress)
                 ->setFullName($fullName)
-                ->setBillingAddress($orderBillingAddress)
-                ->setDateOfBirth($customer->birthday)
+                ->setDateOfBirth($this->customer->birthday)
                 ->setEmail($email)
-                ->setFixPhone($fixPhone)
-                ->setMobilePhone($mobilePhone)
-                ->setShippingAddress($orderShippingAddress);
+                ->setMobilePhone($telephone)
+                ->setAddress($userAddress)
+                ->setShippingAddress($orderShippingAddress)
+                ->setBillingAddress($orderBillingAddress);
 
 
             $orderCollection = Mage::getModel('sales/order')->getCollection();
-            $orderCollection = $orderCollection->addFieldToFilter('customer_id', $customer->getId());
+            $orderCollection = $orderCollection->addFieldToFilter('customer_id', $this->customer->getId());
             foreach ($orderCollection as $cOrder) {
                 if ($cOrder->getState() == Mage_Sales_Model_Order::STATE_COMPLETE) {
                     $orderHistory = new PmtModelOrderHistory();
@@ -150,8 +212,8 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
             }
 
             $details = new PmtModelOrderShoppingCartDetails();
-            $details->setShippingCost(floatval($magentoOrder->getShippingAmount())*100);
-            foreach ($itemCollection as $item) {
+            $details->setShippingCost(floatval($this->magentoOrder->getShippingAmount())*100);
+            foreach ($this->itemCollection as $item) {
                 $product = new PmtModelOrderShoppingCartProduct();
                 $product
                     ->setAmount(floatval($item->getRowTotalInclTax())*100)
@@ -163,16 +225,16 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
             $orderShoppingCart = new PmtModelOrderShoppingCart();
             $orderShoppingCart
                 ->setDetails($details)
-                ->setOrderReference($magentoOrderId)
+                ->setOrderReference($this->magentoOrderId)
                 ->setPromotedAmount(0)
-                ->setTotalAmount(floatval($magentoOrder->getGrandTotal())*100);
+                ->setTotalAmount(floatval($this->magentoOrder->getGrandTotal())*100);
 
             $orderConfigurationUrls = new PmtModelOrderUrls();
             $orderConfigurationUrls
-                ->setCancel($cancelUrl)
-                ->setKo($cancelUrl)
-                ->setNotificationCallback($okUrl)
-                ->setOk($okUrl);
+                ->setCancel($this->cancelUrl)
+                ->setKo($this->cancelUrl)
+                ->setNotificationCallback($this->okUrl)
+                ->setOk($this->okUrl);
 
             $orderChannel = new PmtModelOrderChannel();
             $orderChannel
@@ -198,53 +260,35 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
                 ->setShoppingCart($orderShoppingCart)
                 ->setUser($orderUser);
         } catch (\Exception $exception) {
-            $data = array();
-            if ($magentoOrder) {
-                $data['magentoOrder'] = (array) $magentoOrder;
-            }
-            if ($order) {
-                $data['pmtOrder'] = (array) $order;
-            }
-
-            $this->saveLog($exception, $data);
-            return $this->_redirectUrl($cancelUrl);
+            $this->logException($exception);
+            return $this->_redirectUrl($this->cancelUrl);
         }
 
 
         try {
             $orderClient = new PmtClient(
-                $publicKey,
-                $privateKey
+                $this->publicKey,
+                $this->privateKey
             );
-
             $order = $orderClient->createOrder($order);
             if ($order instanceof PmtModelOrder) {
                 $url = $order->getActionUrls()->getForm();
-                $this->insertRow($magentoOrderId, $order->getId());
+                $this->insertRow($this->magentoOrderId, $order->getId());
             } else {
                 throw new \Exception('Order not created');
             }
         } catch (\Exception $exception) {
-            $data = array();
-            if ($order) {
-                $data['pmtOrder'] = (array) $order;
-            }
-
-            $this->saveLog($exception, $data);
-            return $this->_redirectUrl($cancelUrl);
+            $this->order = $order;
+            $this->logException($exception);
+            return $this->_redirectUrl($this->cancelUrl);
         }
 
-        if (!$moduleConfig['PAYLATER_IFRAME']) {
+        if (!$this->iframe) {
             try {
                 return $this->_redirectUrl($url);
             } catch(\Exception $exception) {
-                $data = array();
-                if ($order) {
-                    $data['pmtOrder'] = (array) $order;
-                }
-
-                $this->saveLog($exception, $data);
-                return $this->_redirectUrl($cancelUrl);
+                $this->logException($exception);
+                return $this->_redirectUrl($this->cancelUrl);
             }
         }
         $this->loadLayout();
@@ -259,7 +303,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
 
         $block->assign(array(
             'orderUrl' => $url,
-            'checkoutUrl' => $cancelUrl,
+            'checkoutUrl' => $this->cancelUrl,
             'leaveMessage' => $this->__('Are you sure you want to leave?')
         ));
 
@@ -267,17 +311,33 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
         return $this->renderLayout();
     }
 
+    public function logException(\Exception $exception) {
+        $data = array();
+        $debug = $exception->getTrace();
+        $method = $debug[0]['function'];
+        $line = $debug[0]['line'];
+        $class = $debug[0]['class'];
+        $data['message'] = $exception->getMessage();
+        $data['code'] = $exception->getCode();
+        $data['method'] = $method;
+        $data['line'] = $line;
+        $data['class'] =str_replace("\\", "\\\\",  $class);
+        $this->saveLog($data);
+    }
+
     /**
      * @param $magentoOrderId
      * @param $pmtOrderId
      *
-     * @return int
+     * @throws Exception
      */
     private function insertRow($magentoOrderId, $pmtOrderId)
     {
-        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-        $sql = 'INSERT INTO ' . self::PMT_ORDERS_TABLE . ' VALUE (\'' . $magentoOrderId. '\', \'' . $pmtOrderId . '\')';
-
-        $conn->query($sql);
+        $model = Mage::getModel('pmt/order');
+        $model->setData(array(
+            'pmt_order_id' => $pmtOrderId,
+            'mg_order_id' => $magentoOrderId,
+        ));
+        $model->save();
     }
 }

@@ -50,14 +50,48 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     protected $toCancel = false;
 
+    public function lalalaAction()
+    {
+        error_reporting(E_ALL ^ E_NOTICE);
+
+        Mage::setIsDeveloperMode(true);
+        ini_set("display_errors", 1);
+
+        $model = Mage::getModel('pmt/log');
+        $model->setData(array(
+            'log' => 'prueba web',
+        ));
+        $model->save();
+
+        $model = Mage::getModel('pmt/order');
+        $model->setData(array(
+            'pmt_order_id' => 'pmt',
+            'mg_order_id' => 'mg'
+        ));
+        $model->save();
+//        var_dump("<pre>", $model);
+//
+//        $model2 = Mage::getModel('pmt/order');
+//        $model2->load('aaaa');
+//
+//        var_dump("<pre>", $model2);
+//        $data = $model->getData();
+//        var_dump(get_class($data));
+    }
+
     /**
      * Cancel action
      */
     public function cancelAction()
     {
-        $this->toCancel = true;
-
-        return $this->redirect();
+        try {
+            $this->toCancel = true;
+            $this->prepareVariables();
+            $this->restoreCart();
+            return $this->redirect();
+        } catch (\Exception $exception) {
+            return $this->redirect(true);
+        }
     }
 
     /**
@@ -315,14 +349,17 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     {
         $this->unblockConcurrency($this->merchantOrderId);
         $this->restoreCart();
-        $method = debug_backtrace();
-        $method = $method[1]['function'];
-        $this->saveLog($exception, array(
+        $debug = debug_backtrace();
+        $method = $debug[1]['function'];
+        $line = $debug[1]['line'];
+        $this->saveLog(array(
+            'pmtCode' => $this->statusCode,
             'pmtMessage' => $this->errorMessage,
             'pmtMessageDetail' => $this->errorDetail,
             'pmtOrderId' => $this->pmtOrderId,
             'merchantOrderId' => $this->merchantOrderId,
             'method' => $method,
+            'line' => $line,
         ));
         return $this->finishProcess(true);
     }

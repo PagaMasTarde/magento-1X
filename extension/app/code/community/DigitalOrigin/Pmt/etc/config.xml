@@ -35,7 +35,20 @@
         <models>
             <pmt>
                 <class>DigitalOrigin_Pmt_Model</class>
+                <resourceModel>pmt_resource</resourceModel>
             </pmt>
+
+            <pmt_resource>
+            <class>DigitalOrigin_Pmt_Model_Resource</class>
+            <entities>
+                <log>
+                    <table>pmt_logs</table>
+                </log>
+                <order>
+                    <table>pmt_orders</table>
+                </order>
+            </entities>
+        </pmt_resource>
         </models>
 
         <resources>
@@ -43,7 +56,20 @@
                 <setup>
                     <module>DigitalOrigin_Pmt</module>
                 </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
             </pmt_setup>
+            <pmt_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </pmt_write>
+            <pmt_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </pmt_read>
         </resources>
     </global>
 

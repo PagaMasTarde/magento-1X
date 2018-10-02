@@ -159,14 +159,12 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
         return isset($httpStatusCodes)? $httpStatusCodes[$statusCode] : $httpStatusCodes[200];
     }
 
-    public function saveLog(Exception $exception = null , $data = array())
+    public function saveLog($data = array())
     {
         try {
             $data = array_merge($data, array(
                 'timestamp' => time(),
                 'date' => date("Y-m-d H:i:s"),
-                'class' => get_class($this),
-                'line' => $exception->getLine(),
             ));
 
             $sql = "INSERT INTO " . self::PMT_LOGS_TABLE . " (`log`) VALUE ('" . json_encode($data) . "')";

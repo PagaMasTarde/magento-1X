@@ -1,6 +1,7 @@
 {  
     "name": "pagamastarde/magento-1x",
     "description": "Paga+Tarde Magento 1 module with orders",
+    "version" : "7.0.0",
     "type": "module",
     "keywords": [  
         "api",
