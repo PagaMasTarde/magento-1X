@@ -134,6 +134,8 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     }
 
     /**
+     * Return the HttpStatusCode description
+     *
      * @param int $statusCode
      * @return string
      */
@@ -159,6 +161,11 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
         return isset($httpStatusCodes)? $httpStatusCodes[$statusCode] : $httpStatusCodes[200];
     }
 
+    /**
+     * Save log in SQL database
+     *
+     * @param array $data
+     */
     public function saveLog($data = array())
     {
         try {
@@ -167,10 +174,11 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
                 'date' => date("Y-m-d H:i:s"),
             ));
 
-            $sql = "INSERT INTO " . self::PMT_LOGS_TABLE . " (`log`) VALUE ('" . json_encode($data) . "')";
-            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $conn->query($sql);
-
+            $model = Mage::getModel('pmt/log');
+            $model->setData(array(
+                'log' => json_encode($data),
+            ));
+            $model->save();
         } catch (\Exception $exception) {
             // Do nothing
         }

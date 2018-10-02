@@ -113,7 +113,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
     }
 
     /**
-     * Default Action controller, launch in a new purchase.
+     * Default Action controller, launch in a new purchase show PMT Form
      */
     public function indexAction()
     {
@@ -273,7 +273,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
             $order = $orderClient->createOrder($order);
             if ($order instanceof PmtModelOrder) {
                 $url = $order->getActionUrls()->getForm();
-                $this->insertRow($this->magentoOrderId, $order->getId());
+                $this->insertOrderControl($this->magentoOrderId, $order->getId());
             } else {
                 throw new \Exception('Order not created');
             }
@@ -311,6 +311,11 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
         return $this->renderLayout();
     }
 
+    /**
+     * Save log in case of error
+     *
+     * @param Exception $exception
+     */
     public function logException(\Exception $exception) {
         $data = array();
         $debug = $exception->getTrace();
@@ -326,12 +331,14 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
     }
 
     /**
+     * Create a record in AbstractController::PMT_ORDERS_TABLE to match the merchant order with the PMT order
+     *
      * @param $magentoOrderId
      * @param $pmtOrderId
      *
      * @throws Exception
      */
-    private function insertRow($magentoOrderId, $pmtOrderId)
+    private function insertOrderControl($magentoOrderId, $pmtOrderId)
     {
         $model = Mage::getModel('pmt/order');
         $model->setData(array(

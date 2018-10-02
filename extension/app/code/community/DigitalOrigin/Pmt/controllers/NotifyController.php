@@ -50,35 +50,6 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     protected $toCancel = false;
 
-    public function lalalaAction()
-    {
-        error_reporting(E_ALL ^ E_NOTICE);
-
-        Mage::setIsDeveloperMode(true);
-        ini_set("display_errors", 1);
-
-        $model = Mage::getModel('pmt/log');
-        $model->setData(array(
-            'log' => 'prueba web',
-        ));
-        $model->save();
-
-        $model = Mage::getModel('pmt/order');
-        $model->setData(array(
-            'pmt_order_id' => 'pmt',
-            'mg_order_id' => 'mg'
-        ));
-        $model->save();
-//        var_dump("<pre>", $model);
-//
-//        $model2 = Mage::getModel('pmt/order');
-//        $model2->load('aaaa');
-//
-//        var_dump("<pre>", $model2);
-//        $data = $model->getData();
-//        var_dump(get_class($data));
-    }
-
     /**
      * Cancel action
      */
@@ -95,6 +66,8 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     }
 
     /**
+     * Find and init variables needed to process payment
+     *
      * @throws Exception
      */
     public function prepareVariables()
@@ -119,6 +92,8 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     }
 
     /**
+     * Check the concurrency of the purchase
+     *
      * @throws Exception
      */
     public function checkConcurrency()
@@ -136,6 +111,8 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     }
 
     /**
+     * Retrieve the merchant order by id
+     *
      * @throws Exception
      */
     public function getMerchantOrder()
@@ -151,19 +128,21 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Find PMT Order Id in AbstractController::PMT_ORDERS_TABLE
+     *
+     * @throws Exception
+     */
     private function getPmtOrderId()
     {
         try {
-            $sql = 'select pmt_order_id from ' . self::PMT_ORDERS_TABLE .
-                   ' where mg_order_id = \'' . $this->merchantOrderId . '\'';
+            $model = Mage::getModel('pmt/order');
+            $model->load($this->merchantOrderId, 'mg_order_id');
 
-            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $result = $conn->fetchAll($sql);
-            if (count($result) !== 1 && isset($result[0]) && isset($result[0]['pmt_order_id'])) {
+            $this->pmtOrderId = $model->getPmtOrderId();
+            if (is_null($this->pmtOrderId)) {
                 throw new \Exception(self::GPOI_NO_ORDERID, 404);
             }
-
-            $this->pmtOrderId = $result[0]['pmt_order_id'];
         } catch (\Exception $exception) {
             $this->statusCode = 404;
             $this->errorMessage = self::GPOI_ERR_MSG;
@@ -172,6 +151,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Find PMT Order in Orders Server using PagaMasTarde\OrdersApiClient
+     *
+     * @throws Exception
+     */
     private function getPmtOrder()
     {
         try {
@@ -188,6 +172,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Compare statuses of merchant order and PMT order, witch have to be the same.
+     *
+     * @throws Exception
+     */
     public function checkOrderStatus()
     {
         try {
@@ -202,6 +191,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Check that the merchant order was not previously processes and is ready to be paid
+     *
+     * @throws Exception
+     */
     public function checkMerchantOrderStatus()
     {
         try {
@@ -236,6 +230,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Check that the merchant order and the order in PMT have the same amount to prevent hacking
+     *
+     * @throws Exception
+     */
     public function validateAmount()
     {
         try {
@@ -250,6 +249,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Process the merchant order and notify client
+     *
+     * @throws Exception
+     */
     public function processMerchantOrder()
     {
         try {
@@ -290,6 +294,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Confirm the order in PMT
+     *
+     * @throws Exception
+     */
     private function confirmPmtOrder()
     {
         try {
@@ -302,6 +311,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         }
     }
 
+    /**
+     * Leave the merchant order as it was peviously
+     *
+     * @throws Exception
+     */
     public function rollbackMerchantOrder()
     {
             $this->merchantOrder->setState(
@@ -313,9 +327,14 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             $this->merchantOrder->save();
     }
 
+    /**
+     * Main action of the controller. Dispatch the Notify process
+     *
+     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
+     * @throws Exception
+     */
     public function indexAction()
     {
-        //Flow Notify/OK Url
         try {
             $this->checkConcurrency();
             $this->getMerchantOrder();
@@ -345,6 +364,16 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         return $this->finishProcess(false);
     }
 
+    /**
+     * Do all the necessary actions to cancel the confirmation process in case of error
+     * 1. Unblock concurrency
+     * 2. Restore the cart if possible
+     * 3. Save log
+     *
+     * @param Exception $exception
+     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
+     * @throws Exception
+     */
     public function cancelProcess(\Exception $exception)
     {
         $this->unblockConcurrency($this->merchantOrderId);
@@ -364,6 +393,12 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         return $this->finishProcess(true);
     }
 
+    /**
+     * Redirect the request to the e-commerce or show the output in json
+     *
+     * @param bool $error
+     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
+     */
     public function finishProcess($error = true)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -372,6 +407,9 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         return $this->redirect($error);
     }
 
+    /**
+     * Restore the cart of the order
+     */
     private function restoreCart()
     {
         try {
@@ -391,30 +429,35 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     }
 
     /**
+     * Lock the concurrency to prevent duplicated inputs
+     *
      * @param $orderId
      * @throws Exception
      */
     protected function blockConcurrency($orderId)
     {
-        $sql = "INSERT INTO " . self::CONCURRENCY_TABLE . " VALUE (" . $orderId. "," . time() . ")";
-
-        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-        $conn->query($sql);
+        $model = Mage::getModel('pmt/concurrency');
+        $model->setData(array(
+            'id' => $orderId,
+            'timestamp' => time(),
+        ));
+        $model->save();
     }
 
     /**
+     * Unlock the concurrency
+     *
      * @param null $orderId
      * @throws Exception
      */
     protected function unblockConcurrency($orderId = null)
     {
         if ($orderId == null) {
-            $sql = "DELETE FROM " . self::CONCURRENCY_TABLE . " WHERE timestamp <" . (time() - 10);
+            Mage::getModel('pmt/concurrency')->getCollection()->truncate();
         } else {
-            $sql = "DELETE FROM " . self::CONCURRENCY_TABLE . " WHERE id  = " . $orderId;
+            $model = Mage::getModel('pmt/concurrency');
+            $model->load($orderId, 'id');
+            $model->delete();
         }
-
-        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-        $conn->query($sql);
     }
 }

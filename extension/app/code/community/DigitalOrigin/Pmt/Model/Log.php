@@ -1,12 +1,13 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: rmarin
- * Date: 2/10/18
- * Time: 9:40
+ * Class DigitalOrigin_Pmt_Model_Log
  */
 class DigitalOrigin_Pmt_Model_Log extends Mage_Core_Model_Abstract
 {
+    /**
+     * Constructor
+     */
     protected function _construct()
     {
         parent::_construct();

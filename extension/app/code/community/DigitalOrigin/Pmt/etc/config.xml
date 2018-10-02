@@ -47,6 +47,9 @@
                 <order>
                     <table>pmt_orders</table>
                 </order>
+                <concurrency>
+                    <table>pmt_cart_concurrency</table>
+                </concurrency>
             </entities>
         </pmt_resource>
         </models>
