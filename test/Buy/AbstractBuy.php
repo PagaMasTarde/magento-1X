@@ -256,6 +256,9 @@ abstract class AbstractBuy extends MagentoTest
     {
         $this->findById('s_method_flatrate_flatrate')->click();
         $this->webDriver->executeScript('shippingMethod.save()');
+
+        sleep(10);
+
         $checkoutStepPaymentMethodSearch = WebDriverBy::id('checkout-payment-method-load');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)

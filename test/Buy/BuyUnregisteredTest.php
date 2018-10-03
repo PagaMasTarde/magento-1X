@@ -47,6 +47,7 @@ class BuyUnregisteredTest extends AbstractBuy
         //Continue to shipping, in this case shipping == billing
         $this->webDriver->executeScript('billing.save()');
 
+        sleep(10);
         //Verify
         $checkoutStepShippingMethodSearch = WebDriverBy::id('checkout-shipping-method-load');
         $this->webDriver->wait()->until(
