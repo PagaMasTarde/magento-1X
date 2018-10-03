@@ -340,6 +340,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
      */
     private function insertOrderControl($magentoOrderId, $pmtOrderId)
     {
+        $this->createTableIfNotExists('pmt/order');
         $model = Mage::getModel('pmt/order');
         $model->setData(array(
             'pmt_order_id' => $pmtOrderId,

@@ -136,6 +136,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     private function getPmtOrderId()
     {
         try {
+            $this->createTableIfNotExists('pmt/order');
             $model = Mage::getModel('pmt/order');
             $model->load($this->merchantOrderId, 'mg_order_id');
 
@@ -452,6 +453,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     protected function unblockConcurrency($orderId = null)
     {
+        $this->createTableIfNotExists('pmt/concurrency');
         if ($orderId == null) {
             Mage::getModel('pmt/concurrency')->getCollection()->truncate();
         } else {

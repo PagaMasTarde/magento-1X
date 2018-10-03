@@ -8,17 +8,32 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Concurrency Tablename
      */
-    const CONCURRENCY_TABLE = 'pmt_cart_concurrency';
+    const PMT_CONCURRENCY_TABLE = 'CREATE TABLE `pmt_cart_concurrency` (
+  `id` INT NOT NULL ,
+  `timestamp` INT NOT NULL ,
+  PRIMARY KEY (`id`)
+  )';
 
     /**
      * Pmt Orders Tablename
      */
-    const PMT_ORDERS_TABLE = 'pmt_orders';
+    const PMT_ORDERS_TABLE = 'CREATE TABLE `pmt_orders` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `mg_order_id` varchar(50) NOT NULL, 
+  `pmt_order_id` varchar(50), 
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`mg_order_id`)
+  )';
 
     /**
      * Pmt Orders Tablename
      */
-    const PMT_LOGS_TABLE = 'pmt_logs';
+    const PMT_LOGS_TABLE = 'CREATE TABLE `pmt_logs` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `log` TEXT,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+  )';
 
     /**
      * PMT_CODE
@@ -57,6 +72,12 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     const CPO_OK_MSG = 'Order confirmed';
 
     const RMO_OK_MSG = 'Order process rollback successfully';
+
+    public $modelTable = array(
+        'pmt/concurrency' => 'PMT_CONCURRENCY_TABLE',
+        'pmt/order' => 'PMT_ORDERS_TABLE',
+        'pmt/log' => 'PMT_LOGS_TABLE',
+    );
 
     /**
      * @var integer $statusCode
@@ -169,6 +190,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     public function saveLog($data = array())
     {
         try {
+            $this->createTableIfNotExists('pmt/log');
             $data = array_merge($data, array(
                 'timestamp' => time(),
                 'date' => date("Y-m-d H:i:s"),
@@ -181,6 +203,32 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
             $model->save();
         } catch (\Exception $exception) {
             // Do nothing
+        }
+    }
+
+    /**
+     * Create pmt_table if not exists
+     *
+     * @param null $model
+     */
+    public function createTableIfNotExists($model = null) {
+        if (!is_null($model)) {
+            try {
+                $exists = Mage::getSingleton('core/resource')
+                    ->getConnection('core_write')
+                    ->isTableExists(Mage::getModel($model)->getResourceCollection()->getTable($model));
+
+                $name = $this->modelTable[$model];
+                $sql = constant("AbstractController::$name");
+                if (!$exists) {
+                    $resource = Mage::getSingleton('core/resource');
+                    $writeConnection = $resource->getConnection('core_write');
+                    $writeConnection->query($sql);
+                }
+
+            } catch (\Exception $exception) {
+                // Do nothing
+            }
         }
     }
 }
