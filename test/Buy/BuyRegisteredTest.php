@@ -36,6 +36,7 @@ class BuyRegisteredTest extends AbstractBuy
         $cartPrice = $this->webDriver->findElement($cartPrice)->getText();
         // --------------------
         $this->goToPMT(false);
+        $this->verifyPaylater();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->checkLastPurchaseStatus('Processing');
@@ -89,5 +90,17 @@ class BuyRegisteredTest extends AbstractBuy
     {
         // complete the purchase with redirect
         SeleniumHelper::finishForm($this->webDriver);
+    }
+
+    /**
+     * Verify Paylater
+     *
+     * @throws \Exception
+     */
+    public function verifyPaylater()
+    {
+        $condition = WebDriverExpectedCondition::titleContains(self::PMT_TITLE);
+        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->assertTrue((bool)$condition, $this->webDriver->getCurrentURL());
     }
 }

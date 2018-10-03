@@ -47,11 +47,15 @@ abstract class AbstractBuy extends MagentoTest
      */
     const SHOPPING_CART_MESSAGE = 'SHOPPING CART';
 
-  /**
+    /**
      * Empty shopping cart message
      */
     const EMPTY_SHOPPING_CART = 'SHOPPING CART IS EMPTY';
 
+    /**
+     * Pmt Order Title
+     */
+    const PMT_TITLE = 'Paga+Tarde';
 
     /**
      * Buy unregistered

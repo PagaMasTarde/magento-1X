@@ -62,8 +62,8 @@ abstract class MagentoTest extends TestCase
         $this->webDriver = RemoteWebDriver::create(
             'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            240000,
-            240000
+            300000,
+            300000
         );
     }
 
