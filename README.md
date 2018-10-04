@@ -3,42 +3,33 @@
 [![Build Status](https://travis-ci.org/PagaMasTarde/magento-1X.svg?branch=master)](https://travis-ci.org/PagaMasTarde/magento-1X)
 [![Latest Stable Version](https://poser.pugx.org/pagamastarde/magento-1x/v/stable)](https://packagist.org/packages/pagamastarde/magento-1x)
 [![composer.lock](https://poser.pugx.org/pagamastarde/magento-1x/composerlock)](https://packagist.org/packages/pagamastarde/magento-1x)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/PagaMasTarde/magento-1x/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PagaMasTarde/magento-1x/?branch=master)
-## Instrucciones de Instalación
-1. Crea tu cuenta en pagamastarde.com si aún no la tienes [desde aquí](https://bo.pagamastarde.com/users/sign_up)
-2. Descarga el módulo de [aquí](https://github.com/pagamastarde/magento-1X/releases/latest)
-3. Instala el módulo en tu magento
-4. Configuralo con la información de tu cuenta que encontrarás en [el panel de gestión de Paga+Tarde](https://bo.pagamastarde.com/shop). Ten en cuenta que para hacer cobros reales deberás activar tu cuenta de Paga+Tarde.
 
-## Modo real y modo de pruebas
+## :hand: Requirements
+* This module supports Magento 1.x versions.
+* Composer
 
-Tanto el módulo como Paga+Tarde tienen funcionamiento en real y en modo de pruebas independientes. Debes introducir las credenciales correspondientes del entorno que desees usar.
+## :floppy_disk: Installation
+To install the module of Paga+Tarde in your Magento shop, you can use Composer
 
-### Soporte
-
-Si tienes alguna duda o pregunta no tienes más que escribirnos un email a [soporte@pagamastarde.com]
-
-## Development Instructions:
-
-To develop or improve this module you need to have installed in your environment
-    * Composer
-    
-To make the module operative you need to download the dependencies, 
-
+```php
     composer install
-    
-Once both dependencies are ready you can generate the specific module files using
+```
 
-    grunt default
-    
-Grunt will compress the CSS and the JS and generate a zip file with the necessary files to push
-to the market.
+Or install the latest version of the module in GitHub
 
-You can always do a symbolic link from your local installation of prestashop in order to verify
-the functionality of the code.
+```
+    https://github.com/PagaMasTarde/magento-1X/releases/latest
+```
 
+For more information about how to install the module package see our [install section](/Documentation/install.md).
 
-### Testing and Improvements
+## :gear: Configuration
+Configure the module in Magento admin panel using the information found in your [Paga+Tarde profile](https://bo.pagamastarde.com/shop). 
 
-* Doing some phpUnit testing on the module.
-* Improving the code structure to make it more human.
+For more information about how to config the module, see our [configuration section](/Documentation/configuration.md).
+
+## :arrow_forward: Use
+To use in a real environment you should enable your Paga+Tarde account.
+
+For more information about how to use the module, see our [use section](/Documentation/use.md).
+
