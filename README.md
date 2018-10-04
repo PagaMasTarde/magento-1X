@@ -9,13 +9,8 @@
 * Composer
 
 ## :floppy_disk: Installation
-To install the module of Paga+Tarde in your Magento shop, you can use Composer
-
-```php
-    composer install
-```
-
-Or install the latest version of the module in GitHub
+To install the module of Paga+Tarde in your Magento shop you have to download the 
+latest version of the module in GitHub and install it.
 
 ```
     https://github.com/PagaMasTarde/magento-1X/releases/latest
