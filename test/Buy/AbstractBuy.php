@@ -72,7 +72,7 @@ abstract class AbstractBuy extends MagentoTest
      */
     public function addToCart()
     {
-        $addToCartButtonSearch = WebDriverBy::className('add-to-cart-buttons');
+        $addToCartButtonSearch = WebDriverBy::cssSelector('.add-to-cart-buttons button');
         $addToCartButtonElement = $this->webDriver->findElement($addToCartButtonSearch);
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($addToCartButtonElement));
         $addToCartButtonElement->click();
