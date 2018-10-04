@@ -4,6 +4,7 @@ namespace Test\Configure;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Facebook\WebDriver\WebDriverSelect;
 use Test\MagentoTest;
 
 /**
@@ -124,7 +125,7 @@ abstract class AbstractConfigure extends MagentoTest
 
 
     /**
-     * goToSystemConfig
+     * goToPaymentMethodsAndSeePMT
      */
     public function goToPaymentMethodsAndSeePMT()
     {
@@ -142,6 +143,42 @@ abstract class AbstractConfigure extends MagentoTest
         $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
             $pmtHeaderSearch
         ));
+    }
+
+    /**
+     * goToShippingMethodsAndSeeFedEx
+     */
+    public function goToShippingMethodsAndSeeFedEx()
+    {
+        $shippingMethodsLinkElement = $this->findByLinkText('Shipping Methods');
+        $shippingMethodsLinkElement->click();
+
+        $fedExHeaderSearch = WebDriverBy::id('carriers_fedex-head');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                $fedExHeaderSearch
+            )
+        );
+
+        $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
+            $fedExHeaderSearch
+        ));
+        $head = $this->findById('carriers_fedex-head');
+        $head->click();
+    }
+
+    /**
+     * disableFedEx
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\UnexpectedTagNameException
+     */
+    public function disableFedEx() {
+        $select = new WebDriverSelect($this->findById('carriers_fedex_active'));
+        $select->selectByValue('0');
+
+        //Confirm and validate
+        $this->webDriver->executeScript('configForm.submit()');
     }
 
     /**

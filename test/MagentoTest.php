@@ -3,7 +3,6 @@
 namespace Test;
 
 use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use PHPUnit\Framework\TestCase;
@@ -59,11 +58,11 @@ abstract class MagentoTest extends TestCase
      */
     protected function setUp()
     {
-        $this->webDriver = RemoteWebDriver::create(
+        $this->webDriver = PmtWebDriver::create(
             'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            300000,
-            300000
+            90000,
+            90000
         );
     }
 
@@ -147,7 +146,7 @@ abstract class MagentoTest extends TestCase
     /**
      * Quit browser
      */
-    protected function quit()
+    public function quit()
     {
         $this->webDriver->quit();
     }
