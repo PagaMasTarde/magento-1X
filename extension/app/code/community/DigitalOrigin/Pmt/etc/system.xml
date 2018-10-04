@@ -101,7 +101,7 @@
                             <validate>validate-number</validate>
                         </DEFAULT_INSTALLMENTS>
                         <MAX_INSTALLMENTS translate="label">
-                            <label>Máximo número de pagos</label>
+                            <label>Maximum number of installments</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>21</sort_order>
                             <show_in_default>1</show_in_default>
