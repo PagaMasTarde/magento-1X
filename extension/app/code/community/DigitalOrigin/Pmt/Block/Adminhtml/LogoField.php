@@ -15,8 +15,8 @@ class DigitalOrigin_Pmt_Block_Adminhtml_LogoField extends Mage_Adminhtml_Block_S
     protected function _getHeaderCommentHtml($element)
     {
         return '<div class="adminLogo">
-              <p class="description">Paga+Tarde es una plataforma de financiación online.</p>
-              <p class="description"><a href="https://bo.pagamastarde.com" target="_blank">Login al panel de Paga+Tarde</a>&nbsp;
-              <a href="http://docs.pagamastarde.com/" target="_blank">Documentación</a></p></div>';
+              <p class="description">'.$this->__("Paga+Tarde is an online financing platform.").'</p>
+              <p class="description"><a href="https://bo.pagamastarde.com" target="_blank">'.$this->__("Login to the Paga+Tarde pannel").'</a>&nbsp;
+              <a href="http://docs.pagamastarde.com/" target="_blank">'.$this->__("Documentation").'</a></p></div>';
     }
 }

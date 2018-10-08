@@ -9,9 +9,12 @@ if ($simulatorType && $enabled) {
 ?>
 
 <div id="pmt-simulator-product-page" class="PmtSimulator"
-     data-pmt-num-quota="<?=$defaultInstallments?>" data-pmt-max-ins="<?=$maxInstallments?>"
+     data-pmt-num-quota="<?=$defaultInstallments?>"
+     data-pmt-max-ins="<?=$maxInstallments?>"
      data-pmt-type="<?=$simulatorType?>"
-     data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>" style="display:<?=$display?>">
+     data-pmt-amount="<?=$this->getFinalPrice()?>"
+     data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>"
+     style="display:<?=$display?>">
 </div>
 <script type="text/javascript">
     function changePrice(miliseconds=2000)

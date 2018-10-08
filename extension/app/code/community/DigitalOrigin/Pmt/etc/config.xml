@@ -129,7 +129,7 @@
                 <DEFAULT_INSTALLMENTS>3</DEFAULT_INSTALLMENTS>
                 <MAX_INSTALLMENTS>12</MAX_INSTALLMENTS>
                 <MIN_AMOUNT>1</MIN_AMOUNT>
-                <PAYLATER_TITLE>Financiación instantánea - 100% online</PAYLATER_TITLE>
+                <PAYLATER_TITLE>Instant financing - 100% online</PAYLATER_TITLE>
                 <sort_order>1</sort_order>
                 <PAYLATER_KO_URL>checkout/cart/</PAYLATER_KO_URL>
                 <PAYLATER_OK_URL>checkout/onepage/success/</PAYLATER_OK_URL>
