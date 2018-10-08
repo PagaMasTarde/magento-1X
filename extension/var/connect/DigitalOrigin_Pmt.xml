@@ -1,5 +1,5 @@
 <_>
-   <form_key>R4lI2pT4KZdZ0g8i</form_key>
+   <form_key>8ktf3EYFRAVTRKas</form_key>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -12,9 +12,9 @@
    <license_uri/>
    <version>7.0.0</version>
    <stability>stable</stability>
-   <notes>* Notification error status 400
-* Loggin in /var/log/pmt.log
-* Secure download log action</notes>
+   <notes>* Orders Compatible.
+* Logs in DB (MySql).
+* New Notify interface</notes>
    <authors>
       <name>
          <name>Digital Origin</name>
@@ -43,7 +43,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                    </files>
+            <files>                                                                     </files>
          </files>
       </package>
       <extension>
