@@ -47,7 +47,7 @@ services:
       - MAGENTO_ADMIN_PASSWORD=password123
       - MAGENTO_DB_HOST=db-test
       - MAGENTO_DB_PASSWORD=password
-      - MAGENTO_URL=magento19-test.docker:8082
+      - MAGENTO_URL=24b187e5.ngrok.io
     volumes:
       - ./extension:/pmt
     links:
