@@ -233,7 +233,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
             $orderConfigurationUrls
                 ->setOk($this->okUrl)
                 ->setCancel($this->cancelUrl)
-                ->setKo($this->cancelUrl)
+                ->setKo($this->okUrl)
                 ->setAuthorizedNotificationCallback($this->okUrl)
                 ->setRejectedNotificationCallback($this->okUrl);
 
