@@ -91,11 +91,13 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
         $mageCore = Mage::helper('core');
         $this->magentoOrderData = json_decode($mageCore->jsonEncode($this->magentoOrder->getData()), true);
 
-        $this->okUrl = Mage::getUrl('pmt/notify', array('_query' => array(
-                'order' => $this->magentoOrderData['increment_id']))
+        $this->okUrl = Mage::getUrl(
+            'pmt/notify',
+            array('_query' => array('order' => $this->magentoOrderData['increment_id']))
         );
-        $this->cancelUrl = Mage::getUrl('pmt/notify/cancel', array('_query' => array(
-                'order' => $this->magentoOrderData['increment_id']))
+        $this->cancelUrl = Mage::getUrl(
+            'pmt/notify/cancel',
+            array('_query' => array('order' => $this->magentoOrderData['increment_id']))
         );
 
         $this->itemCollection = $this->magentoOrder->getAllVisibleItems();
