@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c8d5b2f1e8d1147d4a9ab2ae9d3a294",
+    "content-hash": "f6997a123ac4d2c1e37a439c28e3320b",
     "packages": [
         {
             "name": "nategood/httpful",
@@ -96,17 +96,61 @@
             "time": "2015-06-04T13:11:29+00:00"
         },
         {
-            "name": "pagamastarde/orders-api-client",
-            "version": "v1.0.15",
+            "name": "pagamastarde/module-utils",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PagaMasTarde/ordersApiClient.git",
-                "reference": "8daca8f3be7fd32fbbbe77fc8cb7ab388e641c59"
+                "url": "https://github.com/PagaMasTarde/module-utils.git",
+                "reference": "3e5103843eabd08f7697ae3d2459116db5e5fe89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PagaMasTarde/ordersApiClient/zipball/8daca8f3be7fd32fbbbe77fc8cb7ab388e641c59",
-                "reference": "8daca8f3be7fd32fbbbe77fc8cb7ab388e641c59",
+                "url": "https://api.github.com/repos/PagaMasTarde/module-utils/zipball/3e5103843eabd08f7697ae3d2459116db5e5fe89",
+                "reference": "3e5103843eabd08f7697ae3d2459116db5e5fe89",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "facebook/webdriver": "^1.1",
+                "fzaninotto/faker": "^1.7",
+                "nayjest/str-case-converter": "^1.0",
+                "phpunit/phpunit": "^4.8",
+                "phpunit/phpunit-selenium": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PagaMasTarde\\ModuleUtils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "DigitalOrigin",
+                    "email": "cromero@digitalorigin.com"
+                }
+            ],
+            "description": "Paga+Tarde PHP Library. Module utils",
+            "time": "2018-12-17T18:51:05+00:00"
+        },
+        {
+            "name": "pagamastarde/orders-api-client",
+            "version": "v1.0.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PagaMasTarde/ordersApiClient.git",
+                "reference": "94ee56ac2f744d47d29c5ffbb4fe8e1a897b9e61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PagaMasTarde/ordersApiClient/zipball/94ee56ac2f744d47d29c5ffbb4fe8e1a897b9e61",
+                "reference": "94ee56ac2f744d47d29c5ffbb4fe8e1a897b9e61",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +179,7 @@
                 }
             ],
             "description": "PagaMasTarde Orders Api Client in PHP. Use the api with simple methods and using OOP.",
-            "time": "2018-11-05T15:50:44+00:00"
+            "time": "2018-12-17T11:25:27+00:00"
         },
         {
             "name": "pagamastarde/pmt-api-client",
@@ -1742,16 +1786,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.1.7",
+            "version": "v4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "3e83acef94d979b1de946599ef86b3a352abcdc9"
+                "reference": "2b341009ccec76837a7f46f59641b431e4d4c2b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/3e83acef94d979b1de946599ef86b3a352abcdc9",
-                "reference": "3e83acef94d979b1de946599ef86b3a352abcdc9",
+                "url": "https://api.github.com/repos/symfony/process/zipball/2b341009ccec76837a7f46f59641b431e4d4c2b0",
+                "reference": "2b341009ccec76837a7f46f59641b431e4d4c2b0",
                 "shasum": ""
             },
             "require": {
@@ -1760,7 +1804,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -1787,20 +1831,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-14T20:48:13+00:00"
+            "time": "2018-11-20T16:22:05+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.1.7",
+            "version": "v4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9"
+                "reference": "c41175c801e3edfda90f32e292619d10c27103d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/367e689b2fdc19965be435337b50bc8adf2746c9",
-                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c41175c801e3edfda90f32e292619d10c27103d7",
+                "reference": "c41175c801e3edfda90f32e292619d10c27103d7",
                 "shasum": ""
             },
             "require": {
@@ -1819,7 +1863,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -1846,7 +1890,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-02T16:36:10+00:00"
+            "time": "2018-11-11T19:52:12+00:00"
         },
         {
             "name": "webmozart/assert",
