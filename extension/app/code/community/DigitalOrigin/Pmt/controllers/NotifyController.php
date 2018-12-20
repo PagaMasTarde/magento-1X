@@ -5,6 +5,18 @@ require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractControlle
 
 use PagaMasTarde\OrdersApiClient\Client as PmtClient;
 use PagaMasTarde\OrdersApiClient\Model\Order as PmtModelOrder;
+use PagaMasTarde\ModuleUtils\Exception\AlreadyProcessedException;
+use PagaMasTarde\ModuleUtils\Exception\AmountMismatchException;
+use PagaMasTarde\ModuleUtils\Exception\ConcurrencyException;
+use PagaMasTarde\ModuleUtils\Exception\MerchantOrderNotFoundException;
+use PagaMasTarde\ModuleUtils\Exception\NoIdentificationException;
+use PagaMasTarde\ModuleUtils\Exception\NoOrderFoundException;
+use PagaMasTarde\ModuleUtils\Exception\NoQuoteFoundException;
+use PagaMasTarde\ModuleUtils\Exception\UnknownException;
+use PagaMasTarde\ModuleUtils\Exception\WrongStatusException;
+use PagaMasTarde\ModuleUtils\Model\Response\JsonSuccessResponse;
+use PagaMasTarde\ModuleUtils\Model\Response\JsonExceptionResponse;
+use PagaMasTarde\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class DigitalOrigin_Pmt_NotifyController
@@ -72,23 +84,23 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     public function prepareVariables()
     {
-            $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
-            if ($this->merchantOrderId == '') {
-                throw new \Exception(self::CC_NO_MERCHANT_ORDERID, 404);
-            }
+        $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
+        if ($this->merchantOrderId == '') {
+            throw new NoQuoteFoundException();
+        }
 
-            try {
-                $config = Mage::getStoreConfig('payment/paylater');
-                $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-                $this->config = array(
-                    'urlOK' => $config['PAYLATER_OK_URL'],
-                    'urlKO' => $config['PAYLATER_KO_URL'],
-                    'publicKey' => $config['PAYLATER_PUBLIC_KEY_' . $env],
-                    'privateKey' => $config['PAYLATER_PRIVATE_KEY_' . $env],
-                );
-            } catch (\Exception $exception) {
-                throw new \Exception(self::CC_NO_CONFIG, 500);
-            }
+        try {
+            $config = Mage::getStoreConfig('payment/paylater');
+            $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
+            $this->config = array(
+                'urlOK' => $config['PAYLATER_OK_URL'],
+                'urlKO' => $config['PAYLATER_KO_URL'],
+                'publicKey' => $config['PAYLATER_PUBLIC_KEY_' . $env],
+                'privateKey' => $config['PAYLATER_PRIVATE_KEY_' . $env],
+            );
+        } catch (\Exception $exception) {
+            throw new UnknownException(self::CC_NO_CONFIG);
+        }
     }
 
     /**
@@ -98,16 +110,9 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     public function checkConcurrency()
     {
-        try {
-            $this->prepareVariables();
-            $this->unblockConcurrency();
-            $this->blockConcurrency($this->merchantOrderId);
-        } catch (\Exception $exception) {
-            $this->statusCode = 429;
-            $this->errorMessage = self::CC_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
-        }
+        $this->prepareVariables();
+        $this->unblockConcurrency();
+        $this->blockConcurrency($this->merchantOrderId);
     }
 
     /**
@@ -121,10 +126,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             /** @var Mage_Sales_Model_Order $order */
             $this->merchantOrder = Mage::getModel('sales/order')->loadByIncrementId($this->merchantOrderId);
         } catch (\Exception $exception) {
-            $this->statusCode = 404;
-            $this->errorMessage = self::GMO_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+            throw new MerchantOrderNotFoundException();
         }
     }
 
@@ -142,13 +144,10 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
 
             $this->pmtOrderId = $model->getPmtOrderId();
             if (is_null($this->pmtOrderId)) {
-                throw new \Exception(self::GPOI_NO_ORDERID, 404);
+                throw new NoIdentificationException();
             }
         } catch (\Exception $exception) {
-            $this->statusCode = 404;
-            $this->errorMessage = self::GPOI_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+            throw new NoIdentificationException();
         }
     }
 
@@ -159,17 +158,10 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     private function getPmtOrder()
     {
-        try {
-            $this->orderClient = new PmtClient($this->config['publicKey'], $this->config['privateKey']);
-            $this->pmtOrder = $this->orderClient->getOrder($this->pmtOrderId);
-            if (!($this->pmtOrder instanceof PmtModelOrder)) {
-                throw new \Exception(self::GPO_ERR_TYPEOF, 500);
-            }
-        } catch (\Exception $exception) {
-            $this->statusCode = 400;
-            $this->errorMessage = self::GPO_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+        $this->orderClient = new PmtClient($this->config['publicKey'], $this->config['privateKey']);
+        $this->pmtOrder = $this->orderClient->getOrder($this->pmtOrderId);
+        if (!($this->pmtOrder instanceof PmtModelOrder)) {
+            throw new NoOrderFoundException();
         }
     }
 
@@ -180,15 +172,13 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     public function checkOrderStatus()
     {
-        try {
-            if ($this->pmtOrder->getStatus() !== PmtModelOrder::STATUS_AUTHORIZED) {
-                throw new \Exception(self::COS_WRONG_STATUS, 403);
+        if ($this->pmtOrder->getStatus() !== PmtModelOrder::STATUS_AUTHORIZED) {
+            if ($this->pmtOrder instanceof \PagaMasTarde\OrdersApiClient\Model\Order) {
+                $status = $this->pmtOrder->getStatus();
+            } else {
+                $status = '-';
             }
-        } catch (\Exception $exception) {
-            $this->statusCode = 403;
-            $this->errorMessage = self::COS_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+            throw new WrongStatusException($status);
         }
     }
 
@@ -199,35 +189,31 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     public function checkMerchantOrderStatus()
     {
-        try {
-            // Check previous status is 'pending_payment'
-            $statusHistory = $this->merchantOrder->getAllStatusHistory();
-            if (!(is_array($statusHistory) &&  is_object($statusHistory[0]) &&
-                $statusHistory[0]->getStatus() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)) {
-                throw new \Exception( self::CMOS_WRONG_PREVIOUS_STATUS, 409);
-            }
+        // Check previous status is 'pending_payment'
+        $statusHistory = $this->merchantOrder->getAllStatusHistory();
+        if (!(is_array($statusHistory) &&  is_object($statusHistory[0]) &&
+            $statusHistory[0]->getStatus() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)) {
+            throw new WrongStatusException($statusHistory[0]->getStatus());
+        }
 
-            // Order has been processed at least once in the past.
-            foreach ($this->merchantOrder->getAllStatusHistory() as $oStatus) {
-                if (in_array($oStatus->getStatus(),
-                             array(Mage_Sales_Model_Order::STATE_PROCESSING,
-                             Mage_Sales_Model_Order::STATE_COMPLETE))) {
-                    throw new \Exception( self::CMOS_PREVIOUSLY_PROCESSED, 409);
-                }
-            }
-
-            // Check current state
-            $status = $this->merchantOrder->getStatus();
-            if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
-                $this->merchantOrder->getPayment()->getMethodInstance()->getCode() != self::PMT_CODE
+        // Order has been processed at least once in the past.
+        foreach ($this->merchantOrder->getAllStatusHistory() as $oStatus) {
+            if (in_array(
+                $oStatus->getStatus(),
+                array(Mage_Sales_Model_Order::STATE_PROCESSING,
+                    Mage_Sales_Model_Order::STATE_COMPLETE)
+            )
             ) {
-                throw new \Exception( self::CMOS_WRONG_CURRENT_STATUS, 409);
+                throw new WrongStatusException($oStatus->getStatus());
             }
-        } catch (\Exception $exception) {
-            $this->statusCode = 409;
-            $this->errorMessage = self::CMOS_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+        }
+
+        // Check current state
+        $status = $this->merchantOrder->getStatus();
+        if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
+            $this->merchantOrder->getPayment()->getMethodInstance()->getCode() != self::PMT_CODE
+        ) {
+            throw new WrongStatusException($status);
         }
     }
 
@@ -238,15 +224,10 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     public function validateAmount()
     {
-        try {
-            if ($this->pmtOrder->getShoppingCart()->getTotalAmount() != intval($this->merchantOrder->getGrandTotal()*100)) {
-                throw new \Exception(self::VA_WRONG_AMOUNT, 409);
-            }
-        } catch (\Exception $exception) {
-            $this->statusCode = 409;
-            $this->errorMessage = self::VA_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+        $pmtAmount = $this->pmtOrder->getShoppingCart()->getTotalAmount();
+        $merchantAmount = intval($this->merchantOrder->getGrandTotal()*100);
+        if ($pmtAmount != $merchantAmount) {
+            throw new AmountMismatchException($pmtAmount, $merchantAmount);
         }
     }
 
@@ -288,10 +269,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             }
 
         } catch (\Exception $exception) {
-            $this->statusCode = 500;
-            $this->errorMessage = self::PMO_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+            throw new UnknownException($exception->getMessage());
         }
     }
 
@@ -305,10 +283,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         try {
             $this->orderClient->confirmOrder($this->pmtOrderId);
         } catch (\Exception $exception) {
-            $this->statusCode = 500;
-            $this->errorMessage = self::CPO_ERR_MSG;
-            $this->errorDetail = 'Code: '.$exception->getCode().', Description: '.$exception->getMessage();
-            throw new \Exception();
+            throw new UnknownException($exception->getMessage());
         }
     }
 
@@ -437,12 +412,16 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     protected function blockConcurrency($orderId)
     {
-        $model = Mage::getModel('pmt/concurrency');
-        $model->setData(array(
-            'id' => $orderId,
-            'timestamp' => time(),
-        ));
-        $model->save();
+        try {
+                $model = Mage::getModel('pmt/concurrency');
+                $model->setData(array(
+                    'id' => $orderId,
+                    'timestamp' => time(),
+                ));
+                $model->save();
+        } catch (Exception $e) {
+            throw new ConcurrencyException();
+        }
     }
 
     /**
@@ -453,13 +432,17 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
      */
     protected function unblockConcurrency($orderId = null)
     {
-        $this->createTableIfNotExists('pmt/concurrency');
-        if ($orderId == null) {
-            Mage::getModel('pmt/concurrency')->getCollection()->truncate();
-        } else {
-            $model = Mage::getModel('pmt/concurrency');
-            $model->load($orderId, 'id');
-            $model->delete();
+        try {
+            $this->createTableIfNotExists('pmt/concurrency');
+            if ($orderId == null) {
+                Mage::getModel('pmt/concurrency')->getCollection()->truncate();
+            } else {
+                $model = Mage::getModel('pmt/concurrency');
+                $model->load($orderId, 'id');
+                $model->delete();
+            }
+        } catch (Exception $e) {
+            throw new ConcurrencyException();
         }
     }
 }
