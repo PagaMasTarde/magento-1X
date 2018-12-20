@@ -58,6 +58,11 @@ abstract class AbstractBuy extends MagentoTest
     const PMT_TITLE = 'Paga+Tarde';
 
     /**
+     * Notification route
+     */
+    const NOTIFICATION_FOLDER = '/pmt/notify';
+
+    /**
      * Buy unregistered
      */
     public function prepareProductAndCheckout()
