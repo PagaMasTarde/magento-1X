@@ -1,4 +1,5 @@
 <?php
+use PagaMasTarde\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class AbstractController
@@ -185,20 +186,18 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Save log in SQL database
      *
-     * @param array $data
+     * @param $exception
      */
-    public function saveLog($data = array())
+    public function saveLog($exception)
     {
         try {
             $this->createTableIfNotExists('pmt/log');
-            $data = array_merge($data, array(
-                'timestamp' => time(),
-                'date' => date("Y-m-d H:i:s"),
-            ));
+            $logEntry= new LogEntry();
+            $logEntryJson = $logEntry->error($exception)->toJson();
 
             $model = Mage::getModel('pmt/log');
             $model->setData(array(
-                'log' => json_encode($data),
+                'log' => $logEntryJson,
             ));
             $model->save();
         } catch (\Exception $exception) {
@@ -211,7 +210,8 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
      *
      * @param null $model
      */
-    public function createTableIfNotExists($model = null) {
+    public function createTableIfNotExists($model = null)
+    {
         if (!is_null($model)) {
             try {
                 $exists = Mage::getSingleton('core/resource')
