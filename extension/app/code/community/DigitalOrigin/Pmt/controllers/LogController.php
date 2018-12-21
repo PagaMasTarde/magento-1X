@@ -33,14 +33,15 @@ class DigitalOrigin_Pmt_LogController extends AbstractController
         if (is_numeric($from) && is_numeric($to)) {
             $sqlPart = ' and DATE_FORMAT(createdAt, \'%Y%m%d\') between ' . $from . ' and ' . $to;
         }
-        $sql   = 'select log from pmt_logs where 1=1 ' . $sqlPart . ' order by id desc limit '
+        $sql   = 'select log, createdAt from pmt_logs where 1=1 ' . $sqlPart . ' order by id desc limit '
             . (($limit && is_numeric($limit)) ? $limit : 200);
 
         $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
         $result = $conn->fetchAll($sql);
         $output = array();
-        foreach ($result as $log) {
-            $output[] = json_decode($log['log']);
+        foreach ($result as $key => $log) {
+            $output[$key]['log'] = json_decode($log['log']);
+            $output[$key]['timestamp'] = $log['createdAt'];
         }
         $this->statusCode = 200;
         return $this->response($output);
