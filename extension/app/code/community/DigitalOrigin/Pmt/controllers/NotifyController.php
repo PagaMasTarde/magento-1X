@@ -16,7 +16,6 @@ use PagaMasTarde\ModuleUtils\Exception\UnknownException;
 use PagaMasTarde\ModuleUtils\Exception\WrongStatusException;
 use PagaMasTarde\ModuleUtils\Model\Response\JsonSuccessResponse;
 use PagaMasTarde\ModuleUtils\Model\Response\JsonExceptionResponse;
-use PagaMasTarde\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class DigitalOrigin_Pmt_NotifyController
@@ -71,7 +70,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             $this->toCancel = true;
             $this->prepareVariables();
             $this->restoreCart();
-            return $this->redirect();
+            return $this->redirect(true);
         } catch (\Exception $exception) {
             return $this->redirect(true);
         }
@@ -173,6 +172,10 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     public function checkOrderStatus()
     {
         if ($this->pmtOrder->getStatus() !== PmtModelOrder::STATUS_AUTHORIZED) {
+            if ($this->merchantOrder->getStatus() == Mage_Sales_Model_Order::STATE_PROCESSING) {
+                throw new AlreadyProcessedException();
+            }
+
             if ($this->pmtOrder instanceof \PagaMasTarde\OrdersApiClient\Model\Order) {
                 $status = $this->pmtOrder->getStatus();
             } else {
@@ -321,14 +324,29 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             $this->validateAmount();
             $this->processMerchantOrder();
         } catch (\Exception $exception) {
-            return $this->cancelProcess($exception);
+            $jsonResponse = new JsonExceptionResponse();
+            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+            $jsonResponse->setPmtOrderId($this->pmtOrderId);
+            $jsonResponse->setException($exception);
+            $response = $jsonResponse->toJson();
+            $this->cancelProcess($exception);
         }
 
         try {
-            $this->confirmPmtOrder();
+            if (!isset($response)) {
+                $this->confirmPmtOrder();
+                $jsonResponse = new JsonSuccessResponse();
+                $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+                $jsonResponse->setPmtOrderId($this->pmtOrderId);
+            }
         } catch (\Exception $exception) {
             $this->rollbackMerchantOrder();
-            return $this->cancelProcess($exception);
+            $jsonResponse = new JsonExceptionResponse();
+            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+            $jsonResponse->setPmtOrderId($this->pmtOrderId);
+            $jsonResponse->setException($exception);
+            $jsonResponse->toJson();
+            $this->cancelProcess($exception);
         }
 
         try {
@@ -337,7 +355,12 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             // Do nothing
         }
 
-        return $this->finishProcess(false);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $jsonResponse->printResponse();
+        } else {
+            $error = (!isset($response)) ? false : true;
+            return $this->redirect($error);
+        }
     }
 
     /**
@@ -354,33 +377,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     {
         $this->unblockConcurrency($this->merchantOrderId);
         $this->restoreCart();
-        $debug = debug_backtrace();
-        $method = $debug[1]['function'];
-        $line = $debug[1]['line'];
-        $this->saveLog(array(
-            'pmtCode' => $this->statusCode,
-            'pmtMessage' => $this->errorMessage,
-            'pmtMessageDetail' => $this->errorDetail,
-            'pmtOrderId' => $this->pmtOrderId,
-            'merchantOrderId' => $this->merchantOrderId,
-            'method' => $method,
-            'line' => $line,
-        ));
-        return $this->finishProcess(true);
-    }
-
-    /**
-     * Redirect the request to the e-commerce or show the output in json
-     *
-     * @param bool $error
-     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
-     */
-    public function finishProcess($error = true)
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            return $this->response();
-        }
-        return $this->redirect($error);
+        $this->saveLog($exception);
     }
 
     /**
