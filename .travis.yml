@@ -10,7 +10,7 @@ php:
 
 addons:
   hosts:
-  - magento-test.docker
+  - magento19-test.docker
 
 env:
   - DOCKER_COMPOSE_VERSION=1.21.0
