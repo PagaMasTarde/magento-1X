@@ -140,14 +140,23 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkPmtOrderId()
     {
-        $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order=0';
+        $orderId=0;
+        $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order='.$orderId;
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);
-        $this->assertNotEmpty($response->body->merchant_order_id, $response);
-        $this->assertContains(NoIdentificationException::ERROR_MESSAGE, $response->body->result, "PR=>".$response->body->result);
+        $this->assertEquals(
+            $response->body->merchant_order_id,
+            $orderId,
+            $response->body->merchant_order_id.'!='. $orderId
+        );
+        $this->assertContains(
+            NoIdentificationException::ERROR_MESSAGE,
+            $response->body->result,
+            "PR=>".$response->body->result
+        );
     }
 
     /**
