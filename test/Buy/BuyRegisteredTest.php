@@ -130,6 +130,10 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
+        $this->assertNotEmpty($response->body->status_code, $response);
+        $this->assertNotEmpty($response->body->timestamp, $response);
+        $this->assertNotEmpty($response->body->merchant_order_id, $response);
+        $this->assertNotEmpty($response->body->pmt_order_id, $response);
         $this->assertContains(NoQuoteFoundException::ERROR_MESSAGE, $response->body->result, "PR=>".$response->body->result);
     }
 
@@ -141,7 +145,11 @@ class BuyRegisteredTest extends AbstractBuy
         $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order=0';
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
-        $this->assertNotEmpty($response->body->result);
+        $this->assertNotEmpty($response->body->result, $response);
+        $this->assertNotEmpty($response->body->status_code, $response);
+        $this->assertNotEmpty($response->body->timestamp, $response);
+        $this->assertNotEmpty($response->body->merchant_order_id, $response);
+        $this->assertNotEmpty($response->body->pmt_order_id, $response);
         $this->assertContains(NoIdentificationException::ERROR_MESSAGE, $response->body->result, "PR=>".$response->body->result);
     }
 
@@ -154,7 +162,11 @@ class BuyRegisteredTest extends AbstractBuy
     {
         $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order=145000008';
         $response = Request::post($notifyUrl)->expects('json')->send();
-        $this->assertNotEmpty($response->body->result);
+        $this->assertNotEmpty($response->body->result, $response);
+        $this->assertNotEmpty($response->body->status_code, $response);
+        $this->assertNotEmpty($response->body->timestamp, $response);
+        $this->assertNotEmpty($response->body->merchant_order_id, $response);
+        $this->assertNotEmpty($response->body->pmt_order_id, $response);
         $this->assertContains(AlreadyProcessedException::ERROR_MESSAGE, $response->body->result, "PR51=>".$response->body->result);
     }
 }
