@@ -263,7 +263,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
                 ->setShoppingCart($orderShoppingCart)
                 ->setUser($orderUser);
         } catch (\Exception $exception) {
-            $this->logException($exception);
+            $this->saveLog($exception);
             return $this->_redirectUrl($this->cancelUrl);
         }
 
@@ -282,15 +282,15 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
             }
         } catch (\Exception $exception) {
             $this->order = $order;
-            $this->logException($exception);
+            $this->saveLog($exception);
             return $this->_redirectUrl($this->cancelUrl);
         }
 
         if (!$this->iframe) {
             try {
                 return $this->_redirectUrl($url);
-            } catch(\Exception $exception) {
-                $this->logException($exception);
+            } catch (\Exception $exception) {
+                $this->saveLog($exception);
                 return $this->_redirectUrl($this->cancelUrl);
             }
         }
@@ -312,25 +312,6 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
 
         $this->getLayout()->getBlock('content')->append($block);
         return $this->renderLayout();
-    }
-
-    /**
-     * Save log in case of error
-     *
-     * @param Exception $exception
-     */
-    public function logException(\Exception $exception) {
-        $data = array();
-        $debug = $exception->getTrace();
-        $method = $debug[0]['function'];
-        $line = $debug[0]['line'];
-        $class = $debug[0]['class'];
-        $data['message'] = $exception->getMessage();
-        $data['code'] = $exception->getCode();
-        $data['method'] = $method;
-        $data['line'] = $line;
-        $data['class'] =str_replace("\\", "\\\\",  $class);
-        $this->saveLog($data);
     }
 
     /**
