@@ -28,4 +28,4 @@ before_script:
   - 'phpenv config-rm xdebug.ini'
 
 script:
-  - './bin/start-docker.sh'
+  - './generate.sh'
