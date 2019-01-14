@@ -20,8 +20,10 @@ services:
       - MAGENTO_URL=magento19-dev.docker:8080
     volumes:
       - ./extension:/pmt
+    depends_on:
+      - db-test
     links:
-    - db-dev
+      - db-dev
     ports:
       - "8080:80"
     extra_hosts:
@@ -46,26 +48,28 @@ services:
       - MAGENTO_URL=magento19-test.docker:8080
     volumes:
       - ./extension:/pmt
+    depends_on:
+      - db-test
     links:
       - db-test
     ports:
       - "8082:80"
     extra_hosts:
-    - "magento19-test.docker:127.0.0.1"
+      - "magento19-test.docker:127.0.0.1"
 
   db-dev:
     container_name: magento19dbdev
     image: mysql:5.7
     environment:
-    - MYSQL_ROOT_PASSWORD=password
-    - MYSQL_DATABASE=magento
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=magento
 
   db-test:
     container_name: magento19dbtest
     image: mysql:5.7
     environment:
-    - MYSQL_ROOT_PASSWORD=password
-    - MYSQL_DATABASE=magento
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=magento
 
   selenium:
     container_name: magento19selenium
