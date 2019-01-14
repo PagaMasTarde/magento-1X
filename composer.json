@@ -28,7 +28,6 @@
     "require": {  
         "php": ">=5.3",
         "pagamastarde/orders-api-client": "^1.0",
-        "pagamastarde/pmt-api-client": "^1.2",
         "pagamastarde/module-utils": "^1.0"
     },
     "require-dev": {
