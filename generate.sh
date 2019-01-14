@@ -13,15 +13,15 @@ set -e
 # Run test
 composer install
 
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-register
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
-../extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
+extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
+extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
+extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
+extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
+extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
+extension/lib/DigitalOrigin/bin/phpunit --group magento-register
+extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
+extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
+extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
 
 composer install --no-dev
