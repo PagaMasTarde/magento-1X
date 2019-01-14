@@ -153,6 +153,7 @@ abstract class AbstractBuy extends MagentoTest
         );
         $productLinkElement = $this->webDriver->findElement($productLinkSearch);
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($productLinkElement));
+        sleep(3);
         $productLinkElement->click();
         $this->assertSame(
             self::PRODUCT_NAME,
