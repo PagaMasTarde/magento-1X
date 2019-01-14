@@ -3,6 +3,9 @@
 # Prepare environment and build package
 docker-compose down
 docker-compose up -d --build magento-test db-test selenium
+
+sleep 10
+
 docker-compose exec magento-test install-sampledata
 docker-compose exec magento-test install-magento
 docker-compose exec magento-test modman init

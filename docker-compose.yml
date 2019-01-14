@@ -20,8 +20,6 @@ services:
       - MAGENTO_URL=magento19-dev.docker:8080
     volumes:
       - ./extension:/pmt
-    depends_on:
-      - db-test
     links:
       - db-dev
     ports:
@@ -48,8 +46,6 @@ services:
       - MAGENTO_URL=magento19-test.docker:8080
     volumes:
       - ./extension:/pmt
-    depends_on:
-      - db-test
     links:
       - db-test
     ports:
