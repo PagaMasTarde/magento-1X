@@ -43,11 +43,12 @@ services:
       - MAGENTO_LOCALE=es_ES
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
-      - MAGENTO_URL=magento19-test.docker:8080
+      - MAGENTO_URL=magento19-test.docker:8082
     volumes:
       - ./extension:/pmt
     links:
       - db-test
+      - selenium
     ports:
       - "8082:80"
     extra_hosts:
