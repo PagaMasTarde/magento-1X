@@ -39,6 +39,7 @@ abstract class MagentoTest extends TestCase
         'email'              => 'john_mg@digitalorigin.com',
         'company'            => 'Digital Origin SL',
         'zip'                => '08023',
+        'country'            => 'España',
         'city'               => 'Barcelona',
         'street'             => 'Av Diagonal 585, planta 7',
         'phone'              => '600123123',

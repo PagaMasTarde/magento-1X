@@ -48,7 +48,6 @@ services:
       - ./extension:/pmt
     links:
       - db-test
-      - selenium
     ports:
       - "8082:80"
     extra_hosts:

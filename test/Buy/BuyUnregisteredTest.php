@@ -41,6 +41,7 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->findById('billing:street1')->sendKeys($this->configuration['street']);
         $this->findById('billing:city')->sendKeys($this->configuration['city']);
         $this->findById('billing:postcode')->sendKeys($this->configuration['zip']);
+        $this->findById('billing:country_id')->sendKeys($this->configuration['country']);
         $this->findById('billing:region_id')->sendKeys($this->configuration['city']);
         $this->findById('billing:telephone')->sendKeys($this->configuration['phone']);
 

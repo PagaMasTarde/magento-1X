@@ -2,7 +2,7 @@
 
 # Prepare environment and build package
 docker-compose down
-docker-compose up -d --build magento-test
+docker-compose up -d --build magento-test selenium
 sleep 10
 
 # Install magento and sample data
