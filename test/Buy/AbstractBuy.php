@@ -199,8 +199,8 @@ abstract class AbstractBuy extends MagentoTest
         $this->webDriver->executeScript('review.save()');
 
         // If use iFrame the test will end without finish the buy and test return
-        if($useIframe) {
-            sleep(10);
+        if ($useIframe) {
+            sleep(15);
             $firstIframe = $this->webDriver->findElement(WebDriverBy::cssSelector("*[data-iframe-type='modal']"));
             $condition = WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt($firstIframe);
             $this->webDriver->wait()->until($condition);
