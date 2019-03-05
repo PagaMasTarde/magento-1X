@@ -2,7 +2,11 @@
 
 # Prepare environment and build package
 docker-compose down
-docker-compose up -d --build magento-test selenium
+docker-compose up -d --build magento-test
+if [ $1 == 'true' ]
+then
+    docker-compose up -d --build selenium
+fi
 sleep 10
 
 # Install magento and sample data
@@ -21,14 +25,18 @@ docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
 set -e
 # Run test
 composer install
-extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
-extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
-extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
-extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
-extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
-extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
-extension/lib/DigitalOrigin/bin/phpunit --group magento-register
-extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
-extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
-extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
-composer install --no-dev
+
+if [ $1 == 'true' ]
+then
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-register
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
+else
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
+fi

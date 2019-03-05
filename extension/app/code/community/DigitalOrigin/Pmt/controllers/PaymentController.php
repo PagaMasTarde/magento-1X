@@ -15,7 +15,8 @@ use PagaMasTarde\OrdersApiClient\Model\Order\Configuration as PmtModelOrderConfi
 use PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Urls as PmtModelOrderUrls;
 use PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Channel as PmtModelOrderChannel;
 use PagaMasTarde\OrdersApiClient\Client as PmtClient;
-use PagaMasTarde\OrdersApiClient\Exception\ClientException as PmtClientException;
+
+use PagaMasTarde\ModuleUtils\Exception\OrderNotFoundException;
 
 /**
  * Class DigitalOrigin_Pmt_PaymentController
@@ -108,10 +109,10 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
         $this->customer = $customerSession->getCustomer();
 
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-        $this->publicKey = $moduleConfig['PAYLATER_PUBLIC_KEY_' . $env];
-        $this->privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_' . $env];
-        $this->iframe = $moduleConfig['PAYLATER_IFRAME'];
+        $extraConfig = Mage::helper('pmt/ExtraConfig')->getExtraConfig();
+        $this->publicKey = $moduleConfig['pmt_public_key'];
+        $this->privateKey = $moduleConfig['pmt_private_key'];
+        $this->iframe = $extraConfig['PMT_FORM_DISPLAY_TYPE'];
     }
 
     /**
@@ -278,7 +279,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
                 $url = $order->getActionUrls()->getForm();
                 $this->insertOrderControl($this->magentoOrderId, $order->getId());
             } else {
-                throw new \Exception('Order not created');
+                throw new OrderNotFoundException();
             }
         } catch (\Exception $exception) {
             $this->order = $order;

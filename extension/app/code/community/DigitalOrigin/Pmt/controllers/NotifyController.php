@@ -10,8 +10,8 @@ use PagaMasTarde\ModuleUtils\Exception\AmountMismatchException;
 use PagaMasTarde\ModuleUtils\Exception\ConcurrencyException;
 use PagaMasTarde\ModuleUtils\Exception\MerchantOrderNotFoundException;
 use PagaMasTarde\ModuleUtils\Exception\NoIdentificationException;
-use PagaMasTarde\ModuleUtils\Exception\NoOrderFoundException;
-use PagaMasTarde\ModuleUtils\Exception\NoQuoteFoundException;
+use PagaMasTarde\ModuleUtils\Exception\OrderNotFoundException;
+use PagaMasTarde\ModuleUtils\Exception\QuoteNotFoundException;
 use PagaMasTarde\ModuleUtils\Exception\UnknownException;
 use PagaMasTarde\ModuleUtils\Exception\WrongStatusException;
 use PagaMasTarde\ModuleUtils\Model\Response\JsonSuccessResponse;
@@ -85,17 +85,17 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     {
         $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
         if ($this->merchantOrderId == '') {
-            throw new NoQuoteFoundException();
+            throw new QuoteNotFoundException();
         }
 
         try {
             $config = Mage::getStoreConfig('payment/paylater');
-            $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
+            $extraConfig = Mage::helper('pmt/ExtraConfig')->getExtraConfig();
             $this->config = array(
-                'urlOK' => $config['PAYLATER_OK_URL'],
-                'urlKO' => $config['PAYLATER_KO_URL'],
-                'publicKey' => $config['PAYLATER_PUBLIC_KEY_' . $env],
-                'privateKey' => $config['PAYLATER_PRIVATE_KEY_' . $env],
+                'urlOK' => $extraConfig['PMT_URL_OK'],
+                'urlKO' => $extraConfig['PMT_URL_KO'],
+                'publicKey' => $config['pmt_public_key'],
+                'privateKey' => $config['pmt_private_key'],
             );
         } catch (\Exception $exception) {
             throw new UnknownException(self::CC_NO_CONFIG);
@@ -160,7 +160,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         $this->orderClient = new PmtClient($this->config['publicKey'], $this->config['privateKey']);
         $this->pmtOrder = $this->orderClient->getOrder($this->pmtOrderId);
         if (!($this->pmtOrder instanceof PmtModelOrder)) {
-            throw new NoOrderFoundException();
+            throw new OrderNotFoundException();
         }
     }
 

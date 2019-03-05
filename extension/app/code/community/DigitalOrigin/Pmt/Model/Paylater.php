@@ -95,9 +95,8 @@ class DigitalOrigin_Pmt_Model_Paylater extends Mage_Payment_Model_Method_Abstrac
             return false;
         }
 
-        $env = $this->getConfigData('PAYLATER_PROD') ? 'PROD' : 'TEST';
-        $publicKey = $this->getConfigData('PAYLATER_PUBLIC_KEY_'.$env);
-        $privateKey = $this->getConfigData('PAYLATER_PRIVATE_KEY_'.$env);
+        $publicKey = $this->getConfigData('pmt_public_key');
+        $privateKey = $this->getConfigData('pmt_public_key');
 
         if (!$publicKey || !$privateKey) {
             return false;

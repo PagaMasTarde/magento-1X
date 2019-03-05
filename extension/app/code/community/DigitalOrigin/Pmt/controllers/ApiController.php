@@ -83,8 +83,7 @@ class DigitalOrigin_Pmt_ApiController extends AbstractController
     public function authorize()
     {
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-        $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+        $privateKey = $moduleConfig['pmt_private_key'];
 
         if (Mage::app()->getRequest()->getParam('secret') == $privateKey ||
             Mage::app()->getRequest()->getHeader('secret') == $privateKey

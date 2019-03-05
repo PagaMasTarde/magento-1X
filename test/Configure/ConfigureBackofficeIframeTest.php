@@ -24,7 +24,7 @@ class ConfigureBackofficeIframeTest extends AbstractConfigure
         $this->disableFedEx();
         $this->goToSystemConfig();
         $this->goToPaymentMethodsAndSeePMT();
-        $this->configureAndSave('payment_paylater_PAYLATER_IFRAME1');
+        $this->configureAndSave();
         $this->webDriver->quit();
     }
 }

@@ -1,4 +1,4 @@
-<?php
+S<?php
 
 require_once('lib/DigitalOrigin/autoload.php');
 require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractController.php');
@@ -56,8 +56,7 @@ class DigitalOrigin_Pmt_LogController extends AbstractController
     public function authorize()
     {
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-        $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+        $privateKey = $moduleConfig['pmt_private_key'];
         if ((Mage::app()->getRequest()->getParam('secret') == $privateKey ||
             Mage::app()->getRequest()->getHeader('secret') == $privateKey)
             && !empty($privateKey)) {

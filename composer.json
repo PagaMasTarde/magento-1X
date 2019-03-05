@@ -1,7 +1,7 @@
 {  
     "name": "pagamastarde/magento-1x",
     "description": "Paga+Tarde Magento 1 module with orders",
-    "version" : "7.1.0",
+    "version" : "7.2.0",
     "type": "module",
     "keywords": [  
         "api",
@@ -28,7 +28,7 @@
     "require": {  
         "php": ">=5.3",
         "pagamastarde/orders-api-client": "^1.0",
-        "pagamastarde/module-utils": "^1.0"
+        "pagamastarde/module-utils": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",

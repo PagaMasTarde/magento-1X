@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1877cde6122022f77d34fa6087e2505",
+    "content-hash": "e02c63e05da92c401323791db77d2bf3",
     "packages": [
         {
             "name": "nategood/httpful",
@@ -97,16 +97,16 @@
         },
         {
             "name": "pagamastarde/module-utils",
-            "version": "1.0.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PagaMasTarde/module-utils.git",
-                "reference": "3e5103843eabd08f7697ae3d2459116db5e5fe89"
+                "reference": "00b214250b818192d6fe9e0f52b68ee5b24c38d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PagaMasTarde/module-utils/zipball/3e5103843eabd08f7697ae3d2459116db5e5fe89",
-                "reference": "3e5103843eabd08f7697ae3d2459116db5e5fe89",
+                "url": "https://api.github.com/repos/PagaMasTarde/module-utils/zipball/00b214250b818192d6fe9e0f52b68ee5b24c38d0",
+                "reference": "00b214250b818192d6fe9e0f52b68ee5b24c38d0",
                 "shasum": ""
             },
             "require": {
@@ -137,20 +137,20 @@
                 }
             ],
             "description": "Paga+Tarde PHP Library. Module utils",
-            "time": "2018-12-17T18:51:05+00:00"
+            "time": "2019-01-23T10:59:08+00:00"
         },
         {
             "name": "pagamastarde/orders-api-client",
-            "version": "v1.0.16",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PagaMasTarde/ordersApiClient.git",
-                "reference": "94ee56ac2f744d47d29c5ffbb4fe8e1a897b9e61"
+                "reference": "6e6d7312653beeae57bd809f47de2d6d84fddb4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PagaMasTarde/ordersApiClient/zipball/94ee56ac2f744d47d29c5ffbb4fe8e1a897b9e61",
-                "reference": "94ee56ac2f744d47d29c5ffbb4fe8e1a897b9e61",
+                "url": "https://api.github.com/repos/PagaMasTarde/ordersApiClient/zipball/6e6d7312653beeae57bd809f47de2d6d84fddb4d",
+                "reference": "6e6d7312653beeae57bd809f47de2d6d84fddb4d",
                 "shasum": ""
             },
             "require": {
@@ -179,7 +179,7 @@
                 }
             ],
             "description": "PagaMasTarde Orders Api Client in PHP. Use the api with simple methods and using OOP.",
-            "time": "2018-12-17T11:25:27+00:00"
+            "time": "2019-01-21T08:54:34+00:00"
         }
     ],
     "packages-dev": [
@@ -1102,6 +1102,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-06-30T09:13:00+00:00"
         },
         {
@@ -1745,16 +1746,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.2.2",
+            "version": "v4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "ea043ab5d8ed13b467a9087d81cb876aee7f689a"
+                "reference": "6c05edb11fbeff9e2b324b4270ecb17911a8b7ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/ea043ab5d8ed13b467a9087d81cb876aee7f689a",
-                "reference": "ea043ab5d8ed13b467a9087d81cb876aee7f689a",
+                "url": "https://api.github.com/repos/symfony/process/zipball/6c05edb11fbeff9e2b324b4270ecb17911a8b7ad",
+                "reference": "6c05edb11fbeff9e2b324b4270ecb17911a8b7ad",
                 "shasum": ""
             },
             "require": {
@@ -1790,20 +1791,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-03T14:48:52+00:00"
+            "time": "2019-01-24T22:05:03+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.2.2",
+            "version": "v4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "d0aa6c0ea484087927b49fd513383a7d36190ca6"
+                "reference": "761fa560a937fd7686e5274ff89dcfa87a5047df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/d0aa6c0ea484087927b49fd513383a7d36190ca6",
-                "reference": "d0aa6c0ea484087927b49fd513383a7d36190ca6",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/761fa560a937fd7686e5274ff89dcfa87a5047df",
+                "reference": "761fa560a937fd7686e5274ff89dcfa87a5047df",
                 "shasum": ""
             },
             "require": {
@@ -1849,7 +1850,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-03T09:07:35+00:00"
+            "time": "2019-02-23T15:17:42+00:00"
         },
         {
             "name": "webmozart/assert",

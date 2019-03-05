@@ -6,7 +6,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use PagaMasTarde\ModuleUtils\Exception\AlreadyProcessedException;
 use PagaMasTarde\ModuleUtils\Exception\NoIdentificationException;
-use PagaMasTarde\ModuleUtils\Exception\NoQuoteFoundException;
+use PagaMasTarde\ModuleUtils\Exception\QuoteNotFoundException;
 use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
 
@@ -122,7 +122,7 @@ class BuyRegisteredTest extends AbstractBuy
 
 
     /**
-     * Check if with a empty parameter called order-received we can get a NoQuoteFoundException
+     * Check if with a empty parameter called order-received we can get a QuoteNotFoundException
      */
     protected function checkConcurrency()
     {
@@ -132,7 +132,7 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);
-        $this->assertContains(NoQuoteFoundException::ERROR_MESSAGE, $response->body->result, "PR=>".$response->body->result);
+        $this->assertContains(QuoteNotFoundException::ERROR_MESSAGE, $response->body->result, "PR=>".$response->body->result);
     }
 
     /**

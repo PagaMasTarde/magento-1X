@@ -167,14 +167,15 @@ abstract class AbstractBuy extends MagentoTest
     public function fillPaymentMethod()
     {
         $this->findById('p_method_paylater')->click();
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::presenceOfElementLocated(
-                WebDriverBy::className('PmtSimulator')
-            )
-        );
-        $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
-            WebDriverBy::className('PmtSimulator')
-        ));
+        // No longer support simulator in checkout
+        // $this->webDriver->wait()->until(
+        //     WebDriverExpectedCondition::presenceOfElementLocated(
+        //        WebDriverBy::className('PmtSimulator')
+        //    )
+        // );
+        // $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
+        //     WebDriverBy::className('PmtSimulator')
+        // ));
         $this->webDriver->executeScript("payment.save()");
         $reviewStepSearch = WebDriverBy::id('review-buttons-container');
         $this->webDriver->wait()->until(

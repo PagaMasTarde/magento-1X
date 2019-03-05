@@ -184,43 +184,18 @@ abstract class AbstractConfigure extends MagentoTest
     /**
      * Configure and Save
      */
-    public function configureAndSave(string $paylaterMode)
+    public function configureAndSave()
     {
         //Fill configuration for PMT
         $this->findById('payment_paylater_active1')->click();
-        $this->findById('payment_paylater_PAYLATER_PROD0')->click();
-        $this->findById('payment_paylater_PAYLATER_PUBLIC_KEY_TEST')
+        $this->findById('payment_paylater_pmt_public_key')
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
-        $this->findById('payment_paylater_PAYLATER_PRIVATE_KEY_TEST')
+        $this->findById('payment_paylater_pmt_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
-        ;
-        $this->findById('payment_paylater_PAYLATER_PUBLIC_KEY_PROD')
-            ->clear()
-            ->sendKeys($this->configuration['publicKey'])
-        ;
-        $this->findById('payment_paylater_PAYLATER_PRIVATE_KEY_PROD')
-            ->clear()
-            ->sendKeys($this->configuration['secretKey'])
-        ;
-        $this->findById($paylaterMode)->click();
-        $this->findById('payment_paylater_DEFAULT_INSTALLMENTS')
-            ->clear()
-            ->sendKeys($this->configuration['defInstallments'])
-        ;
-        $this->findById('payment_paylater_MAX_INSTALLMENTS')
-            ->clear()
-            ->sendKeys($this->configuration['maxInstallments'])
-        ;
-        $this->findById('payment_paylater_MIN_AMOUNT')
-            ->clear()
-            ->sendKeys($this->configuration['minAmount'])
-        ;
-        $this->findById('payment_paylater_PAYLATER_TITLE')->clear()->sendKeys('extra');
-
-        //Confirm and validate
+        ;        //Confirm and validate
         $this->webDriver->executeScript('configForm.submit()');
 
         //Verify

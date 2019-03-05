@@ -21,7 +21,7 @@ class ConfigureBackofficeRedirectTest extends AbstractConfigure
         $this->getBackofficeLoggedIn();
         $this->goToSystemConfig();
         $this->goToPaymentMethodsAndSeePMT();
-        $this->configureAndSave('payment_paylater_PAYLATER_IFRAME0');
+        $this->configureAndSave();
         $this->webDriver->quit();
     }
 }
