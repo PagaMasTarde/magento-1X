@@ -197,7 +197,10 @@ abstract class AbstractBuy extends MagentoTest
     public function goToPMT($useIframe = true)
     {
         sleep(5);
-        $this->webDriver->executeScript('review.save()');
+
+        $continueButton = WebDriverBy::cssSelector('.button.btn-checkout');
+        $continueButtonElement = $this->webDriver->findElement($continueButton);
+        $continueButtonElement->click();
 
         // If use iFrame the test will end without finish the buy and test return
         if ($useIframe) {
@@ -272,6 +275,21 @@ abstract class AbstractBuy extends MagentoTest
         );
         $this->assertTrue(
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
+        );
+    }
+
+    /**
+     * Verify That UTF Encoding is working
+     */
+    public function verifyUTF8()
+    {
+        $paymentFormElement = WebDriverBy::className('FieldsPreview-desc');
+        $condition = WebDriverExpectedCondition::visibilityOfElementLocated($paymentFormElement);
+        $this->webDriver->wait()->until($condition);
+        $this->assertTrue((bool) $condition);
+        $this->assertSame(
+            $this->configuration['firstname'] . ' ' . $this->configuration['lastname'],
+            $this->findByClass('FieldsPreview-desc')->getText()
         );
     }
 
