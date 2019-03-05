@@ -25,7 +25,6 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
         $this->goToPMT(false);
-        $this->verifyUTF8();
         $this->quit();
     }
 

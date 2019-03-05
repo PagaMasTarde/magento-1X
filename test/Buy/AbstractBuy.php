@@ -276,21 +276,6 @@ abstract class AbstractBuy extends MagentoTest
     }
 
     /**
-     * Verify That UTF Encoding is working
-     */
-    public function verifyUTF8()
-    {
-        $paymentFormElement = WebDriverBy::className('FieldsPreview-desc');
-        $condition = WebDriverExpectedCondition::visibilityOfElementLocated($paymentFormElement);
-        $this->webDriver->wait()->until($condition);
-        $this->assertTrue((bool) $condition);
-        $this->assertSame(
-            $this->configuration['firstname'] . ' ' . $this->configuration['lastname'],
-            $this->findByClass('FieldsPreview-desc')->getText()
-        );
-    }
-
-    /**
      * Check if the purchase was in the myAccount panel and with Processing status
      *
      * @param string $statusText
