@@ -196,11 +196,9 @@ abstract class AbstractBuy extends MagentoTest
      */
     public function goToPMT($useIframe = true)
     {
-        sleep(5);
+        sleep(25);
 
-        $continueButton = WebDriverBy::cssSelector('.button.btn-checkout');
-        $continueButtonElement = $this->webDriver->findElement($continueButton);
-        $continueButtonElement->click();
+        $this->webDriver->executeScript('review.save()');
 
         // If use iFrame the test will end without finish the buy and test return
         if ($useIframe) {
