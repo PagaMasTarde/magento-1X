@@ -4,10 +4,9 @@
  * @var string $checkoutUrl
  */
 ?>
-<script type="text/javascript" src="https://cdn.pagamastarde.com/js/pmt-v2/sdk.js"></script>
 <script type="text/javascript">
-    if (typeof pmtClient !== 'undefined') {
-        pmtClient.modal.open("<?=$orderUrl; ?>",
+    if (typeof pmtSDK !== 'undefined') {
+        pmtSDK.modal.open("<?=$orderUrl; ?>",
             {
                 id: 'iframe-pagantis',
                 closeOnBackDropClick: false,
@@ -17,7 +16,7 @@
                 closeConfirmationMessage: '<?=$leaveMessage;?>'
             }
         );
-        pmtClient.modal.onClose(function() {
+        pmtSDK.modal.onClose(function() {
             window.location.href = "<?=$checkoutUrl; ?>";
         });
     }

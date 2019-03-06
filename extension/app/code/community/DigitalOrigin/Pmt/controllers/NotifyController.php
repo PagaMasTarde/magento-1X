@@ -69,6 +69,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         try {
             $this->toCancel = true;
             $this->prepareVariables();
+            $this->getMerchantOrder();
             $this->restoreCart();
             return $this->redirect(true);
         } catch (\Exception $exception) {
