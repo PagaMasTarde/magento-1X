@@ -101,18 +101,6 @@ class BuyRegisteredTest extends AbstractBuy
         SeleniumHelper::finishForm($this->webDriver);
     }
 
-    /**
-     * Verify Paylater
-     *
-     * @throws \Exception
-     */
-    public function verifyPaylater()
-    {
-        $condition = WebDriverExpectedCondition::titleContains(self::PMT_TITLE);
-        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
-        $this->assertTrue((bool)$condition, $this->webDriver->getCurrentURL());
-    }
-
     public function makeValidation()
     {
         $this->checkConcurrency();
