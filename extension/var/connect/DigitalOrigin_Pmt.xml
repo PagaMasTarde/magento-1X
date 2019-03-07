@@ -1,5 +1,5 @@
 <_>
-   <form_key>3YcWhs3n0qBKCJjp</form_key>
+   <form_key>1MrM1UEl8Hwt5PjG</form_key>
    <name>DigitalOrigin_Pmt</name>
    <channel>community</channel>
    <version_ids>
@@ -12,9 +12,15 @@
    <license_uri/>
    <version>7.2.0</version>
    <stability>stable</stability>
-   <notes>* Orders Compatible.
-* Logs in DB (MySql).
-* New Notify interface</notes>
+   <notes>* New version with orders
+* Updating dependencies and vendor versions
+* Module internationalization to English, French, Italian and Portuguese
+* Module standardization code.
+* Module BackOffice redesign
+* Module advanced options behavior
+* New logs managing
+* New configController
+* Simulator v3</notes>
    <authors>
       <name>
          <name>Digital Origin</name>
@@ -43,7 +49,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                         </files>
+            <files>                                                                          </files>
          </files>
       </package>
       <extension>
