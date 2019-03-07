@@ -1,8 +1,8 @@
 version: "3.5"
 
 services:
-  magento19:
-    container_name: magento19dev
+  magento-alone:
+    container_name: magento19alone
     image: alexcheng/magento:latest
     environment:
       - MAGENTO_ADMIN_FIRSTNAME=Owner
@@ -10,22 +10,20 @@ services:
       - MAGENTO_ADMIN_EMAIL=admin@example.com
       - MAGENTO_ADMIN_USERNAME=admin
       - MAGENTO_ADMIN_PASSWORD=password123
-      - MYSQL_HOST=db-dev
+      - MYSQL_HOST=db-alone
       - MYSQL_DATABASE=magento
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
       - MAGENTO_LOCALE=es_ES
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
-      - MAGENTO_URL=magento19-dev.docker:8080
-    volumes:
-      - ./extension:/pmt
+      - MAGENTO_URL=magento19-alone.docker:8081
     links:
-      - db-dev
+      - db-alone
     ports:
-      - "8080:80"
+      - "8081:80"
     extra_hosts:
-      - "magento19-dev.docker:127.0.0.1"
+      - "magento19-alone.docker:127.0.0.1"
 
   magento-test:
     container_name: magento19test
@@ -53,8 +51,8 @@ services:
     extra_hosts:
       - "magento19-test.docker:127.0.0.1"
 
-  db-dev:
-    container_name: magento19dbdev
+  db-alone:
+    container_name: magento19dbalone
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -74,4 +72,4 @@ services:
       - "4444:4444"
     extra_hosts:
       - "magento19-test.docker:${DOCKERHOST}"
-      - "magento19-dev.docker:${DOCKERHOST}"
+      - "magento19-alone.docker:${DOCKERHOST}"
