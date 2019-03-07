@@ -26,12 +26,7 @@ class CancelBuyUnregisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        var_dump($this->webDriver->getTitle());
         $this->goToPMT(false);
-        sleep(5);
-        var_dump($this->webDriver->getTitle());
-        sleep(5);
-        var_dump($this->webDriver->getTitle());
         $this->cancelPurchase();
         $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
         $this->quit();
