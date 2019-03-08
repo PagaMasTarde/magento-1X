@@ -16,7 +16,7 @@ class DigitalOrigin_Pmt_Block_Adminhtml_LogoField extends Mage_Adminhtml_Block_S
     {
         return '<div class="adminLogo">
               <p class="description">'.$this->__("Paga+Tarde is an online financing platform.").'</p>
-              <p class="description"><a href="https://bo.pagamastarde.com" target="_blank">'.$this->__("Login to the Paga+Tarde pannel").'</a>&nbsp;
+              <p class="description"><a href="https://bo.pagamastarde.com" target="_blank">'.$this->__("Login to the Paga+Tarde panel").'</a>&nbsp;
               <a href="http://docs.pagamastarde.com/" target="_blank">'.$this->__("Documentation").'</a></p></div>';
     }
 }

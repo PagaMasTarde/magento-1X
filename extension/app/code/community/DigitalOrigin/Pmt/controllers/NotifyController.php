@@ -99,7 +99,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
                 'privateKey' => $config['pmt_private_key'],
             );
         } catch (\Exception $exception) {
-            throw new UnknownException(self::CC_NO_CONFIG);
+            throw new UnknownException('Unable to load module configuration');
         }
     }
 

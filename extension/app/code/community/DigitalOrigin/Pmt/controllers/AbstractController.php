@@ -42,38 +42,8 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     const PMT_CODE = 'paylater';
 
     /**
-     * EXCEPTION RESPONSES
+     * @var array
      */
-    const CC_ERR_MSG = 'Unable to block resource';
-    const CC_NO_MERCHANT_ORDERID = 'Merchant Order Id not found';
-    const CC_NO_CONFIG = 'Unable to load module configuration';
-
-    const GMO_ERR_MSG = 'Unable to find merchant Order';
-
-    const GPOI_ERR_MSG = 'Pmt Order Not Found';
-    const GPOI_NO_ORDERID = 'We can not get the PagaMasTarde identification in database.';
-
-    const GPO_ERR_MSG = 'Unable to get Order';
-    const GPO_ERR_TYPEOF = 'The requested PMT Order is not a valid PMTOrder object';
-
-    const COS_ERR_MSG = 'Order status is not authorized';
-    const COS_WRONG_STATUS = 'Invalid Pmt status';
-
-    const CMOS_ERR_MSG = 'Merchant Order status is invalid';
-    const CMOS_WRONG_CURRENT_STATUS = 'The status of the merchant order is not correct';
-    const CMOS_WRONG_PREVIOUS_STATUS = 'Previous merchant status order is not correct';
-    const CMOS_PREVIOUSLY_PROCESSED = 'The merchant order has been already processed at least one';
-
-    const VA_ERR_MSG = 'Amount conciliation error';
-    const VA_WRONG_AMOUNT = 'Wrong order amount';
-
-    const PMO_ERR_MSG = 'Unknown Error';
-
-    const CPO_ERR_MSG = 'Order not confirmed';
-    const CPO_OK_MSG = 'Order confirmed';
-
-    const RMO_OK_MSG = 'Order process rollback successfully';
-
     public $modelTable = array(
         'pmt/concurrency' => 'PMT_CONCURRENCY_TABLE',
         'pmt/order' => 'PMT_ORDERS_TABLE',
