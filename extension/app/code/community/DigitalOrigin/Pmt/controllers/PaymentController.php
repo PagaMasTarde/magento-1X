@@ -1,7 +1,7 @@
 <?php
 
-require_once('lib/DigitalOrigin/autoload.php');
-require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractController.php');
+require_once(__DIR__.'/../../../../../../lib/DigitalOrigin/autoload.php');
+require_once(__DIR__.'/AbstractController.php');
 
 use PagaMasTarde\OrdersApiClient\Model\Order as PmtModelOrder;
 use PagaMasTarde\OrdersApiClient\Model\Order\User as PmtModelOrderUser;
@@ -295,23 +295,27 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
                 return $this->_redirectUrl($this->cancelUrl);
             }
         }
-        $this->loadLayout();
 
-        /** @var Mage_Core_Block_Template $block */
-        $block = $this->getLayout()->createBlock(
-            'Mage_Core_Block_Template',
-            'custompaymentmethod',
-            array('template' => 'pmt/payment/iframe.phtml')
-        );
+        try {
+            /** @var Mage_Core_Block_Template $block */
+            $block = $this->getLayout()->createBlock(
+                'Mage_Core_Block_Template',
+                'custompaymentmethod',
+                array('template' => 'pmt/payment/iframe.phtml')
+            );
 
+            $this->loadLayout();
+            $block->assign(array(
+                'orderUrl' => $url,
+                'checkoutUrl' => $this->cancelUrl,
+                'leaveMessage' => $this->__('Are you sure you want to leave?')
+            ));
+            $this->getLayout()->getBlock('content')->append($block);
+        } catch (\Exception $exception) {
+            $this->saveLog($exception);
+            return $this->_redirectUrl($this->cancelUrl);
+        }
 
-        $block->assign(array(
-            'orderUrl' => $url,
-            'checkoutUrl' => $this->cancelUrl,
-            'leaveMessage' => $this->__('Are you sure you want to leave?')
-        ));
-
-        $this->getLayout()->getBlock('content')->append($block);
         return $this->renderLayout();
     }
 

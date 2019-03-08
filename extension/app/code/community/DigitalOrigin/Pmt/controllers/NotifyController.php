@@ -1,7 +1,7 @@
 <?php
 
-require_once('lib/DigitalOrigin/autoload.php');
-require_once('app/code/community/DigitalOrigin/Pmt/controllers/AbstractController.php');
+require_once(__DIR__.'/../../../../../../lib/DigitalOrigin/autoload.php');
+require_once(__DIR__.'/AbstractController.php');
 
 use PagaMasTarde\OrdersApiClient\Client as PmtClient;
 use PagaMasTarde\OrdersApiClient\Model\Order as PmtModelOrder;

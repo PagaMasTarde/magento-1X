@@ -26,7 +26,7 @@ class CancelBuyUnregisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPMT(false);
+        $this->goToPMT();
         $this->cancelPurchase();
         $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
         $this->quit();
@@ -37,6 +37,7 @@ class CancelBuyUnregisteredTest extends AbstractBuy
      */
     public function fillBillingInformation()
     {
+        sleep(5);
         // Fill the form
         $this->findById('billing:firstname')->sendKeys($this->configuration['firstname']);
         $this->findById('billing:lastname')->sendKeys($this->configuration['lastname']);
@@ -93,7 +94,7 @@ class CancelBuyUnregisteredTest extends AbstractBuy
      */
     public function cancelPurchase()
     {
-        // complete the purchase with redirect
+        // cancel the purchase with redirect
         SeleniumHelper::cancelForm($this->webDriver);
     }
 

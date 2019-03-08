@@ -188,7 +188,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
      *
      * @param $exception
      */
-    public function saveLog($exception)
+    public function saveLog(\Exception $exception)
     {
         try {
             $this->createTableIfNotExists('pmt/log');

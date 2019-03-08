@@ -42,7 +42,7 @@ abstract class AbstractBuy extends MagentoTest
      */
     const CANCELED_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN CANCELED.';
 
-   /**
+    /**
      * Shopping cart message
      */
     const SHOPPING_CART_MESSAGE = 'SHOPPING CART';
@@ -166,23 +166,41 @@ abstract class AbstractBuy extends MagentoTest
      */
     public function fillPaymentMethod()
     {
+        sleep(5);
+
+        $reviewStepSearch = WebDriverBy::id('p_method_paylater');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable($reviewStepSearch)
+        );
         $this->findById('p_method_paylater')->click();
-        // No longer support simulator in checkout
-        // $this->webDriver->wait()->until(
-        //     WebDriverExpectedCondition::presenceOfElementLocated(
-        //        WebDriverBy::className('PmtSimulator')
-        //    )
-        // );
-        // $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
-        //     WebDriverBy::className('PmtSimulator')
-        // ));
+
         $this->webDriver->executeScript("payment.save()");
         $reviewStepSearch = WebDriverBy::id('review-buttons-container');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated($reviewStepSearch)
         );
+
         $this->assertTrue(
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($reviewStepSearch)
+        );
+    }
+
+    /**
+     * Fill the shipping method information
+     */
+    public function fillShippingMethod()
+    {
+        sleep(5);
+
+        $this->findById('s_method_flatrate_flatrate')->click();
+        $this->webDriver->executeScript('shippingMethod.save()');
+
+        $checkoutStepPaymentMethodSearch = WebDriverBy::id('checkout-payment-method-load');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
+        );
+        $this->assertTrue(
+            (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
         );
     }
 
@@ -190,49 +208,14 @@ abstract class AbstractBuy extends MagentoTest
     /**
      * Complete order and open PMT (redirect or iframe methods)
      *
-     * @param bool $useIframe
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function goToPMT($useIframe = true)
+    public function goToPMT()
     {
         sleep(5);
 
-        $continueButton = WebDriverBy::cssSelector('.button.btn-checkout');
-        $continueButtonElement = $this->webDriver->findElement($continueButton);
-        $continueButtonElement->click();
-
-        // If use iFrame the test will end without finish the buy and test return
-        if ($useIframe) {
-            sleep(15);
-            $firstIframe = $this->webDriver->findElement(WebDriverBy::cssSelector("*[data-iframe-type='modal']"));
-            $condition = WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt($firstIframe);
-            $this->webDriver->wait()->until($condition);
-            $this->assertTrue((bool) $condition);
-
-            $pmtModal = WebDriverBy::id('pmtmodal');
-            $condition = WebDriverExpectedCondition::visibilityOfElementLocated($pmtModal);
-            $this->webDriver->wait()->until($condition);
-            $this->assertTrue((bool) $condition);
-
-            $iFrame = 'pmtmodal_iframe';
-            $condition = WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt($iFrame);
-            $this->webDriver->wait()->until($condition);
-            $this->assertTrue((bool) $condition);
-
-            $this->logoutFromPmt();
-            $this->webDriver->wait()->until(
-                WebDriverExpectedCondition::elementToBeClickable(
-                    WebDriverBy::name('form-continue')
-                )
-            );
-            $this->assertContains(
-                'compra',
-                $this->findByClass('Form-heading1')->getText()
-            );
-            // PMT opened successfully in iframe mode
-            return;
-        }
+        $this->webDriver->executeScript('review.save()');
     }
 
     /**
@@ -257,25 +240,6 @@ abstract class AbstractBuy extends MagentoTest
             $continueButtonElement = $this->webDriver->findElement($continueButtonSearch);
             $continueButtonElement->click();
         }
-    }
-
-    /**
-     * Fill the shipping method information
-     */
-    public function fillShippingMethod()
-    {
-        $this->findById('s_method_flatrate_flatrate')->click();
-        $this->webDriver->executeScript('shippingMethod.save()');
-
-        sleep(10);
-
-        $checkoutStepPaymentMethodSearch = WebDriverBy::id('checkout-payment-method-load');
-        $this->webDriver->wait()->until(
-            WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
-        );
-        $this->assertTrue(
-            (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepPaymentMethodSearch)
-        );
     }
 
     /**

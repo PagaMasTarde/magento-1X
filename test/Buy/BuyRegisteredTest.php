@@ -43,7 +43,7 @@ class BuyRegisteredTest extends AbstractBuy
         );
         $cartPrice = $this->webDriver->findElement($cartPrice)->getText();
         // --------------------
-        $this->goToPMT(false);
+        $this->goToPMT();
         $this->verifyPaylater();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
