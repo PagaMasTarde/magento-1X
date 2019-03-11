@@ -37,6 +37,7 @@ then
     extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
     extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
     extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
 else
     extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
 fi
