@@ -17,17 +17,16 @@ class CancelBuyRegisteredTest extends AbstractBuy
     /**
      * Test Buy Registered
      */
-    public function testBuyRegistered()
+    public function testCancelBuyRegistered()
     {
         $this->prepareProductAndCheckout();
         $this->login();
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPMT(false);
+        $this->goToPMT();
         $this->cancelPurchase();
         $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
-        $this->checkLastPurchaseStatus('Canceled');
         $this->quit();
     }
 

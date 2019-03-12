@@ -25,7 +25,6 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
         $this->goToPMT();
-        $this->verifyUTF8();
         $this->quit();
     }
 
@@ -41,12 +40,14 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->findById('billing:street1')->sendKeys($this->configuration['street']);
         $this->findById('billing:city')->sendKeys($this->configuration['city']);
         $this->findById('billing:postcode')->sendKeys($this->configuration['zip']);
+        $this->findById('billing:country_id')->sendKeys($this->configuration['country']);
         $this->findById('billing:region_id')->sendKeys($this->configuration['city']);
         $this->findById('billing:telephone')->sendKeys($this->configuration['phone']);
 
         //Continue to shipping, in this case shipping == billing
         $this->webDriver->executeScript('billing.save()');
 
+        sleep(10);
         //Verify
         $checkoutStepShippingMethodSearch = WebDriverBy::id('checkout-shipping-method-load');
         $this->webDriver->wait()->until(

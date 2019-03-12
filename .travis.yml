@@ -10,14 +10,11 @@ php:
 
 addons:
   hosts:
-  - magento-test.docker
-
-env:
-  - DOCKER_COMPOSE_VERSION=1.21.0
+  - magento19-test.docker
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - sudo apt-get update
@@ -31,4 +28,4 @@ before_script:
   - 'phpenv config-rm xdebug.ini'
 
 script:
-  - './generate.sh'
+  - './generate.sh true'

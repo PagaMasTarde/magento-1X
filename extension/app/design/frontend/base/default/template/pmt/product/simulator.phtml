@@ -4,56 +4,67 @@
  * @var bool $enabled
  * @var string $publicKey
  */
-if ($simulatorType && $enabled) {
+if ($pmtIsEnabled && $pmtSimulatorIsEnabled) {
 ?>
+    <script>
+        function loadSimulator()
+        {
+            if (typeof pmtSDK != 'undefined') {
+                var price = null;
+                var quantity = null;
+                var positionSelector = '<?=$pmtCSSSelector;?>';
+                var priceSelector = '<?=$pmtPriceSelector;?>';
+                var quantitySelector = '<?=$pmtQuantitySelector;?>';
 
-<div id="pmt-simulator-product-page" class="PmtSimulator"
-     data-pmt-num-quota="4" data-pmt-max-ins="12"
-     data-pmt-type="<?=$simulatorType?>"
-     data-pmt-amount="<?=$this->getFinalPrice()?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
-</div>
-<script type="text/javascript">
-    function changePrice(miliseconds=1000)
-    {
-        setTimeout(
-            function() {
-                var newPrice = document.querySelector('[id^="product-price"]').innerText.replace('.','');
-                var currentPrice = document.getElementsByClassName('PmtSimulator')[0].getAttribute('data-pmt-amount');
-                if (newPrice != currentPrice && typeof newPrice !== 'undefined') {
-                    for (simulator of document.getElementsByClassName('PmtSimulator'))
-                    {
-                        simulator.setAttribute('data-pmt-amount', newPrice);
-                    }
+                if (positionSelector === 'default') {
+                    positionSelector = '.PmtSimulator';
+                }
 
-                    if (typeof pmtClient !== 'undefined') {
-                        pmtClient.simulator.reload();
+                if (priceSelector === 'default') {
+                    priceSelector = '[id^="product-price"]';
+                    if (priceSelector === 'default') {
+                        price = '<?=$amount;?>';
                     }
                 }
-            }
-            ,miliseconds)
-    }
 
-    changePrice(0); //Load the screen price into simulator to avoid the reload event
-    window.onload = function() {
-        var productAttributeModifiers = document.getElementById('product-options-wrapper').querySelectorAll('input, select, a, textarea');
-        productAttributeModifiers.forEach(function(modifier, index) {
-            switch(modifier.tagName)
-            {
-                case 'A': { var eventType = 'click'; break;}
-                case 'SELECT': { var eventType = 'change'; break;}
-                case 'INPUT': { var eventType = 'focusout'; break;}
-                case 'TEXTAREA': { var eventType = 'focusout'; break;}
-            }
-            modifier.addEventListener(eventType, changePrice);
-        });
-    }
-    window.setInterval(function(){changePrice();}, 2000);
+                if (quantitySelector === 'default') {
+                    quantitySelector = '.qty-wrapper #qty';
+                    if (quantitySelector === 'default') {
+                        quantity = '1'
+                    }
+                }
 
-    if (typeof pmtClient !== 'undefined') {
-        pmtClient.setPublicKey('<?=$publicKey?>');
-        pmtClient.simulator.reload();
-    }
-</script>
+                pmtSDK.product_simulator = {};
+                pmtSDK.product_simulator.id = 'product-simulator';
+                pmtSDK.product_simulator.publicKey = '<?=$pmtPublicKey;?>';
+                pmtSDK.product_simulator.selector = positionSelector;
+                pmtSDK.product_simulator.numInstalments = '<?=$pmtQuotesStart;?>';
+                pmtSDK.product_simulator.type = <?=$pmtSimulatorType;?>;
+                pmtSDK.product_simulator.skin = <?=$pmtSimulatorSkin;?>;
+                pmtSDK.product_simulator.position = <?=$pmtSimulatorPosition;?>;
+
+                if (priceSelector !== 'default') {
+                    pmtSDK.product_simulator.itemAmountSelector = priceSelector;
+                }
+                if (quantitySelector !== 'default' && quantitySelector !== 'none') {
+                    pmtSDK.product_simulator.itemQuantitySelector = quantitySelector;
+                }
+                if (price != null) {
+                    pmtSDK.product_simulator.itemAmount = price;
+                }
+                if (quantity != null) {
+                    pmtSDK.product_simulator.itemQuantity = quantity;
+                }
+
+                pmtSDK.simulator.init(pmtSDK.product_simulator);
+                clearInterval(window.PSSimulatorId);
+            }
+        }
+        window.PSSimulatorId = setInterval(function () {
+            loadSimulator();
+        }, 2000);
+    </script>
+    <div id="pmt-simulator-product-page" class="PmtSimulator"></div>
 <?php
 }
 ?>

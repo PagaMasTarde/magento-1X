@@ -1,38 +1,14 @@
 <?php
 /**
  * @var Mage_Payment_Block_Form $this
- * @var $publicKey string
- * @var $amount string decimal
- * @var $simulatorType int
+ * @var $pmtIsEnabled boolean
  */
-
-$_code = $this->getMethodCode();
-?>
-<style>
-    #logo {height:25px; margin-right: 10px;}
-</style>
-<fieldset class="form-list">
-<script type="text/javascript">
-    if (typeof pmtClient !== 'undefined') {
-        pmtClient.setPublicKey('<?=$publicKey?>');
-        pmtClient.events.send('checkout', { basketAmount: '<?=$amount?>' } );
-    }
-</script>
-<?php if($simulatorType) { ?>
-<div id="payment_form_<?=$_code?>" style="display: none">
-    <div id="paylater-checkout">
-        <div class="PmtSimulator"
-             data-pmt-num-quota="4" data-pmt-max-ins="12"
-             data-pmt-type="<?=$simulatorType?>"
-             data-pmt-amount="<?=$amount?>" data-pmt-expanded="<?php if ($simulatorType == 1) echo 'no'; else echo 'yes'; ?>">
-        </div>
-    </div>
-</div>
-<script type="text/javascript">
-    document.querySelectorAll('[value="paylater"]','[type="radio"]')[0].addEventListener('click', function() { pmtClient.simulator.reload(); });
-    if (typeof pmtClient !== 'undefined') {
-        pmtClient.simulator.reload();
-    }
-</script>
+if ($pmtIsEnabled) { ?>
+   <style>
+       #logo {
+            height:25px;
+            margin-right: 10px;
+        }
+   </style>
 <?php } ?>
-</fieldset>
+

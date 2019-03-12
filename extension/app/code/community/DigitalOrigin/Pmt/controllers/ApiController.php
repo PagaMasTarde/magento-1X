@@ -1,9 +1,12 @@
 <?php
 
+require_once(__DIR__.'/../../../../../../lib/DigitalOrigin/autoload.php');
+require_once(__DIR__.'/AbstractController.php');
+
 /**
  * Class DigitalOrigin_Pmt_ApiController
  */
-class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
+class DigitalOrigin_Pmt_ApiController extends AbstractController
 {
     /**
      * @var string $message
@@ -80,8 +83,7 @@ class DigitalOrigin_Pmt_ApiController extends Mage_Core_Controller_Front_Action
     public function authorize()
     {
         $moduleConfig = Mage::getStoreConfig('payment/paylater');
-        $env = $moduleConfig['PAYLATER_PROD'] ? 'PROD' : 'TEST';
-        $privateKey = $moduleConfig['PAYLATER_PRIVATE_KEY_'.$env];
+        $privateKey = $moduleConfig['pmt_private_key'];
 
         if (Mage::app()->getRequest()->getParam('secret') == $privateKey ||
             Mage::app()->getRequest()->getHeader('secret') == $privateKey

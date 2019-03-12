@@ -3,17 +3,20 @@
     <default>
         <reference name="head">
             <block type="core/text" name="pmt.js">
-                <action method="setText">
+                <action method="setText" ifconfig="payment/paylater/active">
                     <text>
-                        <![CDATA[<script type="text/javascript" src="https://cdn.pagamastarde.com/pmt-js-client-sdk/3/js/client-sdk.min.js"></script>]]>
+ <![CDATA[<script type="text/javascript" src="https://cdn.pagamastarde.com/js/pmt-v2/sdk.js"></script>]]>
                     </text>
                 </action>
             </block>
         </reference>
     </default>
     <catalog_product_view>
-        <reference name="product.info.options.wrapper">
-            <block type="pmt/product_simulator" as="pmt_simulator"  name="product_simulator" template="pmt/product/simulator.phtml"/>
+        <reference name="product.info.addtocart">
+            <block type="pmt/product_simulator"
+                   as="pmt_simulator"
+                   name="product_simulator"
+                   template="pmt/product/simulator.phtml"/>
         </reference>
     </catalog_product_view>
 </layout>

@@ -2,49 +2,47 @@ version: "3.5"
 
 services:
   magento19:
-    build:
-      dockerfile: Dockerfile
-      context: ./
-    depends_on:
-      - db-dev
+    container_name: magento19dev
+    image: alexcheng/magento:latest
     environment:
-      - MAGENTO_LOCALE=es_ES
-      - MAGENTO_TIMEZONE=Europe/Madrid
-      - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
       - MAGENTO_ADMIN_EMAIL=admin@example.com
       - MAGENTO_ADMIN_USERNAME=admin
       - MAGENTO_ADMIN_PASSWORD=password123
-      - MAGENTO_DB_HOST=db-dev
-      - MAGENTO_DB_PASSWORD=password
+      - MYSQL_HOST=db-dev
+      - MYSQL_DATABASE=magento
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MAGENTO_LOCALE=es_ES
+      - MAGENTO_TIMEZONE=Europe/Madrid
+      - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-dev.docker:8080
     volumes:
       - ./extension:/pmt
     links:
-    - db-dev
+      - db-dev
     ports:
       - "8080:80"
     extra_hosts:
       - "magento19-dev.docker:127.0.0.1"
 
   magento-test:
-    build:
-      dockerfile: Dockerfile
-      context: ./
-    depends_on:
-      - db-test
+    container_name: magento19test
+    image: alexcheng/magento:latest
     environment:
-      - MAGENTO_LOCALE=es_ES
-      - MAGENTO_TIMEZONE=Europe/Madrid
-      - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
       - MAGENTO_ADMIN_EMAIL=admin@example.com
       - MAGENTO_ADMIN_USERNAME=admin
       - MAGENTO_ADMIN_PASSWORD=password123
-      - MAGENTO_DB_HOST=db-test
-      - MAGENTO_DB_PASSWORD=password
+      - MYSQL_HOST=db-test
+      - MYSQL_DATABASE=magento
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MAGENTO_LOCALE=es_ES
+      - MAGENTO_TIMEZONE=Europe/Madrid
+      - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-test.docker:8082
     volumes:
       - ./extension:/pmt
@@ -53,21 +51,24 @@ services:
     ports:
       - "8082:80"
     extra_hosts:
-    - "magento19-test.docker:127.0.0.1"
+      - "magento19-test.docker:127.0.0.1"
 
   db-dev:
+    container_name: magento19dbdev
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=magento
 
   db-test:
+    container_name: magento19dbtest
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=magento
 
   selenium:
+    container_name: magento19selenium
     image: selenium/standalone-chrome:3.7.1
     ports:
       - "4444:4444"

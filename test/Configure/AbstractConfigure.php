@@ -4,6 +4,7 @@ namespace Test\Configure;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Facebook\WebDriver\WebDriverSelect;
 use Test\MagentoTest;
 
 /**
@@ -124,7 +125,7 @@ abstract class AbstractConfigure extends MagentoTest
 
 
     /**
-     * goToSystemConfig
+     * goToPaymentMethodsAndSeePMT
      */
     public function goToPaymentMethodsAndSeePMT()
     {
@@ -145,33 +146,56 @@ abstract class AbstractConfigure extends MagentoTest
     }
 
     /**
+     * goToShippingMethodsAndSeeFedEx
+     */
+    public function goToShippingMethodsAndSeeFedEx()
+    {
+        $shippingMethodsLinkElement = $this->findByLinkText('Shipping Methods');
+        $shippingMethodsLinkElement->click();
+
+        $fedExHeaderSearch = WebDriverBy::id('carriers_fedex-head');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::visibilityOfElementLocated(
+                $fedExHeaderSearch
+            )
+        );
+
+        $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
+            $fedExHeaderSearch
+        ));
+        $head = $this->findById('carriers_fedex-head');
+        $head->click();
+    }
+
+    /**
+     * disableFedEx
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\UnexpectedTagNameException
+     */
+    public function disableFedEx() {
+        $select = new WebDriverSelect($this->findById('carriers_fedex_active'));
+        $select->selectByValue('0');
+
+        //Confirm and validate
+        $this->webDriver->executeScript('configForm.submit()');
+    }
+
+    /**
      * Configure and Save
      */
-    public function configureAndSave(string $paylaterMode)
+    public function configureAndSave()
     {
         //Fill configuration for PMT
         $this->findById('payment_paylater_active1')->click();
-        $this->findById('payment_paylater_PAYLATER_PROD0')->click();
-        $this->findById('payment_paylater_PAYLATER_PUBLIC_KEY_TEST')
+        $this->findById('payment_paylater_pmt_public_key')
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
-        $this->findById('payment_paylater_PAYLATER_PRIVATE_KEY_TEST')
+        $this->findById('payment_paylater_pmt_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
-        ;
-        $this->findById('payment_paylater_PAYLATER_PUBLIC_KEY_PROD')
-            ->clear()
-            ->sendKeys($this->configuration['publicKey'])
-        ;
-        $this->findById('payment_paylater_PAYLATER_PRIVATE_KEY_PROD')
-            ->clear()
-            ->sendKeys($this->configuration['secretKey'])
-        ;
-        $this->findById($paylaterMode)->click();
-        $this->findById('payment_paylater_PAYLATER_TITLE')->clear()->sendKeys('extra');
-
-        //Confirm and validate
+        ;        //Confirm and validate
         $this->webDriver->executeScript('configForm.submit()');
 
         //Verify

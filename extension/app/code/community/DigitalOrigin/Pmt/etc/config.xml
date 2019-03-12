@@ -3,7 +3,7 @@
 
     <modules>
         <DigitalOrigin_Pmt>
-            <version>6.2.9</version>
+            <version>7.2.1</version>
         </DigitalOrigin_Pmt>
     </modules>
 
@@ -35,7 +35,23 @@
         <models>
             <pmt>
                 <class>DigitalOrigin_Pmt_Model</class>
+                <resourceModel>pmt_resource</resourceModel>
             </pmt>
+
+            <pmt_resource>
+            <class>DigitalOrigin_Pmt_Model_Resource</class>
+            <entities>
+                <log>
+                    <table>pmt_logs</table>
+                </log>
+                <order>
+                    <table>pmt_orders</table>
+                </order>
+                <concurrency>
+                    <table>pmt_cart_concurrency</table>
+                </concurrency>
+            </entities>
+        </pmt_resource>
         </models>
 
         <resources>
@@ -43,7 +59,20 @@
                 <setup>
                     <module>DigitalOrigin_Pmt</module>
                 </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
             </pmt_setup>
+            <pmt_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </pmt_write>
+            <pmt_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </pmt_read>
         </resources>
     </global>
 
@@ -89,19 +118,13 @@
         <payment>
             <paylater translate="title" module="pmt">
                 <active>1</active>
-                <title>Paga+Tarde</title>
+                <title>Paga + tarde</title>
                 <model>pmt/paylater</model>
                 <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>
                 <payment_action>sale</payment_action>
-                <PAYLATER_PROD>0</PAYLATER_PROD>
-                <PAYLATER_PRODUCT_HOOK_TYPE>1</PAYLATER_PRODUCT_HOOK_TYPE>
-                <PAYLATER_CHECKOUT_HOOK_TYPE>1</PAYLATER_CHECKOUT_HOOK_TYPE>
-                <MIN_AMOUNT>10</MIN_AMOUNT>
-                <PAYLATER_TITLE>Financiación instantánea - 100% online</PAYLATER_TITLE>
                 <sort_order>1</sort_order>
-                <PAYLATER_KO_URL>checkout/cart/</PAYLATER_KO_URL>
-                <PAYLATER_OK_URL>checkout/onepage/success/</PAYLATER_OK_URL>
+                <pmt_simulator_is_enabled>1</pmt_simulator_is_enabled>
             </paylater>
         </payment>
     </default>

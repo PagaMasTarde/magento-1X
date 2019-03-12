@@ -48,6 +48,7 @@ class FillDataTest extends AbstractRegister
             $this->findById('firstname')->clear()->sendKeys($this->configuration['firstname']);
             $this->findById('telephone')->clear()->sendKeys($this->configuration['phone']);
             $this->findById('street_1')->clear()->sendKeys($this->configuration['street']);
+            $this->findById('country')->sendKeys($this->configuration['country']);
             $this->findById('city')->clear()->sendKeys($this->configuration['city']);
             $this->findById('region_id')->sendKeys($this->configuration['city']);
             $this->findById('zip')->sendKeys($this->configuration['zip']);
