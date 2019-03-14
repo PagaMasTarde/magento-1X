@@ -1,12 +1,11 @@
 version: 2
 jobs:
   build:
-    docker:
+    machine:
       - image: circleci/php:7.1-node-browsers
     working_directory: ~/repo
     steps:
       - checkout
-      - machine: true
       - run:
           name: Add Docker Host
           command: |
