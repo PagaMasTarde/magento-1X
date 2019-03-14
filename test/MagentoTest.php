@@ -36,8 +36,8 @@ abstract class MagentoTest extends TestCase
         'birthdate'          => '05/05/2005',
         'firstname'          => 'Jøhn',
         'lastname'           => 'Dōè Martínez',
-        'email'              => 'john_mg@digitalorigin.com',
-        'company'            => 'Digital Origin SL',
+        'email'              => 'john_mg@pagantis.com',
+        'company'            => 'Pagantis SA',
         'zip'                => '08023',
         'country'            => 'España',
         'city'               => 'Barcelona',
@@ -59,7 +59,7 @@ abstract class MagentoTest extends TestCase
      */
     protected function setUp()
     {
-        $this->webDriver = PmtWebDriver::create(
+        $this->webDriver = PagantisWebDriver::create(
             'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome(),
             90000,

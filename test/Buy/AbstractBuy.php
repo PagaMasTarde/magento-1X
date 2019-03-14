@@ -53,14 +53,14 @@ abstract class AbstractBuy extends MagentoTest
     const EMPTY_SHOPPING_CART = 'SHOPPING CART IS EMPTY';
 
     /**
-     * Pmt Order Title
+     * Pagantis Order Title
      */
-    const PMT_TITLE = 'Paga+Tarde';
+    const PAGANTIS_TITLE = 'Pagantis';
 
     /**
      * Notification route
      */
-    const NOTIFICATION_FOLDER = '/pmt/notify';
+    const NOTIFICATION_FOLDER = '/pagantis/notify';
 
     /**
      * Buy unregistered
@@ -168,11 +168,11 @@ abstract class AbstractBuy extends MagentoTest
     {
         sleep(5);
 
-        $reviewStepSearch = WebDriverBy::id('p_method_paylater');
+        $reviewStepSearch = WebDriverBy::id('p_method_pagantis');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable($reviewStepSearch)
         );
-        $this->findById('p_method_paylater')->click();
+        $this->findById('p_method_pagantis')->click();
 
         $this->webDriver->executeScript("payment.save()");
         $reviewStepSearch = WebDriverBy::id('review-buttons-container');
@@ -206,12 +206,12 @@ abstract class AbstractBuy extends MagentoTest
 
 
     /**
-     * Complete order and open PMT (redirect or iframe methods)
+     * Complete order and open Pagantis (redirect or iframe methods)
      *
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function goToPMT()
+    public function goToPagantis()
     {
         sleep(5);
 
@@ -219,12 +219,12 @@ abstract class AbstractBuy extends MagentoTest
     }
 
     /**
-     * Close previous pmt session if an user is logged in
+     * Close previous pagantis session if an user is logged in
      *
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function logoutFromPmt()
+    public function logoutFromPagantis()
     {
         // Wait the page to render (check the simulator is rendered)
         $this->webDriver->wait()->until(
@@ -232,7 +232,7 @@ abstract class AbstractBuy extends MagentoTest
                 WebDriverBy::name('minusButton')
             )
         );
-        // Check if user is logged in in PMT
+        // Check if user is logged in in Pagantis
         $closeSession = $this->webDriver->findElements(WebDriverBy::name('one_click_return_to_normal'));
         if (count($closeSession) !== 0) {
             //Logged out

@@ -4,10 +4,10 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use PagaMasTarde\ModuleUtils\Exception\AlreadyProcessedException;
-use PagaMasTarde\ModuleUtils\Exception\NoIdentificationException;
-use PagaMasTarde\ModuleUtils\Exception\QuoteNotFoundException;
-use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
+use Pagantis\ModuleUtils\Exception\AlreadyProcessedException;
+use Pagantis\ModuleUtils\Exception\NoIdentificationException;
+use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
+use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
 
 /**
@@ -43,8 +43,8 @@ class BuyRegisteredTest extends AbstractBuy
         );
         $cartPrice = $this->webDriver->findElement($cartPrice)->getText();
         // --------------------
-        $this->goToPMT();
-        $this->verifyPaylater();
+        $this->goToPagantis();
+        $this->verifyPagantis();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->checkLastPurchaseStatus('Processing');
@@ -102,13 +102,13 @@ class BuyRegisteredTest extends AbstractBuy
     }
 
     /**
-     * Verify Paylater
+     * Verify Pagantis
      *
      * @throws \Exception
      */
-    public function verifyPaylater()
+    public function verifyPagantis()
     {
-        $condition = WebDriverExpectedCondition::titleContains(self::PMT_TITLE);
+        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
         $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
         $this->assertTrue((bool)$condition, $this->webDriver->getCurrentURL());
     }
@@ -116,7 +116,7 @@ class BuyRegisteredTest extends AbstractBuy
     public function makeValidation()
     {
         $this->checkConcurrency();
-        $this->checkPmtOrderId();
+        $this->checkPagantisOrderId();
         $this->checkAlreadyProcessed();
     }
 
@@ -136,9 +136,10 @@ class BuyRegisteredTest extends AbstractBuy
     }
 
     /**
-     * Check if with a parameter called order-received set to a invalid identification, we can get a NoIdentificationException
+     * Check if with a parameter called order-received set to a invalid identification,
+     * we can get a NoIdentificationException
      */
-    protected function checkPmtOrderId()
+    protected function checkPagantisOrderId()
     {
         $orderId=0;
         $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order='.$orderId;
@@ -172,7 +173,11 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);
         $this->assertNotEmpty($response->body->merchant_order_id, $response);
-        $this->assertNotEmpty($response->body->pmt_order_id, $response);
-        $this->assertContains(AlreadyProcessedException::ERROR_MESSAGE, $response->body->result, "PR51=>".$response->body->result);
+        $this->assertNotEmpty($response->body->pagantis_order_id, $response);
+        $this->assertContains(
+            AlreadyProcessedException::ERROR_MESSAGE,
+            $response->body->result,
+            "PR51=>".$response->body->result
+        );
     }
 }

@@ -4,7 +4,7 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use PagaMasTarde\SeleniumFormUtils\SeleniumHelper;
+use Pagantis\SeleniumFormUtils\SeleniumHelper;
 
 /**
  * Class CancelBuyRegisteredTest
@@ -24,7 +24,7 @@ class CancelBuyRegisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPMT();
+        $this->goToPagantis();
         $this->cancelPurchase();
         $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
         $this->quit();

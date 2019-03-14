@@ -20,7 +20,7 @@ class ConfigureBackofficeRedirectTest extends AbstractConfigure
     {
         $this->getBackofficeLoggedIn();
         $this->goToSystemConfig();
-        $this->goToPaymentMethodsAndSeePMT();
+        $this->goToPaymentMethodsAndSeePagantis();
         $this->configureAndSave();
         $this->webDriver->quit();
     }

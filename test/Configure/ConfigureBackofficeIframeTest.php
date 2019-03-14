@@ -23,7 +23,7 @@ class ConfigureBackofficeIframeTest extends AbstractConfigure
         $this->goToShippingMethodsAndSeeFedEx();
         $this->disableFedEx();
         $this->goToSystemConfig();
-        $this->goToPaymentMethodsAndSeePMT();
+        $this->goToPaymentMethodsAndSeePagantis();
         $this->configureAndSave();
         $this->webDriver->quit();
     }

@@ -2,7 +2,7 @@
 
 ## :house: Access
 
-To access to Paga+Tarde admin panel, we need to open the Magento admin panel and follow the next steps:
+To access to Pagantis admin panel, we need to open the Magento admin panel and follow the next steps:
 
 1 – System => Magento Connect => Magento Connect Manager
 ![Step 1](./install-step1.png?raw=true "Step 1")

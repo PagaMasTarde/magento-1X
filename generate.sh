@@ -15,7 +15,7 @@ docker-compose exec magento-test install-magento
 
 # Install modman and enable the link creation
 docker-compose exec magento-test modman init
-docker-compose exec magento-test modman link /pmt
+docker-compose exec magento-test modman link /pagantis
 
 # Install n98-magerun to enable automatically dev:symlinks so that modman works
 docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
@@ -28,16 +28,16 @@ composer install
 
 if [ $1 == 'true' ]
 then
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-register
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
+    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-iframe
+    extension/lib/Pagantis/bin/phpunit --group magento-product-page
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-register
+    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
 else
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-redirect
 fi

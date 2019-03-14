@@ -24,7 +24,7 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPMT();
+        $this->goToPagantis();
         $this->quit();
     }
 

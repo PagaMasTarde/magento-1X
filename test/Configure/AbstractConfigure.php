@@ -125,23 +125,23 @@ abstract class AbstractConfigure extends MagentoTest
 
 
     /**
-     * goToPaymentMethodsAndSeePMT
+     * goToPaymentMethodsAndSeePagantis
      */
-    public function goToPaymentMethodsAndSeePMT()
+    public function goToPaymentMethodsAndSeePagantis()
     {
         $paymentMethodsLinkElement = $this->findByLinkText('Payment Methods');
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($paymentMethodsLinkElement));
         $paymentMethodsLinkElement->click();
 
-        $pmtHeaderSearch = WebDriverBy::id('payment_paylater-head');
+        $pagantisHeaderSearch = WebDriverBy::id('payment_pagantis-head');
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(
-                $pmtHeaderSearch
+                $pagantisHeaderSearch
             )
         );
 
         $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
-            $pmtHeaderSearch
+            $pagantisHeaderSearch
         ));
     }
 
@@ -186,13 +186,13 @@ abstract class AbstractConfigure extends MagentoTest
      */
     public function configureAndSave()
     {
-        //Fill configuration for PMT
-        $this->findById('payment_paylater_active1')->click();
-        $this->findById('payment_paylater_pmt_public_key')
+        //Fill configuration for Pagantis
+        $this->findById('payment_pagantis_active1')->click();
+        $this->findById('payment_pagantis_pagantis_public_key')
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
-        $this->findById('payment_paylater_pmt_private_key')
+        $this->findById('payment_pagantis_pagantis_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
         ;        //Confirm and validate
