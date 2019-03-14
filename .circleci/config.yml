@@ -51,5 +51,4 @@ jobs:
           name: Basic Test
           command: |
             export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
-            wget $DOCKERHOST:8082
             extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
