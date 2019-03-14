@@ -36,12 +36,12 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
 
                 pmtSDK.product_simulator = {};
                 pmtSDK.product_simulator.id = 'product-simulator';
-                pmtSDK.product_simulator.publicKey = '<?=$pmtPublicKey;?>';
+                pmtSDK.product_simulator.publicKey = '<?=$pagantisPublicKey;?>';
                 pmtSDK.product_simulator.selector = positionSelector;
-                pmtSDK.product_simulator.numInstalments = '<?=$pmtQuotesStart;?>';
-                pmtSDK.product_simulator.type = <?=$pmtSimulatorType;?>;
-                pmtSDK.product_simulator.skin = <?=$pmtSimulatorSkin;?>;
-                pmtSDK.product_simulator.position = <?=$pmtSimulatorPosition;?>;
+                pmtSDK.product_simulator.numInstalments = '<?=$pagantisQuotesStart;?>';
+                pmtSDK.product_simulator.type = <?=$pagantisSimulatorType;?>;
+                pmtSDK.product_simulator.skin = <?=$pagantisSimulatorSkin;?>;
+                pmtSDK.product_simulator.position = <?=$pagantisSimulatorPosition;?>;
 
                 if (priceSelector !== 'default') {
                     pmtSDK.product_simulator.itemAmountSelector = priceSelector;

@@ -2,20 +2,19 @@
 <config>
 
     <modules>
-        <Pagantis>
-            <version>7.2.1</version>
-        </Pagantis>
+        <Pagantis_Pagantis>
+            <version>8.0.0</version>
+        </Pagantis_Pagantis>
     </modules>
 
     <global>
-
         <events>
             <sales_order_place_after>
                 <observers>
-                    <Pagantis>
+                    <Pagantis_Pagantis>
                         <class>pagantis/observer</class>
                         <method>cancelPendingOrders</method>
-                    </Pagantis>
+                    </Pagantis_Pagantis>
                 </observers>
             </sales_order_place_after>
         </events>
@@ -57,7 +56,7 @@
         <resources>
             <pagantis_setup>
                 <setup>
-                    <module>Pagantis</module>
+                    <module>Pagantis_Pagantis</module>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -79,11 +78,11 @@
     <adminhtml>
         <translate>
             <modules>
-                <Pagantis>
+                <Pagantis_Pagantis>
                     <files>
-                        <default>Pagantis.csv</default>
+                        <default>Pagantis_Pagantis.csv</default>
                     </files>
-                </Pagantis>
+                </Pagantis_Pagantis>
             </modules>
         </translate>
         <layout>
@@ -100,7 +99,7 @@
             <pagantis>
                 <use>standard</use>
                 <args>
-                    <module>Pagantis</module>
+                    <module>Pagantis_Pagantis</module>
                     <frontName>pagantis</frontName>
                 </args>
             </pagantis>
@@ -119,7 +118,7 @@
             <pagantis translate="title" module="pagantis">
                 <active>1</active>
                 <title>Pagantis</title>
-                <model>pagantis</model>
+                <model>pagantis/pagantis</model>
                 <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>
                 <payment_action>sale</payment_action>

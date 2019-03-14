@@ -75,7 +75,7 @@ class Pagantis_Pagantis_Model_Pagantis extends Mage_Payment_Model_Method_Abstrac
      */
     public function getOrderPlaceRedirectUrl()
     {
-        return Mage::getUrl('pagsantis/payment', array('_secure' => false));
+        return Mage::getUrl('pagantis/payment', array('_secure' => false));
     }
 
     /**

@@ -127,7 +127,6 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             'php' => phpversion(),
             'member_since' => $this->customer->getCreatedAt(),
         );
-
         $fullName = null;
         $telephone = null;
         $userAddress = null;
