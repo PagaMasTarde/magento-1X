@@ -27,7 +27,9 @@ jobs:
             sleep 10
       - run:
           name: Docker Copy Module Files
-          command: docker cp ./extension magento19test:/pmt
+          command: |
+            docker exec magento19test mkdir /pmt
+            docker cp extension/ magento19test:/pmt
       - run:
           name: Install Sample Data
           command: |
