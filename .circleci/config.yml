@@ -16,7 +16,7 @@ jobs:
           command: |
             sudo apt install -y python-software-properties
             sudo add-apt-repository -y ppa:ondrej/php
-            sudo apt update
+            find /etc/apt/sources.list.d -type f -name '*.list' -exec sudo apt-get update -o Dir::Etc::sourcelist="{}" ';'
             sudo apt install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom
             curl -s https://getcomposer.org/installer | php
             sudo mv composer.phar /usr/local/bin/composer
@@ -25,6 +25,7 @@ jobs:
           name: Docker UP
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             docker-compose up -d --build magento-test
             docker-compose up -d --build selenium
             sleep 10
