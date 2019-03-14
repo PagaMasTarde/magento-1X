@@ -9,9 +9,6 @@ then
 fi
 sleep 10
 
-# Copy extension to docker (for circleCI)
-docker cp ./extension magento19test:/pmt
-
 # Install magento and sample data
 docker-compose exec magento-test install-sampledata
 docker-compose exec magento-test install-magento

@@ -44,6 +44,8 @@ services:
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-test.docker:8082
+    volumes:
+      - ./extension:/pmt
     links:
       - db-test
     ports:
