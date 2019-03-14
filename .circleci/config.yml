@@ -1,11 +1,14 @@
 version: 2
 jobs:
   build:
+    machine: true
     docker:
       - image: circleci/php:7.1-node-browsers
     working_directory: ~/repo
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Add Docker Host
           command: |
