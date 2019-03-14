@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Docker Copy Module Files
           command: |
-            docker cp extension/* magento19test:/pmt
+            docker cp extension/. magento19test:/pmt
             docker exec magento19test ls -lah /pmt
       - run:
           name: Install Sample Data
