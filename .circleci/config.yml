@@ -23,3 +23,6 @@ jobs:
       - run:
           name: Generate
           command: ./generate.sh true
+      - run:
+          name: Done
+          command: echo "Done"
