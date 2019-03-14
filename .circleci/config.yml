@@ -13,7 +13,7 @@ jobs:
             echo 127.0.0.1 magento19-test.docker | sudo tee -a /etc/hosts
       - run:
           name: Composer Install
-          command: composer install
+          command: php -v
       - run:
           name: Docker UP
           command: |
