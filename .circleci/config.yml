@@ -52,4 +52,4 @@ jobs:
       - run:
           name: Basic Test
           command: |
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+            docker-compose exec magento-test /pmt/lib/DigitalOrigin/bin/phpunit --group magento-basic
