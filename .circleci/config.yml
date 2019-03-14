@@ -11,10 +11,8 @@ jobs:
       - run:
           name: Add Docker Host
           command: |
-            export CIHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
-            echo $CIHOST magento19-test.docker | sudo tee -a /etc/hosts
-            export DOCKERHOST=$(curl https://ipinfo.io/ip)
-            echo $DOCKERHOST
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            echo $DOCKERHOST magento19-test.docker | sudo tee -a /etc/hosts
       - run:
           name: Disable xdebug
           command: |
@@ -52,4 +50,6 @@ jobs:
       - run:
           name: Basic Test
           command: |
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            wget $DOCKERHOST:8082
             extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
