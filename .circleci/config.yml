@@ -30,6 +30,7 @@ jobs:
           command: |
             docker exec magento19test mkdir /pmt
             docker cp extension/ magento19test:/pmt
+            docker exec magento19test ls -lah /pmt
       - run:
           name: Install Sample Data
           command: |
