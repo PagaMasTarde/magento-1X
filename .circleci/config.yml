@@ -16,7 +16,8 @@ jobs:
           command: composer install
       - run:
           name: Disable xdebug
-          command: phpenv config-rm xdebug.ini
+          command: |
+            sudo sed -i 's/^zend_extension/;zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - run:
           name: Generate
           command: ./generate.sh true
