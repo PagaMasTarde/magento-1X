@@ -13,6 +13,8 @@ jobs:
           command: |
             export CIHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
             echo $CIHOST magento19-test.docker | sudo tee -a /etc/hosts
+            export DOCKERHOST=$(curl https://ipinfo.io/ip)
+            echo $DOCKERHOST
       - run:
           name: Disable xdebug
           command: |
@@ -23,7 +25,7 @@ jobs:
       - run:
           name: Docker UP
           command: |
-            export DOCKERHOST=$(curl https://ipinfo.io/ip)
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
             docker-compose up -d --build magento-test
             docker-compose up -d --build selenium
             sleep 10
@@ -35,13 +37,13 @@ jobs:
       - run:
           name: Install Sample Data
           command: |
-            export DOCKERHOST=$(curl https://ipinfo.io/ip)
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
             docker-compose exec magento-test install-sampledata
             docker-compose exec magento-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
-            export DOCKERHOST=$(curl https://ipinfo.io/ip)
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
             docker-compose exec magento-test modman init
             docker-compose exec magento-test modman link /pmt
             docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar

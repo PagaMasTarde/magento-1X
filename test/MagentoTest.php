@@ -16,7 +16,8 @@ abstract class MagentoTest extends TestCase
     /**
      * Magento URL
      */
-    const MAGENTO_URL = 'http://magento19-test.docker:8082/index.php';
+    const MAGENTO_URL = 'http://magento-test/index.php';
+    //const MAGENTO_URL = 'http://magento19-test.docker:8082/index.php';
 
     /**
      * Magento Backoffice URL
@@ -62,8 +63,8 @@ abstract class MagentoTest extends TestCase
         $this->webDriver = PmtWebDriver::create(
             'http://magento19-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            90000,
-            90000
+            30000,
+            30000
         );
     }
 
