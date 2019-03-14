@@ -31,11 +31,13 @@ jobs:
       - run:
           name: Install Sample Data
           command: |
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
             docker-compose exec magento-test install-sampledata
             docker-compose exec magento-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
             docker-compose exec magento-test modman init
             docker-compose exec magento-test modman link /pmt
             docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
@@ -43,4 +45,6 @@ jobs:
             docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
       - run:
           name: Basic Test
-          command: extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+          command: |
+            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
