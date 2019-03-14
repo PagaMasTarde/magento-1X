@@ -1,18 +1,15 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/php:7.1-node-browsers
+    machine: true
     working_directory: ~/repo
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Add Docker Host
           command: |
-            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
-            echo $DOCKERHOST magento19-test.docker | sudo tee -a /etc/hosts
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            echo 127.0.0.1 magento19-test.docker | sudo tee -a /etc/hosts
       - run:
           name: Disable xdebug
           command: |
@@ -23,7 +20,7 @@ jobs:
       - run:
           name: Docker UP
           command: |
-            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose up -d --build magento-test
             docker-compose up -d --build selenium
             sleep 10
@@ -35,13 +32,13 @@ jobs:
       - run:
           name: Install Sample Data
           command: |
-            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose exec magento-test install-sampledata
             docker-compose exec magento-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
-            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose exec magento-test modman init
             docker-compose exec magento-test modman link /pmt
             docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
@@ -50,5 +47,5 @@ jobs:
       - run:
           name: Basic Test
           command: |
-            export DOCKERHOST=$(echo $DOCKER_HOST | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
