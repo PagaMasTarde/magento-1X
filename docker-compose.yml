@@ -28,7 +28,7 @@ services:
       - "magento19-dev.docker:127.0.0.1"
 
   magento-test:
-    container_name: magento-test
+    container_name: magento19test
     image: alexcheng/magento:latest
     environment:
       - MAGENTO_ADMIN_FIRSTNAME=Owner
@@ -43,9 +43,13 @@ services:
       - MAGENTO_LOCALE=es_ES
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
-      - MAGENTO_URL=magento-test
+      - MAGENTO_URL=magento19-test.docker:8082
     links:
       - db-test
+    ports:
+      - "8082:80"
+    extra_hosts:
+      - "magento19-test.docker:127.0.0.1"
 
   db-dev:
     container_name: magento19dbdev
@@ -64,3 +68,8 @@ services:
   selenium:
     container_name: magento19selenium
     image: selenium/standalone-chrome:3.7.1
+    ports:
+      - "4444:4444"
+    extra_hosts:
+      - "magento19-test.docker:${DOCKERHOST}"
+      - "magento19-dev.docker:${DOCKERHOST}"
