@@ -23,8 +23,7 @@ jobs:
       - run:
           name: Docker UP
           command: |
-            ifconfig
-            exit 1
+            export DOCKERHOST=$(curl https://ipinfo.io/ip)
             docker-compose up -d --build magento-test
             docker-compose up -d --build selenium
             sleep 10
@@ -36,11 +35,13 @@ jobs:
       - run:
           name: Install Sample Data
           command: |
+            export DOCKERHOST=$(curl https://ipinfo.io/ip)
             docker-compose exec magento-test install-sampledata
             docker-compose exec magento-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
+            export DOCKERHOST=$(curl https://ipinfo.io/ip)
             docker-compose exec magento-test modman init
             docker-compose exec magento-test modman link /pmt
             docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
