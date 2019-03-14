@@ -14,10 +14,10 @@ jobs:
       - run:
           name: Composer Install
           command: |
-            sudo apt install php-5
+            sudo apt install php5
             curl -s https://getcomposer.org/installer | php
             mv composer.phar /usr/local/bin/composer
-
+            composer install
       - run:
           name: Docker UP
           command: |
