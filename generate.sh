@@ -3,7 +3,7 @@
 # Prepare environment and build package
 docker-compose down
 docker-compose up -d --build magento-test
-if [ $1 == 'true' ]
+if [$1 == 'true']
 then
     docker-compose up -d --build selenium
 fi
