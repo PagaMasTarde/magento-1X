@@ -11,10 +11,6 @@ jobs:
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             echo 127.0.0.1 magento19-test.docker | sudo tee -a /etc/hosts
       - run:
-          name: Disable xdebug
-          command: |
-            sudo sed -i 's/^zend_extension/;zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - run:
           name: Composer Install
           command: composer install
       - run:
