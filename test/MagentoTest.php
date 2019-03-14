@@ -60,7 +60,7 @@ abstract class MagentoTest extends TestCase
     protected function setUp()
     {
         $this->webDriver = PmtWebDriver::create(
-            'http://localhost:4444/wd/hub',
+            'http://magento19-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
             90000,
             90000
