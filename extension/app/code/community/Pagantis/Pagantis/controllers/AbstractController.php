@@ -18,7 +18,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Pagantis Orders Tablename
      */
-    const PAGANTIS_ORDERS_TABLE = 'CREATE TABLE `pagantis_orders` (
+    const PAGANTIS_ORDERS_TABLE = 'CREATE TABLE `pagantis_order` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `mg_order_id` varchar(50) NOT NULL, 
   `pagantis_order_id` varchar(50), 
@@ -29,7 +29,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Pagantis Orders Tablename
      */
-    const PAGANTIS_LOGS_TABLE = 'CREATE TABLE `pagantis_logs` (
+    const PAGANTIS_LOGS_TABLE = 'CREATE TABLE `pagantis_log` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `log` TEXT,
   `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
