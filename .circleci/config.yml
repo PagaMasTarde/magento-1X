@@ -54,47 +54,47 @@ jobs:
           name: magento-basic
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-basic
+            extension/lib/Pagantis/bin/phpunit --group magento-basic
       - run:
           name: magento-configure-backoffice-iframe
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-configure-backoffice-iframe
+            extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-iframe
       - run:
           name: magento-product-page
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-product-page
+            extension/lib/Pagantis/bin/phpunit --group magento-product-page
       - run:
           name: magento-buy-unregistered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-buy-unregistered
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
       - run:
           name: magento-cancel-buy-unregistered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
       - run:
           name: magento-register
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-register
+            extension/lib/Pagantis/bin/phpunit --group magento-register
       - run:
           name: magento-fill-data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-fill-data
+            extension/lib/Pagantis/bin/phpunit --group magento-fill-data
       - run:
           name: magento-buy-registered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-buy-registered
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
       - run:
           name: magento-cancel-buy-registered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/€Pagantis/bin/phpunit --group magento-cancel-buy-registered
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
       - run:
           name: magento-cancel-buy-controllers
           command: |
