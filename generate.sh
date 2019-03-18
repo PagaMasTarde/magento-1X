@@ -9,6 +9,9 @@ then
 fi
 sleep 10
 
+# Copy Files to magento test
+docker cp ./extension/. magento19test:/pmt/
+
 # Install magento and sample data
 docker-compose exec magento-test install-sampledata
 docker-compose exec magento-test install-magento
@@ -28,16 +31,27 @@ composer install
 
 if [ $1 == 'true' ]
 then
-    extension/lib/Pagantis/bin/phpunit --group magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
-    extension/lib/Pagantis/bin/phpunit --group magento-product-page
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-register
-    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
+    echo magento-basic
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+    echo magento-configure-backoffice-iframe
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice
+    echo magento-product-page
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
+    echo magento-buy-unregistered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
+    echo magento-cancel-buy-unregistered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
+    echo magento-register
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-register
+    echo magento-fill-data
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
+    echo magento-buy-registered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
+    echo magento-cancel-buy-registered
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
+    echo magento-cancel-buy-controllers
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
 else
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    echo magento-configure-backoffice-redirect
+    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice
 fi

@@ -32,6 +32,7 @@
     },
     "require-dev": {
         "pagantis/selenium-form-utils": "^2.0",
+        "fzaninotto/faker": "^1.8",
         "magento/core": "1.9.3.9"
     },
     "autoload": {
