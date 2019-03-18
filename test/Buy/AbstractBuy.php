@@ -55,7 +55,7 @@ abstract class AbstractBuy extends MagentoTest
     /**
      * Pagantis Order Title
      */
-    const PAGANTIS_TITLE = 'Pagantis';
+    const PAGANTIS_TITLE = 'Paga+Tarde';
 
     /**
      * Notification route
