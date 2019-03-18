@@ -5,6 +5,7 @@ namespace Test;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,8 +32,8 @@ abstract class MagentoTest extends TestCase
         'backofficePassword' => 'password123',
         'username'           => 'demo@prestashop.com',
         'password'           => 'prestashop_demo',
-        'publicKey'          => 'tk_fd53cd467ba49022e4f8215e',
-        'secretKey'          => '21e57baa97459f6a',
+        'publicKey'          => 'tk_4954690ee76a4ff7875b93b4',
+        'secretKey'          => '4392a844f7904be3',
         'birthdate'          => '05/05/2005',
         'firstname'          => 'Jøhn',
         'lastname'           => 'Dōè Martínez',
@@ -50,6 +51,47 @@ abstract class MagentoTest extends TestCase
     );
 
     /**
+     * MagentoTest constructor.
+     *
+     * @param null   $name
+     * @param array  $data
+     * @param string $dataName
+     */
+    public function __construct($name = null, array $data = array(), $dataName = '')
+    {
+        $faker = Factory::create();
+
+        $this->configuration['dni'] = $this->getDNI();
+        $this->configuration['birthdate'] =
+            $faker->numberBetween(1, 28) . '/' .
+            $faker->numberBetween(1, 12). '/1975'
+        ;
+        $this->configuration['firstname'] = $faker->firstName;
+        $this->configuration['lastname'] = $faker->lastName . ' ' . $faker->lastName;
+        $this->configuration['company'] = $faker->company;
+        $this->configuration['zip'] = $faker->postcode;
+        $this->configuration['street'] = $faker->streetAddress;
+        $this->configuration['phone'] = '6' . $faker->randomNumber(8);
+        $this->configuration['email'] = date('ymd') . '@pagamastarde.com';
+
+        parent::__construct($name, $data, $dataName);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDNI()
+    {
+        $dni = '0000' . rand(pow(10, 4-1), pow(10, 4)-1);
+        $value = (int) ($dni / 23);
+        $value *= 23;
+        $value= $dni - $value;
+        $letter= "TRWAGMYFPDXBNJZSQVHLCKEO";
+        $dniLetter= substr($letter, $value, 1);
+        return $dni.$dniLetter;
+    }
+
+    /**
      * @var RemoteWebDriver
      */
     protected $webDriver;
@@ -60,10 +102,10 @@ abstract class MagentoTest extends TestCase
     protected function setUp()
     {
         $this->webDriver = PmtWebDriver::create(
-            'http://localhost:4444/wd/hub',
+            'http://magento19-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            90000,
-            90000
+            50000,
+            50000
         );
     }
 
