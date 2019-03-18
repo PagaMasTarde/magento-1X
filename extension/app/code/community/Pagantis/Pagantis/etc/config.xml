@@ -41,10 +41,10 @@
             <class>Pagantis_Pagantis_Model_Resource</class>
             <entities>
                 <log>
-                    <table>pagantis_logs</table>
+                    <table>pagantis_log</table>
                 </log>
                 <order>
-                    <table>pagantis_orders</table>
+                    <table>pagantis_order</table>
                 </order>
                 <concurrency>
                     <table>pagantis_cart_concurrency</table>

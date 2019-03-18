@@ -29,7 +29,7 @@ composer install
 if [ $1 == 'true' ]
 then
     extension/lib/Pagantis/bin/phpunit --group magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-iframe
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
     extension/lib/Pagantis/bin/phpunit --group magento-product-page
     extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
     extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
@@ -39,5 +39,5 @@ then
     extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
     extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
 else
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-redirect
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
 fi

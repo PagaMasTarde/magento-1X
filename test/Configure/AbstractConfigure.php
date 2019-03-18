@@ -173,7 +173,8 @@ abstract class AbstractConfigure extends MagentoTest
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\UnexpectedTagNameException
      */
-    public function disableFedEx() {
+    public function disableFedEx()
+    {
         $select = new WebDriverSelect($this->findById('carriers_fedex_active'));
         $select->selectByValue('0');
 

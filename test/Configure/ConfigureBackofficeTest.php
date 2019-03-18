@@ -9,9 +9,9 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
  * Class ConfigureBackofficeTest
  * @package Test\Configure
  *
- * @group magento-configure-backoffice-iframe
+ * @group magento-configure-backoffice
  */
-class ConfigureBackofficeIframeTest extends AbstractConfigure
+class ConfigureBackofficeTest extends AbstractConfigure
 {
     /**
      * testConfigureBackoffice
