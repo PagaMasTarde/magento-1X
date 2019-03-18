@@ -94,6 +94,10 @@ class CancelBuyUnregisteredTest extends AbstractBuy
      */
     public function cancelPurchase()
     {
+        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
+        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->assertTrue((bool)$condition, "PR32");
+
         // cancel the purchase with redirect
         SeleniumHelper::cancelForm($this->webDriver);
     }
