@@ -1,6 +1,7 @@
 # Magento 1X Module <img src="https://pagamastarde.com/img/icons/logo.svg" width="100" align="right">
 
-[![Build Status](https://travis-ci.org/PagaMasTarde/magento-1X.svg?branch=master)](https://travis-ci.org/PagaMasTarde/magento-1X)
+CircleCI: [![CircleCI](https://circleci.com/gh/PagaMasTarde/magento-1X/tree/master.svg?style=svg)](https://circleci.com/gh/PagaMasTarde/magento-1X/tree/master)
+
 [![Latest Stable Version](https://poser.pugx.org/pagamastarde/magento-1x/v/stable)](https://packagist.org/packages/pagamastarde/magento-1x)
 [![composer.lock](https://poser.pugx.org/pagamastarde/magento-1x/composerlock)](https://packagist.org/packages/pagamastarde/magento-1x)
 
