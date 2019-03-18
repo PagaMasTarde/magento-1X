@@ -9,6 +9,9 @@ then
 fi
 sleep 10
 
+# Copy Files to magento test
+docker cp ./extension/. magento19test:/pmt/
+
 # Install magento and sample data
 docker-compose exec magento-test install-sampledata
 docker-compose exec magento-test install-magento
@@ -28,16 +31,27 @@ composer install
 
 if [ $1 == 'true' ]
 then
+    echo magento-basic
     extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+    echo magento-configure-backoffice-iframe
     extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
+    echo magento-product-page
     extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
+    echo magento-buy-unregistered
     extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
+    echo magento-cancel-buy-unregistered
     extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
+    echo magento-register
     extension/lib/DigitalOrigin/bin/phpunit --group magento-register
+    echo magento-fill-data
     extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
+    echo magento-buy-registered
     extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
+    echo magento-cancel-buy-registered
     extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
+    echo magento-cancel-buy-controllers
     extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
 else
+    echo magento-configure-backoffice-redirect
     extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
 fi
