@@ -32,8 +32,8 @@ abstract class MagentoTest extends TestCase
         'backofficePassword' => 'password123',
         'username'           => 'demo@prestashop.com',
         'password'           => 'prestashop_demo',
-        'publicKey'          => 'tk_fd53cd467ba49022e4f8215e',
-        'secretKey'          => '21e57baa97459f6a',
+        'publicKey'          => 'tk_4954690ee76a4ff7875b93b4',
+        'secretKey'          => '4392a844f7904be3',
         'birthdate'          => '05/05/2005',
         'firstname'          => 'Jøhn',
         'lastname'           => 'Dōè Martínez',
@@ -68,12 +68,11 @@ abstract class MagentoTest extends TestCase
         ;
         $this->configuration['firstname'] = $faker->firstName;
         $this->configuration['lastname'] = $faker->lastName . ' ' . $faker->lastName;
-        $this->configuration['email'] = $faker->email;
         $this->configuration['company'] = $faker->company;
         $this->configuration['zip'] = $faker->postcode;
-        $this->configuration['city'] = $faker->city;
         $this->configuration['street'] = $faker->streetAddress;
         $this->configuration['phone'] = '6' . $faker->randomNumber(8);
+        $this->configuration['email'] = date('ymd') . '@pagamastarde.com';
 
         parent::__construct($name, $data, $dataName);
     }
