@@ -104,8 +104,8 @@ abstract class MagentoTest extends TestCase
         $this->webDriver = PmtWebDriver::create(
             'http://magento19-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            50000,
-            50000
+            120000,
+            120000
         );
     }
 
