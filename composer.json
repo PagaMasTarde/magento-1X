@@ -32,11 +32,7 @@
     },
     "require-dev": {
         "ext-json": "*",
-        "phpunit/phpunit": "^5.7",
-        "phpunit/phpunit-selenium": "^3",
-        "pagamastarde/selenium-form-utils": "^1.0",
-        "facebook/webdriver": "^1.5",
-        "fzaninotto/faker": "^1.8",
+        "pagantis/selenium-form-utils": "^2.0",
         "magento/core": "1.9.3.9"
     },
     "autoload": {
