@@ -75,7 +75,7 @@ class PackageTest extends MagentoTest
             self::DOCKER_CONTAINER .
             ':/pmt/var/connect/DigitalOrigin_Pmt-'
             . $this->release .
-            '.tgz Pagantis_' . $this->release . '.tgz'
+            '.tgz Pagantis_v' . $this->release . '.tgz'
         );
     }
 
@@ -116,6 +116,7 @@ class PackageTest extends MagentoTest
             self::VENDOR_FOLDER
         );
         exec('docker exec -it '. self::DOCKER_CONTAINER .' chown -R www-data /pmt/');
+        exec('rm -rf extension/' . self::VENDOR_FOLDER . 'Prod');
     }
 
     /**
