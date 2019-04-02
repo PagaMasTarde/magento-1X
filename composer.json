@@ -1,9 +1,9 @@
-{  
+{
     "name": "pagamastarde/magento-1x",
     "description": "Paga+Tarde Magento 1 module with orders",
-    "version" : "7.2.1",
+    "version": "7.2.1",
     "type": "module",
-    "keywords": [  
+    "keywords": [
         "api",
         "rest",
         "magento",
@@ -20,17 +20,18 @@
     "homepage": "https://pagamastarde.com/",
     "license": "proprietary",
     "authors": [
-        {  
+        {
             "name": "Digital Origin",
             "email": "cromero@digitalorigin.com"
         }
     ],
-    "require": {  
+    "require": {
         "php": ">=5.3",
         "pagamastarde/orders-api-client": "^1.0",
         "pagamastarde/module-utils": "^1.1"
     },
     "require-dev": {
+        "ext-json": "*",
         "phpunit/phpunit": "^5.7",
         "phpunit/phpunit-selenium": "^3",
         "pagamastarde/selenium-form-utils": "^1.0",
@@ -39,10 +40,14 @@
         "magento/core": "1.9.3.9"
     },
     "autoload": {
-        "psr-4": {"": "extension/"}
+        "psr-4": {
+            "": "extension/"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"Test\\": "test/"}
+        "psr-4": {
+            "Test\\": "test/"
+        }
     },
     "minimum-stability": "stable",
     "config": {
