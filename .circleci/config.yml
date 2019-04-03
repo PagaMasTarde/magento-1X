@@ -154,7 +154,7 @@ jobs:
           name: magento-basic
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+            extension/lib/Pagantis/bin/phpunit --group magento-basic
       - run:
           name: Install GitHub CLI
           command: |
@@ -171,7 +171,7 @@ jobs:
           name: magento-package
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-package
+            extension/lib/Pagantis/bin/phpunit --group magento-package
             ls
       - run:
           name: Push ZIP to GitHub
