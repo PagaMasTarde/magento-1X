@@ -50,7 +50,9 @@ class BuyRegisteredTest extends AbstractBuy
         $this->checkLastPurchaseStatus('Processing');
 
         // get registered purchase amount
-        $checkoutPrice = WebDriverBy::cssSelector('.box-account.box-recent .data-table.orders .first .total .price');
+        $checkoutPrice = WebDriverBy::cssSelector(
+            '.box-account.box-recent .data-table.orders .first .total .price'
+        );
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
                 $checkoutPrice
@@ -137,7 +139,11 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);
-        $this->assertContains(QuoteNotFoundException::ERROR_MESSAGE, $response->body->result, "PR=>".$response->body->result);
+        $this->assertContains(
+            QuoteNotFoundException::ERROR_MESSAGE,
+            $response->body->result,
+            "PR=>".$response->body->result
+        );
     }
 
     /**

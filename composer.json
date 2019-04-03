@@ -1,9 +1,9 @@
-{  
+{
     "name": "pagantis/magento-1x",
     "description": "Pagantis Magento 1x module",
     "version" : "8.0.0",
     "type": "module",
-    "keywords": [  
+    "keywords": [
         "api",
         "rest",
         "magento",
@@ -25,20 +25,25 @@
             "email": "integrations@pagantis.com"
         }
     ],
-    "require": {  
+    "require": {
         "php": ">=5.3",
         "pagantis/orders-api-client": "^2.0",
         "pagantis/module-utils": "^2.0"
     },
     "require-dev": {
+        "ext-json": "*",
         "pagantis/selenium-form-utils": "^2.0",
         "magento/core": "1.9.3.9"
     },
     "autoload": {
-        "psr-4": {"": "extension/"}
+        "psr-4": {
+            "": "extension/"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"Test\\": "test/"}
+        "psr-4": {
+            "Test\\": "test/"
+        }
     },
     "minimum-stability": "stable",
     "config": {
