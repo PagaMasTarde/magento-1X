@@ -96,7 +96,7 @@ jobs:
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
       - run:
-          name: magento-cancel-buy-controllers
+          name: magento-controllers
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             extension/lib/Pagantis/bin/phpunit --group magento-controllers
