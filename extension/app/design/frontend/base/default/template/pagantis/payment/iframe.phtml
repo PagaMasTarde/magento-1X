@@ -5,8 +5,8 @@
  */
 ?>
 <script type="text/javascript">
-    if (typeof pmtSDK !== 'undefined') {
-        pmtSDK.modal.open("<?=$orderUrl; ?>",
+    if (typeof pgSDK !== 'undefined') {
+        pgSDK.modal.open("<?=$orderUrl; ?>",
             {
                 id: 'iframe-pagantis',
                 closeOnBackDropClick: false,
@@ -16,7 +16,7 @@
                 closeConfirmationMessage: '<?=$leaveMessage;?>'
             }
         );
-        pmtSDK.modal.onClose(function() {
+        pgSDK.modal.onClose(function() {
             window.location.href = "<?=$checkoutUrl; ?>";
         });
     }

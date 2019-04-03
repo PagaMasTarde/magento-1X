@@ -5,7 +5,7 @@
             <block type="core/text" name="pagantis.js">
                 <action method="setText" ifconfig="payment/pagantis/active">
                     <text>
- <![CDATA[<script type="text/javascript" src="https://cdn.pagamastarde.com/js/pmt-v2/sdk.js"></script>]]>
+ <![CDATA[<script type="text/javascript" src="https://cdn.pagantis.com/js/pg-v2/sdk.js"></script>]]>
                     </text>
                 </action>
             </block>

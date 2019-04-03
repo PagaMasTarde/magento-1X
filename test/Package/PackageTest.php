@@ -73,7 +73,7 @@ class PackageTest extends MagentoTest
         exec(
             'docker cp ' .
             self::DOCKER_CONTAINER .
-            ':/pmt/var/connect/DigitalOrigin_Pmt-'
+            ':/pagantis/var/connect/DigitalOrigin_Pmt-'
             . $this->release .
             '.tgz Pagantis_v' . $this->release . '.tgz'
         );
@@ -106,16 +106,16 @@ class PackageTest extends MagentoTest
             JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES
         ));
 
-        exec('docker exec -it '. self::DOCKER_CONTAINER .' rm -rf /pmt/' . self::VENDOR_FOLDER);
+        exec('docker exec -it '. self::DOCKER_CONTAINER .' rm -rf /pagantis/' . self::VENDOR_FOLDER);
         exec(
             'docker cp ' .
             'extension/' . self::VENDOR_FOLDER .
             'Prod ' .
             self::DOCKER_CONTAINER .
-            ':/pmt/' .
+            ':/pagantis/' .
             self::VENDOR_FOLDER
         );
-        exec('docker exec -it '. self::DOCKER_CONTAINER .' chown -R www-data /pmt/');
+        exec('docker exec -it '. self::DOCKER_CONTAINER .' chown -R www-data /pagantis/');
         exec('rm -rf extension/' . self::VENDOR_FOLDER . 'Prod');
     }
 
