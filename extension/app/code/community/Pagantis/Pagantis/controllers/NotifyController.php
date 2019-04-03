@@ -78,6 +78,63 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     }
 
     /**
+     * Main action of the controller. Dispatch the Notify process
+     *
+     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
+     * @throws Exception
+     */
+    public function indexAction()
+    {
+        try {
+            $this->checkConcurrency();
+            $this->getMerchantOrder();
+            $this->getPagantisOrderId();
+            $this->getPagantisOrder();
+            $this->checkOrderStatus();
+            $this->checkMerchantOrderStatus();
+            $this->validateAmount();
+            $this->processMerchantOrder();
+        } catch (\Exception $exception) {
+            $jsonResponse = new JsonExceptionResponse();
+            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+            $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
+            $jsonResponse->setException($exception);
+            $response = $jsonResponse->toJson();
+            $this->cancelProcess($exception);
+        }
+
+        try {
+            if (!isset($response)) {
+                $this->confirmPagantisOrder();
+                $jsonResponse = new JsonSuccessResponse();
+                $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+                $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
+            }
+        } catch (\Exception $exception) {
+            $this->rollbackMerchantOrder();
+            $jsonResponse = new JsonExceptionResponse();
+            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+            $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
+            $jsonResponse->setException($exception);
+            $jsonResponse->toJson();
+            $this->cancelProcess($exception);
+        }
+
+        try {
+            $this->unblockConcurrency($this->merchantOrderId);
+        } catch (\Exception $exception) {
+            // Do nothing
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $jsonResponse->printResponse();
+        } else {
+            $error = (!isset($response)) ? false : true;
+            return $this->redirect($error);
+        }
+    }
+
+    /**
      * Find and init variables needed to process payment
      *
      * @throws Exception
@@ -261,7 +318,8 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->merchantOrder->setState(
                 Mage_Sales_Model_Order::STATE_PROCESSING,
                 Mage_Sales_Model_Order::STATE_PROCESSING,
-                null,
+                'pagantisOrderId: ' . $this->pagantisOrder->getId().
+                'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(),
                 true
             );
             $this->merchantOrder->save();
@@ -301,67 +359,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->merchantOrder->setState(
                 Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
                 Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
-                null,
+                'pagantisOrderId: ' . $this->pagantisOrder->getId().
+                'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(),
                 false
             );
             $this->merchantOrder->save();
-    }
-
-    /**
-     * Main action of the controller. Dispatch the Notify process
-     *
-     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
-     * @throws Exception
-     */
-    public function indexAction()
-    {
-        try {
-            $this->checkConcurrency();
-            $this->getMerchantOrder();
-            $this->getPagantisOrderId();
-            $this->getPagantisOrder();
-            $this->checkOrderStatus();
-            $this->checkMerchantOrderStatus();
-            $this->validateAmount();
-            $this->processMerchantOrder();
-        } catch (\Exception $exception) {
-            $jsonResponse = new JsonExceptionResponse();
-            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-            $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
-            $jsonResponse->setException($exception);
-            $response = $jsonResponse->toJson();
-            $this->cancelProcess($exception);
-        }
-
-        try {
-            if (!isset($response)) {
-                $this->confirmPagantisOrder();
-                $jsonResponse = new JsonSuccessResponse();
-                $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-                $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
-            }
-        } catch (\Exception $exception) {
-            $this->rollbackMerchantOrder();
-            $jsonResponse = new JsonExceptionResponse();
-            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-            $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
-            $jsonResponse->setException($exception);
-            $jsonResponse->toJson();
-            $this->cancelProcess($exception);
-        }
-
-        try {
-            $this->unblockConcurrency($this->merchantOrderId);
-        } catch (\Exception $exception) {
-            // Do nothing
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $jsonResponse->printResponse();
-        } else {
-            $error = (!isset($response)) ? false : true;
-            return $this->redirect($error);
-        }
     }
 
     /**
