@@ -89,6 +89,4 @@ class Pagantis_Pagantis_ConfigController extends AbstractController
 
         return false;
     }
-
-
 }

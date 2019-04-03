@@ -66,6 +66,4 @@ class Pagantis_Pagantis_LogController extends AbstractController
 
         return false;
     }
-
-
 }

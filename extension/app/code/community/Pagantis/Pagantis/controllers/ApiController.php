@@ -16,8 +16,12 @@ class Pagantis_Pagantis_ApiController extends AbstractController
      * @var bool $error
      */
     protected $error = false;
+
     /**
-     * Controller index method:
+     * Controller index method
+     *
+     * @return mixed
+     * @throws Zend_Controller_Request_Exception
      */
     public function indexAction()
     {
@@ -58,7 +62,7 @@ class Pagantis_Pagantis_ApiController extends AbstractController
         foreach ($orders as $order) {
             $this->message[] = json_decode(Mage::helper('core')->jsonEncode($order->getData()), true);
         }
-        $this->jsonResponse();
+        return $this->jsonResponse();
     }
     /**
      * Send a jsonResponse

@@ -78,6 +78,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Return a printable response of the request
      *
+     * @param array $extraOutput
      * @return Mage_Core_Controller_Response_Http
      */
     public function response($extraOutput = array())
@@ -158,7 +159,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
      *
      * @param $exception
      */
-    public function saveLog(\Exception $exception)
+    public function saveLog(Exception $exception)
     {
         try {
             $this->createTableIfNotExists('pagantis/log');
@@ -170,7 +171,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
                 'log' => $logEntryJson,
             ));
             $model->save();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Do nothing
         }
     }
@@ -195,8 +196,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
                     $writeConnection = $resource->getConnection('core_write');
                     $writeConnection->query($sql);
                 }
-
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // Do nothing
             }
         }

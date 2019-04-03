@@ -40,12 +40,12 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     protected $pagantisOrderId;
 
     /**
-     * @var \Pagantis\OrdersApiClient\Model\Order $pagantisOrder
+     * @var PagantisModelOrder $pagantisOrder
      */
     protected $pagantisOrder;
 
     /**
-     * @var Pagantis\OrdersApiClient\Client $orderClient
+     * @var PagantisClient $orderClient
      */
     protected $orderClient;
 
@@ -72,7 +72,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->getMerchantOrder();
             $this->restoreCart();
             return $this->redirect(true);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->redirect(true);
         }
     }
@@ -80,11 +80,12 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     /**
      * Main action of the controller. Dispatch the Notify process
      *
-     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
+     * @return Mage_Core_Controller_Varien_Action|void
      * @throws Exception
      */
     public function indexAction()
     {
+        $jsonResponse = array();
         try {
             $this->checkConcurrency();
             $this->getMerchantOrder();
@@ -94,7 +95,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->checkMerchantOrderStatus();
             $this->validateAmount();
             $this->processMerchantOrder();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $jsonResponse = new JsonExceptionResponse();
             $jsonResponse->setMerchantOrderId($this->merchantOrderId);
             $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
@@ -110,7 +111,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 $jsonResponse->setMerchantOrderId($this->merchantOrderId);
                 $jsonResponse->setPagantisOrderId($this->pagantisOrderId);
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->rollbackMerchantOrder();
             $jsonResponse = new JsonExceptionResponse();
             $jsonResponse->setMerchantOrderId($this->merchantOrderId);
@@ -122,12 +123,12 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
 
         try {
             $this->unblockConcurrency($this->merchantOrderId);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Do nothing
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $jsonResponse->printResponse();
+            return $jsonResponse->printResponse();
         } else {
             $error = (!isset($response)) ? false : true;
             return $this->redirect($error);
@@ -155,7 +156,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 'publicKey' => $config['pagantis_public_key'],
                 'privateKey' => $config['pagantis_private_key'],
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new UnknownException('Unable to load module configuration');
         }
     }
@@ -182,7 +183,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         try {
             /** @var Mage_Sales_Model_Order $order */
             $this->merchantOrder = Mage::getModel('sales/order')->loadByIncrementId($this->merchantOrderId);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new MerchantOrderNotFoundException();
         }
     }
@@ -203,7 +204,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             if (is_null($this->pagantisOrderId)) {
                 throw new NoIdentificationException();
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new NoIdentificationException();
         }
     }
@@ -234,7 +235,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 throw new AlreadyProcessedException();
             }
 
-            if ($this->pagantisOrder instanceof \Pagantis\OrdersApiClient\Model\Order) {
+            if ($this->pagantisOrder instanceof PagantisModelOrder) {
                 $status = $this->pagantisOrder->getStatus();
             } else {
                 $status = '-';
@@ -326,11 +327,10 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
 
             try {
                 $this->merchantOrder->sendNewOrderEmail();
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // Do nothing
             }
-
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new UnknownException($exception->getMessage());
         }
     }
@@ -344,7 +344,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     {
         try {
             $this->orderClient->confirmOrder($this->pagantisOrderId);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new UnknownException($exception->getMessage());
         }
     }
@@ -367,16 +367,15 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     }
 
     /**
-     * Do all the necessary actions to cancel the confirmation process in case of error
+     *  Do all the necessary actions to cancel the confirmation process in case of error
      * 1. Unblock concurrency
      * 2. Restore the cart if possible
      * 3. Save log
      *
      * @param Exception $exception
-     * @return Mage_Core_Controller_Response_Http|Mage_Core_Controller_Varien_Action
      * @throws Exception
      */
-    public function cancelProcess(\Exception $exception)
+    public function cancelProcess(Exception $exception)
     {
         $this->unblockConcurrency($this->merchantOrderId);
         $this->restoreCart();
@@ -399,7 +398,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                     $cart->save();
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Do nothing
         }
     }

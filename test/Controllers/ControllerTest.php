@@ -4,7 +4,6 @@ namespace Test;
 
 use Httpful\Request;
 use Httpful\Mime;
-use Httpful\Http;
 
 /**
  * Class ControllerTest

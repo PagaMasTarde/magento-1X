@@ -158,7 +158,10 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                     $orderBillingAddress = new PagantisModelOrderAddress();
                     $orderBillingAddress
                         ->setZipCode($this->addressData[$i]['postcode'])
-                        ->setFullName($this->addressData[$i]['firstname'] . ' ' . $this->addressData[$i]['lastname'])
+                        ->setFullName(
+                            $this->addressData[$i]['firstname'] . ' ' .
+                            $this->addressData[$i]['lastname']
+                        )
                         ->setCountryCode($this->addressData[$i]['country_id'])
                         ->setCity($this->addressData[$i]['city'])
                         ->setAddress($this->addressData[$i]['street'])
@@ -167,7 +170,17 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             }
 
             if (is_null($fullName)) {
-                $fullName = $this->magentoOrderData['customer_firstname'] . ' ' . $this->magentoOrderData['customer_lastname'];
+                $firstName = 'not setted';
+                if (isset($this->magentoOrderData['customer_firstname'])) {
+                    $firstName = $this->magentoOrderData['customer_firstname'];
+                }
+
+                $lastName = 'not setted';
+                if (isset($this->magentoOrderData['customer_lastname'])) {
+                    $lastName = $this->magentoOrderData['customer_lastname'];
+                }
+
+                $fullName = $firstName . ' ' . $lastName;
             }
 
             if (is_null($telephone)) {
@@ -257,7 +270,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 ->setMetadata($metadataOrder)
                 ->setShoppingCart($orderShoppingCart)
                 ->setUser($orderUser);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->saveLog($exception);
             return $this->_redirectUrl($this->cancelUrl);
         }
@@ -275,7 +288,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             } else {
                 throw new OrderNotFoundException();
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->order = $order;
             $this->saveLog($exception);
             return $this->_redirectUrl($this->cancelUrl);
@@ -284,7 +297,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
         if (!$this->iframe) {
             try {
                 return $this->_redirectUrl($url);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->saveLog($exception);
                 return $this->_redirectUrl($this->cancelUrl);
             }
@@ -305,7 +318,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 'leaveMessage' => $this->__('Are you sure you want to leave?')
             ));
             $this->getLayout()->getBlock('content')->append($block);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->saveLog($exception);
             return $this->_redirectUrl($this->cancelUrl);
         }
