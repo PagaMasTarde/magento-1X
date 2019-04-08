@@ -21,7 +21,7 @@ class Pagantis_Pagantis_Model_Resource_Concurrency_Collection extends Mage_Core_
     public function truncate()
     {
         foreach ($this->getItems() as $item) {
-            var_dump($item->delete());
+            $item->delete();
         }
         return $this;
     }
