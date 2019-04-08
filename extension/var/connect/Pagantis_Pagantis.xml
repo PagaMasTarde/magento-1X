@@ -10,7 +10,7 @@
    <description>Pagantis, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Pagantis, la solución líder en España de financiación omnicanal instantánea.</description>
    <license>GPL</license>
    <license_uri/>
-   <version>8.0.1</version>
+   <version>8.0.2</version>
    <stability>stable</stability>
    <notes>* New version with orders
 * Updating dependencies and vendor versions

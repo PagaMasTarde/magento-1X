@@ -16,6 +16,7 @@ app/design/frontend/base/default/template/pagantis/checkout/logo.phtml          
 app/design/frontend/base/default/template/pagantis/checkout/pagantis.phtml            app/design/frontend/base/default/template/pagantis/checkout/pagantis.phtml
 app/design/adminhtml/default/default/layout/pagantis.xml            app/design/adminhtml/default/default/layout/pagantis.xml
 # lib
+lib/Pagantis/            lib/Pagantis/
 # skin
 skin/frontend/base/default/images/pagantis/logopagantis.png            skin/frontend/base/default/images/pagantis/logopagantis.png
 skin/frontend/base/default/images/pagantis/logosimple.png            skin/frontend/base/default/images/pagantis/logosimple.png
