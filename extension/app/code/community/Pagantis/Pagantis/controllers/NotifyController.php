@@ -319,7 +319,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->merchantOrder->setState(
                 Mage_Sales_Model_Order::STATE_PROCESSING,
                 Mage_Sales_Model_Order::STATE_PROCESSING,
-                'pagantisOrderId: ' . $this->pagantisOrder->getId().
+                'pagantisOrderId: ' . $this->pagantisOrder->getId(). ' ' .
                 'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(),
                 true
             );
@@ -359,7 +359,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->merchantOrder->setState(
                 Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
                 Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
-                'pagantisOrderId: ' . $this->pagantisOrder->getId().
+                'pagantisOrderId: ' . $this->pagantisOrder->getId(). ' ' .
                 'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(),
                 false
             );
