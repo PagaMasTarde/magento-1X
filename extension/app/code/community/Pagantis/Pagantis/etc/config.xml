@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<config>
+
+    <modules>
+        <Pagantis_Pagantis>
+            <version>8.0.0</version>
+        </Pagantis_Pagantis>
+    </modules>
+
+    <global>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <Pagantis_Pagantis>
+                        <class>pagantis/observer</class>
+                        <method>cancelPendingOrders</method>
+                    </Pagantis_Pagantis>
+                </observers>
+            </sales_order_place_after>
+        </events>
+
+        <helpers>
+            <pagantis>
+                <class>Pagantis_Pagantis_Helper</class>
+            </pagantis>
+        </helpers>
+
+        <blocks>
+            <pagantis>
+                <class>Pagantis_Pagantis_Block</class>
+            </pagantis>
+        </blocks>
+
+        <models>
+            <pagantis>
+                <class>Pagantis_Pagantis_Model</class>
+                <resourceModel>pagantis_resource</resourceModel>
+            </pagantis>
+
+            <pagantis_resource>
+            <class>Pagantis_Pagantis_Model_Resource</class>
+            <entities>
+                <log>
+                    <table>pagantis_log</table>
+                </log>
+                <order>
+                    <table>pagantis_order</table>
+                </order>
+                <concurrency>
+                    <table>pagantis_cart_concurrency</table>
+                </concurrency>
+            </entities>
+        </pagantis_resource>
+        </models>
+
+        <resources>
+            <pagantis_setup>
+                <setup>
+                    <module>Pagantis_Pagantis</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </pagantis_setup>
+            <pagantis_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </pagantis_write>
+            <pagantis_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </pagantis_read>
+        </resources>
+    </global>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <Pagantis_Pagantis>
+                    <files>
+                        <default>Pagantis_Pagantis.csv</default>
+                    </files>
+                </Pagantis_Pagantis>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <bar>
+                    <file>pagantis.xml</file>
+                </bar>
+            </updates>
+        </layout>
+    </adminhtml>
+
+    <frontend>
+        <routers>
+            <pagantis>
+                <use>standard</use>
+                <args>
+                    <module>Pagantis_Pagantis</module>
+                    <frontName>pagantis</frontName>
+                </args>
+            </pagantis>
+        </routers>
+        <layout>
+            <updates>
+                <pagantis>
+                    <file>pagantis.xml</file>
+                </pagantis>
+            </updates>
+        </layout>
+    </frontend>
+
+    <default>
+        <payment>
+            <pagantis translate="title" module="pagantis">
+                <active>1</active>
+                <title>Pagantis</title>
+                <model>pagantis/pagantis</model>
+                <order_status>pending_payment</order_status>
+                <allowspecific>0</allowspecific>
+                <payment_action>sale</payment_action>
+                <sort_order>1</sort_order>
+                <pagantis_simulator_is_enabled>1</pagantis_simulator_is_enabled>
+            </pagantis>
+        </payment>
+    </default>
+
+</config>

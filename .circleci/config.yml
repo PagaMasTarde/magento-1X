@@ -33,8 +33,8 @@ jobs:
       - run:
           name: Docker Copy Module Files
           command: |
-            docker cp ./extension/. magento19test:/pmt/
-            docker exec magento19test ls -lah /pmt
+            docker cp ./extension/. magento19test:/pagantis/
+            docker exec magento19test ls -lah /pagantis
       - run:
           name: Install Sample Data
           command: |
@@ -46,7 +46,7 @@ jobs:
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose exec magento-test modman init
-            docker-compose exec magento-test modman link /pmt
+            docker-compose exec magento-test modman link /pagantis
             docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
             docker-compose exec magento-test chmod +x n98-magerun.phar
             docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
@@ -54,52 +54,52 @@ jobs:
           name: magento-basic
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+            extension/lib/Pagantis/bin/phpunit --group magento-basic
       - run:
-          name: magento-configure-backoffice-iframe
+          name: magento-configure-backoffice
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-iframe
+            extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
       - run:
           name: magento-product-page
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-product-page
+            extension/lib/Pagantis/bin/phpunit --group magento-product-page
       - run:
           name: magento-buy-unregistered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-unregistered
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
       - run:
           name: magento-cancel-buy-unregistered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-unregistered
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
       - run:
           name: magento-register
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-register
+            extension/lib/Pagantis/bin/phpunit --group magento-register
       - run:
           name: magento-fill-data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-fill-data
+            extension/lib/Pagantis/bin/phpunit --group magento-fill-data
       - run:
           name: magento-buy-registered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-buy-registered
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
       - run:
           name: magento-cancel-buy-registered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
       - run:
-          name: magento-cancel-buy-controllers
+          name: magento-controllers
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
+            extension/lib/Pagantis/bin/phpunit --group magento-controllers
   pushRelease:
     machine: true
     working_directory: ~/repo
@@ -133,8 +133,8 @@ jobs:
       - run:
           name: Docker Copy Module Files
           command: |
-            docker cp ./extension/. magento19test:/pmt/
-            docker exec magento19test ls -lah /pmt
+            docker cp ./extension/. magento19test:/pagantis/
+            docker exec magento19test ls -lah /pagantis
       - run:
           name: Install Sample Data
           command: |
@@ -146,7 +146,7 @@ jobs:
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose exec magento-test modman init
-            docker-compose exec magento-test modman link /pmt
+            docker-compose exec magento-test modman link /pagantis
             docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
             docker-compose exec magento-test chmod +x n98-magerun.phar
             docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
@@ -154,7 +154,7 @@ jobs:
           name: magento-basic
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-basic
+            extension/lib/Pagantis/bin/phpunit --group magento-basic
       - run:
           name: Install GitHub CLI
           command: |
@@ -171,7 +171,7 @@ jobs:
           name: magento-package
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/DigitalOrigin/bin/phpunit --group magento-package
+            extension/lib/Pagantis/bin/phpunit --group magento-package
             ls
       - run:
           name: Push ZIP to GitHub

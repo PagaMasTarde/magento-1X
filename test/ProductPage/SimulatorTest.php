@@ -27,15 +27,15 @@ class SimulatorTest extends MagentoTest
     {
         $this->goToProductPage();
 
-        $pmtSimulator = WebDriverBy::className('PmtSimulator');
+        $pagantisSimulator = WebDriverBy::className('PagantisSimulator');
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                $pmtSimulator
+                $pagantisSimulator
             )
         );
         $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
-            $pmtSimulator
+            $pagantisSimulator
         ));
 
         $this->quit();

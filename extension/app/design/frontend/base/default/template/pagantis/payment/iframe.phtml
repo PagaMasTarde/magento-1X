@@ -1,0 +1,23 @@
+<?php
+/**
+ * @var string $orderUrl
+ * @var string $checkoutUrl
+ */
+?>
+<script type="text/javascript">
+    if (typeof pgSDK !== 'undefined') {
+        pgSDK.modal.open("<?=$orderUrl; ?>",
+            {
+                id: 'iframe-pagantis',
+                closeOnBackDropClick: false,
+                closeOnEscPress: false,
+                backDropDark: false,
+                largeSize: true,
+                closeConfirmationMessage: '<?=$leaveMessage;?>'
+            }
+        );
+        pgSDK.modal.onClose(function() {
+            window.location.href = "<?=$checkoutUrl; ?>";
+        });
+    }
+</script>

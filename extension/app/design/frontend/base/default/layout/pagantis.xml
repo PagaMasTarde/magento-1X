@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <block type="core/text" name="pagantis.js">
+                <action method="setText" ifconfig="payment/pagantis/active">
+                    <text>
+ <![CDATA[<script type="text/javascript" src="https://cdn.pagantis.com/js/pg-v2/sdk.js"></script>]]>
+                    </text>
+                </action>
+            </block>
+        </reference>
+    </default>
+    <catalog_product_view>
+        <reference name="product.info.addtocart">
+            <block type="pagantis/product_simulator"
+                   as="pagantis_simulator"
+                   name="product_simulator"
+                   template="pagantis/product/simulator.phtml"/>
+        </reference>
+    </catalog_product_view>
+</layout>

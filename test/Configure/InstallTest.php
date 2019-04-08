@@ -34,14 +34,14 @@ class InstallTest extends AbstractConfigure
         // Push latest version of module form extension/var/connect
         $fileInput = $this->findById('file');
         $fileInput->setFileDetector(new LocalFileDetector());
-        $latestVersion = 'DigitalOrigin_Pmt.tgz';
+        $latestVersion = 'Pagantis.tgz';
 
         $pageSource = $this->webDriver->getPageSource();
 
         //Check module not installed 2 times
-        if (strpos($pageSource, 'DigitalOrigin')) {
+        if (strpos($pageSource, 'Pagantis')) {
             $this->assertContains(
-                'DigitalOrigin',
+                'Pagantis',
                 $pageSource
             );
 

@@ -30,21 +30,21 @@ abstract class MagentoTest extends TestCase
     protected $configuration = array(
         'backofficeUsername' => 'admin',
         'backofficePassword' => 'password123',
-        'username'           => 'demo@prestashop.com',
-        'password'           => 'prestashop_demo',
-        'publicKey'          => 'tk_4954690ee76a4ff7875b93b4',
-        'secretKey'          => '4392a844f7904be3',
+        'username'           => 'demo@magento.com',
+        'password'           => 'mangento_demo',
+        'publicKey'          => 'tk_cd552f3cbf23434fbb0c5dd1',
+        'secretKey'          => 'f1fda1231c774c2b',
         'birthdate'          => '05/05/2005',
-        'firstname'          => 'Jøhn',
-        'lastname'           => 'Dōè Martínez',
+        'firstname'          => 'Péte®',
+        'lastname'           => 'Köonsç Martínez',
         'email'              => 'john_mg@digitalorigin.com',
-        'company'            => 'Digital Origin SL',
+        'company'            => 'Pagantis SA',
         'zip'                => '08023',
         'country'            => 'España',
         'city'               => 'Barcelona',
-        'street'             => 'Av Diagonal 585, planta 7',
+        'street'             => 'Av Diagonal 485, planta 7',
         'phone'              => '600123123',
-        'dni'                => '09422447Z',
+        'dni'                => '02180900V',
         'defInstallments'    => '3',
         'maxInstallments'    => '12',
         'minAmount'          => '1'
@@ -101,7 +101,7 @@ abstract class MagentoTest extends TestCase
      */
     protected function setUp()
     {
-        $this->webDriver = PmtWebDriver::create(
+        $this->webDriver = PagantisWebDriver::create(
             'http://magento19-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
             120000,
