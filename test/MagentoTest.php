@@ -72,7 +72,7 @@ abstract class MagentoTest extends TestCase
         $this->configuration['zip'] = $faker->postcode;
         $this->configuration['street'] = $faker->streetAddress;
         $this->configuration['phone'] = '6' . $faker->randomNumber(8);
-        $this->configuration['email'] = date('ymd') . '@pagamastarde.com';
+        $this->configuration['email'] = date('ymd') . '@pagantis.com';
 
         parent::__construct($name, $data, $dataName);
     }

@@ -1,8 +1,8 @@
 # Magento 1X Module <img src="https://developer.pagantis.com/logos/pagantis_rgb_color.png" width="100" align="right">
 
-CircleCI: [![CircleCI](https://circleci.com/gh/PagaMasTarde/magento-1X/tree/master.svg?style=svg)](https://circleci.com/gh/PagaMasTarde/magento-1X/tree/master)
-[![Latest Stable Version](https://poser.pugx.org/pagamastarde/magento-1x/v/stable)](https://packagist.org/packages/pagamastarde/magento-1x)
-[![composer.lock](https://poser.pugx.org/pagamastarde/magento-1x/composerlock)](https://packagist.org/packages/pagamastarde/magento-1x)
+CircleCI: [![CircleCI](https://circleci.com/gh/pagantis/magento-1X/tree/master.svg?style=svg)](https://circleci.com/gh/pagantis/magento-1X/tree/master)
+[![Latest Stable Version](https://poser.pugx.org/pagantis/magento-1x/v/stable)](https://packagist.org/packages/pagantis/magento-1x)
+[![composer.lock](https://poser.pugx.org/pagantis/magento-1x/composerlock)](https://packagist.org/packages/pagantis/magento-1x)
 
 ## :hand: Requirements
 * This module supports Magento 1.x versions.

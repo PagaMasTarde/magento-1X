@@ -177,7 +177,7 @@ jobs:
           name: Push ZIP to GitHub
           command: |
             github-release upload \
-                --user pagamastarde \
+                --user pagantis \
                 --repo magento-1x \
                 --tag $CIRCLE_TAG \
                 --name Pagantis_$CIRCLE_TAG.tgz \
