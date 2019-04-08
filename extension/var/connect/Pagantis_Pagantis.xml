@@ -1,5 +1,5 @@
 <_>
-   <form_key>5sdF8rlsAAzhsavF</form_key>
+   <form_key>GYYFJbIpe0ssg8X5</form_key>
    <name>Pagantis_Pagantis</name>
    <channel>community</channel>
    <version_ids>
@@ -49,7 +49,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                            </files>
+            <files>                                                                               </files>
          </files>
       </package>
       <extension>
@@ -81,7 +81,7 @@
       <path>
          <path/>
          <path>Pagantis</path>
-         <path>pagantis</path>
+         <path>Pagantis</path>
          <path>frontend/base/default/layout/pagantis.xml</path>
          <path>frontend/base/default/template/pagantis</path>
          <path/>
