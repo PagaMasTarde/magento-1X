@@ -37,7 +37,7 @@ abstract class MagentoTest extends TestCase
         'birthdate'          => '05/05/2005',
         'firstname'          => 'Péte®',
         'lastname'           => 'Köonsç Martínez',
-        'email'              => 'john_mg@digitalorigin.com',
+        'email'              => 'john_mg@pagantis.com',
         'company'            => 'Pagantis SA',
         'zip'                => '08023',
         'country'            => 'España',
