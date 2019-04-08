@@ -43,7 +43,7 @@ class PackageTest extends MagentoTest
     /**
      * Vendor Folder
      */
-    const VENDOR_FOLDER = 'lib/DigitalOrigin';
+    const VENDOR_FOLDER = 'lib/Pagantis';
 
     /**
      * @var release-version
@@ -62,7 +62,7 @@ class PackageTest extends MagentoTest
         $this->updateReleaseInfo();
         $this->saveAndCreatePackage();
         $this->copyOutSidePackage();
-        //$this->quit();
+        $this->quit();
     }
 
     /**
@@ -73,7 +73,7 @@ class PackageTest extends MagentoTest
         exec(
             'docker cp ' .
             self::DOCKER_CONTAINER .
-            ':/pagantis/var/connect/DigitalOrigin_Pmt-'
+            ':/pagantis/var/connect/Pagantis_Pagantis-'
             . $this->release .
             '.tgz Pagantis_v' . $this->release . '.tgz'
         );
