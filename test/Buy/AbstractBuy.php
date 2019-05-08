@@ -63,6 +63,16 @@ abstract class AbstractBuy extends MagentoTest
     const NOTIFICATION_FOLDER = '/pagantis/notify';
 
     /**
+     * Log route
+     */
+    const LOG_FOLDER = '/pagantis/log';
+
+    /**
+     * ExtraConfig route
+     */
+    const CONFIG_FOLDER = '/pagantis/config';
+
+    /**
      * Buy unregistered
      */
     public function prepareProductAndCheckout()
