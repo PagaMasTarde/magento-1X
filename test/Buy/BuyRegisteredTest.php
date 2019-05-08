@@ -9,6 +9,7 @@ use Pagantis\ModuleUtils\Exception\NoIdentificationException;
 use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
+use Httpful\Mime;
 
 /**
  * Class BuyRegisteredTest
