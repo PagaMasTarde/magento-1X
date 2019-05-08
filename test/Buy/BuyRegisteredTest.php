@@ -229,7 +229,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkExtraConfig()
     {
-        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'?secret='.$this->configuration['secretKey'];
+        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
 
         $response = Request::get($configUrl)->expects('json')->send();
         $content = $response->body;
@@ -237,6 +237,7 @@ class BuyRegisteredTest extends AbstractBuy
             $this->assertArrayHasKey($config, (array) $content, "PR61=>".print_r($content, true));
         }
 
+        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
         $requestTitle = 'changed';
         $body = array('PAGANTIS_TITLE' => $requestTitle);
         $response = Request::post($configUrl)

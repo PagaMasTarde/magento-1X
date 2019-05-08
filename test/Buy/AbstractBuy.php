@@ -70,7 +70,7 @@ abstract class AbstractBuy extends MagentoTest
     /**
      * ExtraConfig route
      */
-    const CONFIG_FOLDER = '/pagantis/config/get';
+    const CONFIG_FOLDER = '/pagantis/config/';
 
     /**
      * Buy unregistered
