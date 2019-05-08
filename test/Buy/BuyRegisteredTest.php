@@ -237,22 +237,22 @@ class BuyRegisteredTest extends AbstractBuy
             $this->assertArrayHasKey($config, (array) $content, "PR61=>".print_r($content, true));
         }
 
-        $defaultTitle = 'Instant Financing';
-        $newTitle = 'changed';
-        $body = array('PAGANTIS_TITLE' => $newTitle);
+        $requestTitle = 'changed';
+        $body = array('PAGANTIS_TITLE' => $requestTitle);
         $response = Request::post($configUrl)
                            ->body($body, Mime::FORM)
                            ->expectsJSON()
                            ->send();
         $title = $response->body->PAGANTIS_TITLE;
-        $this->assertEquals($newTitle, $title, "PR62=>".$configUrl." => ".$title);
+        $this->assertEquals($requestTitle, $title, "PR62=>".$configUrl." => ".$requestTitle ."!=".$title);
 
-        $body = array('PAGANTIS_TITLE' => $defaultTitle);
+        $requestTitle = 'Instant Financing';
+        $body = array('PAGANTIS_TITLE' => $requestTitle);
         $response = Request::post($configUrl)
                            ->body($body, Mime::FORM)
                            ->expectsJSON()
                            ->send();
         $title = $response->body->PAGANTIS_TITLE;
-        $this->assertEquals($defaultTitle, $title, "PR62b=>".$configUrl." => ".$title ."!=".$defaultTitle);
+        $this->assertEquals($requestTitle, $title, "PR62b=>".$configUrl." => ".$requestTitle ."!=".$title);
     }
 }
