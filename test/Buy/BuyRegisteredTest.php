@@ -237,7 +237,7 @@ class BuyRegisteredTest extends AbstractBuy
             $this->assertArrayHasKey($config, (array) $content, "PR61=>".print_r($content, true));
         }
 
-        $defaultTitle = $content->PAGANTIS_TITLE;
+        $defaultTitle = 'Instant Financing';
         $newTitle = 'changed';
         $body = array('PAGANTIS_TITLE' => $newTitle);
         $response = Request::post($configUrl)
@@ -245,7 +245,7 @@ class BuyRegisteredTest extends AbstractBuy
                            ->expectsJSON()
                            ->send();
         $title = $response->body->PAGANTIS_TITLE;
-        $this->assertEquals($newTitle, $title, "PR62=>".$configUrl." = ".$title);
+        $this->assertEquals($newTitle, $title, "PR62=>".$configUrl." => ".$title);
 
         $body = array('PAGANTIS_TITLE' => $defaultTitle);
         $response = Request::post($configUrl)
@@ -253,6 +253,6 @@ class BuyRegisteredTest extends AbstractBuy
                            ->expectsJSON()
                            ->send();
         $title = $response->body->PAGANTIS_TITLE;
-        $this->assertEquals($defaultTitle, $title, "PR62=>".$configUrl." = ".$title);
+        $this->assertEquals($defaultTitle, $title, "PR62b=>".$configUrl." => ".$title ."!=".$defaultTitle);
     }
 }
