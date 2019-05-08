@@ -65,12 +65,12 @@ abstract class AbstractBuy extends MagentoTest
     /**
      * Log route
      */
-    const LOG_FOLDER = '/pagantis/log';
+    const LOG_FOLDER = '/pagantis/log/download';
 
     /**
      * ExtraConfig route
      */
-    const CONFIG_FOLDER = '/pagantis/config';
+    const CONFIG_FOLDER = '/pagantis/config/get';
 
     /**
      * Buy unregistered

@@ -218,7 +218,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkLog()
     {
-        $logUrl = self::MAGENTO_URL.self::LOG_FOLDER;
+        $logUrl = self::MAGENTO_URL.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
         $response = Request::get($logUrl)->expects('json')->send();
         $this->assertEquals(3, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
     }
@@ -228,7 +228,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkExtraConfig()
     {
-        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER;
+        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'?secret='.$this->configuration['secretKey'];
 
         $response = Request::get($configUrl)->expects('json')->send();
         $content = $response->body;
