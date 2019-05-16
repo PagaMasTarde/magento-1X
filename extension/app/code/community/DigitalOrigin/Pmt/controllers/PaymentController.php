@@ -140,7 +140,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
         $orderBillingAddress = null;
         try {
             for ($i = 0; $i <= count($this->addressData); $i++) {
-                if (array_search('shipping', $this->addressData[$i])) {
+                if (isset($this->addressData[$i]) && array_search('shipping', $this->addressData[$i])) {
                     $fullName = $this->addressData[$i]['firstname'] . ' ' . $this->addressData[$i]['lastname'];
                     $telephone = $this->addressData[$i]['telephone'];
                     $userAddress = new PmtModelOrderAddress();
@@ -160,7 +160,7 @@ class DigitalOrigin_Pmt_PaymentController extends AbstractController
                         ->setAddress($this->addressData[$i]['street'])
                         ->setMobilePhone($telephone);
                 }
-                if (array_search('billing', $this->addressData[$i])) {
+                if (isset($this->addressData[$i]) && array_search('billing', $this->addressData[$i])) {
                     $orderBillingAddress = new PmtModelOrderAddress();
                     $orderBillingAddress
                         ->setZipCode($this->addressData[$i]['postcode'])
