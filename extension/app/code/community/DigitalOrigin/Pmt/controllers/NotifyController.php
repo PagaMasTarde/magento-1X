@@ -3,19 +3,19 @@
 require_once(__DIR__.'/../../../../../../lib/DigitalOrigin/autoload.php');
 require_once(__DIR__.'/AbstractController.php');
 
-use PagaMasTarde\OrdersApiClient\Client as PmtClient;
-use PagaMasTarde\OrdersApiClient\Model\Order as PmtModelOrder;
-use PagaMasTarde\ModuleUtils\Exception\AlreadyProcessedException;
-use PagaMasTarde\ModuleUtils\Exception\AmountMismatchException;
-use PagaMasTarde\ModuleUtils\Exception\ConcurrencyException;
-use PagaMasTarde\ModuleUtils\Exception\MerchantOrderNotFoundException;
-use PagaMasTarde\ModuleUtils\Exception\NoIdentificationException;
-use PagaMasTarde\ModuleUtils\Exception\OrderNotFoundException;
-use PagaMasTarde\ModuleUtils\Exception\QuoteNotFoundException;
-use PagaMasTarde\ModuleUtils\Exception\UnknownException;
-use PagaMasTarde\ModuleUtils\Exception\WrongStatusException;
-use PagaMasTarde\ModuleUtils\Model\Response\JsonSuccessResponse;
-use PagaMasTarde\ModuleUtils\Model\Response\JsonExceptionResponse;
+use Pagantis\OrdersApiClient\Client as PmtClient;
+use Pagantis\OrdersApiClient\Model\Order as PmtModelOrder;
+use Pagantis\ModuleUtils\Exception\AlreadyProcessedException;
+use Pagantis\ModuleUtils\Exception\AmountMismatchException;
+use Pagantis\ModuleUtils\Exception\ConcurrencyException;
+use Pagantis\ModuleUtils\Exception\MerchantOrderNotFoundException;
+use Pagantis\ModuleUtils\Exception\NoIdentificationException;
+use Pagantis\ModuleUtils\Exception\OrderNotFoundException;
+use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
+use Pagantis\ModuleUtils\Exception\UnknownException;
+use Pagantis\ModuleUtils\Exception\WrongStatusException;
+use Pagantis\ModuleUtils\Model\Response\JsonSuccessResponse;
+use Pagantis\ModuleUtils\Model\Response\JsonExceptionResponse;
 
 /**
  * Class DigitalOrigin_Pmt_NotifyController
@@ -327,7 +327,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         } catch (\Exception $exception) {
             $jsonResponse = new JsonExceptionResponse();
             $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-            $jsonResponse->setPmtOrderId($this->pmtOrderId);
+            $jsonResponse->setPagantisOrderId($this->pmtOrderId);
             $jsonResponse->setException($exception);
             $response = $jsonResponse->toJson();
             $this->cancelProcess($exception);
@@ -338,13 +338,13 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
                 $this->confirmPmtOrder();
                 $jsonResponse = new JsonSuccessResponse();
                 $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-                $jsonResponse->setPmtOrderId($this->pmtOrderId);
+                $jsonResponse->setPagantisOrderId($this->pmtOrderId);
             }
         } catch (\Exception $exception) {
             $this->rollbackMerchantOrder();
             $jsonResponse = new JsonExceptionResponse();
             $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-            $jsonResponse->setPmtOrderId($this->pmtOrderId);
+            $jsonResponse->setPagantisOrderId($this->pmtOrderId);
             $jsonResponse->setException($exception);
             $jsonResponse->toJson();
             $this->cancelProcess($exception);
