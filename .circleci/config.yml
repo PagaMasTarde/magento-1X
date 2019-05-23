@@ -21,7 +21,7 @@ jobs:
             sudo apt install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom
             curl -s https://getcomposer.org/installer | php
             sudo mv composer.phar /usr/local/bin/composer
-            composer install
+            composer install --ignore-platform-reqs
       - run:
           name: Docker UP
           command: |

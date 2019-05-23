@@ -31,6 +31,7 @@
         "pagantis/module-utils": "^2.0"
     },
     "require-dev": {
+        "doctrine/instantiator": "1.0.5",
         "ext-json": "*",
         "pagantis/selenium-form-utils": "^2.0",
         "magento/core": "1.9.3.9"
