@@ -48,5 +48,11 @@
     "minimum-stability": "stable",
     "config": {
         "vendor-dir": "extension/lib/Pagantis"
+    },
+    "repositories": {
+        "packagist.org": {
+            "type": "composer",
+            "url": "https://repo-eu-uk-1.packagist.org"
+        }
     }
 }
