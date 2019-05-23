@@ -102,7 +102,8 @@ jobs:
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
   pushRelease:
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
     working_directory: ~/repo
     steps:
       - checkout
@@ -117,7 +118,7 @@ jobs:
           command: |
             sudo apt install -y python-software-properties
             sudo add-apt-repository -y ppa:ondrej/php
-            find /etc/apt/sources.list.d -type f -name '*.list' -exec sudo apt-get update -o Dir::Etc::sourcelist="{}" ';'
+            sudo apt-get update
             sudo apt install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom
             curl -s https://getcomposer.org/installer | php
             sudo mv composer.phar /usr/local/bin/composer
