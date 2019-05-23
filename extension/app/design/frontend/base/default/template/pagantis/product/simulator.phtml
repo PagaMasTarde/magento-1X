@@ -31,10 +31,15 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
 
         function loadSimulator()
         {
-            if (<?=$locale;?> == 'ES') {
-                alert('es selected');
+            var sdk = pgSDK;
+
+            if ('<?=$locale;?>' == 'ES') {
+                var sdk = pmtSDK;
+            } else {
+                var sdk = 'undefined';
             }
-            if (typeof pgSDK != 'undefined') {
+
+            if (typeof sdk != 'undefined') {
                 var price = null;
                 var quantity = null;
                 var positionSelector = '<?=$pagantisCSSSelector;?>';
@@ -59,29 +64,29 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
                     }
                 }
 
-                pgSDK.product_simulator = {};
-                pgSDK.product_simulator.id = 'product-simulator';
-                pgSDK.product_simulator.publicKey = '<?=$pagantisPublicKey;?>';
-                pgSDK.product_simulator.selector = positionSelector;
-                pgSDK.product_simulator.numInstalments = '<?=$pagantisQuotesStart;?>';
-                pgSDK.product_simulator.type = <?=$pagantisSimulatorType;?>;
-                pgSDK.product_simulator.skin = <?=$pagantisSimulatorSkin;?>;
-                pgSDK.product_simulator.position = <?=$pagantisSimulatorPosition;?>;
+                sdk.product_simulator = {};
+                sdk.product_simulator.id = 'product-simulator';
+                sdk.product_simulator.publicKey = '<?=$pagantisPublicKey;?>';
+                sdk.product_simulator.selector = positionSelector;
+                sdk.product_simulator.numInstalments = '<?=$pagantisQuotesStart;?>';
+                sdk.product_simulator.type = <?=$pagantisSimulatorType;?>;
+                sdk.product_simulator.skin = <?=$pagantisSimulatorSkin;?>;
+                sdk.product_simulator.position = <?=$pagantisSimulatorPosition;?>;
 
                 if (priceSelector !== 'default') {
-                    pgSDK.product_simulator.itemAmountSelector = priceSelector;
+                    sdk.product_simulator.itemAmountSelector = priceSelector;
                 }
                 if (quantitySelector !== 'default' && quantitySelector !== 'none') {
-                    pgSDK.product_simulator.itemQuantitySelector = quantitySelector;
+                    sdk.product_simulator.itemQuantitySelector = quantitySelector;
                 }
                 if (price != null) {
-                    pgSDK.product_simulator.itemAmount = price;
+                    sdk.product_simulator.itemAmount = price;
                 }
                 if (quantity != null) {
-                    pgSDK.product_simulator.itemQuantity = quantity;
+                    sdk.product_simulator.itemQuantity = quantity;
                 }
 
-                pgSDK.simulator.init(pgSDK.product_simulator);
+                sdk.simulator.init(sdk.product_simulator);
                 clearInterval(window.PSSimulatorId);
             }
         }

@@ -1,6 +1,6 @@
 #!/bin/bash
 while true; do
-    read -p "Do you wish to run dev or test [test|dev]?" devtest
+    read -p "Do you wish to run dev or test [test|dev]? " devtest
     case $devtest in
         [dev]* ) container="magento-dev";test=false; break;;
         [test]* ) container="magento-test";test=true; break;;
@@ -8,7 +8,7 @@ while true; do
     esac
 done
 while true; do
-    read -p "You have chosen to start ${container}, are you sure? [y/n]" yn
+    read -p "You have chosen to start ${container}, are you sure [y/n]? " yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
@@ -68,6 +68,13 @@ echo magento-cancel-buy-registered
 extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
 echo magento-cancel-buy-controllers
 extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
-# Generate Pakage
-echo magento-package
-extension/lib/Pagantis/bin/phpunit --group magento-package
+
+# Copy Files for test container
+if [ $test = true ];
+then
+    # Generate Pakage
+    echo magento-package
+    extension/lib/Pagantis/bin/phpunit --group magento-package
+fi
+
+docker-compose exec ${container} ./n98-magerun.phar cache:flush
