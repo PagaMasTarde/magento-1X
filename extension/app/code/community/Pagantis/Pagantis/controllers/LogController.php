@@ -1,6 +1,5 @@
 <?php
 
-require_once(__DIR__.'/../../../../../../lib/Pagantis/autoload.php');
 require_once(__DIR__.'/AbstractController.php');
 
 /**

@@ -7,6 +7,28 @@
 if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
 ?>
     <script>
+        function findPriceSelector()
+        {
+            //Trying to find the product price selector
+            var priceDOM = document.querySelector('[id^="product-price"]');
+            if (priceDOM != null) {
+                return '[id^="product-price"]';
+            }
+
+            //Keep default for checkout price.
+            return 'default';
+        }
+
+        function findQuantitySelector()
+        {
+            var quantityDOM = document.querySelector('.qty-wrapper #qty');
+            if (quantityDOM != null) {
+                return '.qty-wrapper #qty';
+            }
+
+            return 'default';
+        }
+
         function loadSimulator()
         {
             if (typeof pgSDK != 'undefined') {
@@ -21,14 +43,14 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
                 }
 
                 if (priceSelector === 'default') {
-                    priceSelector = '[id^="product-price"]';
+                    priceSelector = findPriceSelector();
                     if (priceSelector === 'default') {
                         price = '<?=$amount;?>';
                     }
                 }
 
                 if (quantitySelector === 'default') {
-                    quantitySelector = '.qty-wrapper #qty';
+                    quantitySelector = findQuantitySelector();
                     if (quantitySelector === 'default') {
                         quantity = '1'
                     }

@@ -9,6 +9,7 @@ use Pagantis\ModuleUtils\Exception\NoIdentificationException;
 use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
+use Httpful\Mime;
 
 /**
  * Class BuyRegisteredTest
@@ -22,6 +23,25 @@ class BuyRegisteredTest extends AbstractBuy
      * @var String $orderUrl
      */
     public $orderUrl;
+
+    /**
+     * @var array $configs
+     */
+    protected $configs = array(
+        "PAGANTIS_TITLE",
+        "PAGANTIS_SIMULATOR_DISPLAY_TYPE",
+        "PAGANTIS_SIMULATOR_DISPLAY_SKIN",
+        "PAGANTIS_SIMULATOR_DISPLAY_POSITION",
+        "PAGANTIS_SIMULATOR_START_INSTALLMENTS",
+        "PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR",
+        "PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION",
+        "PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR",
+        "PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR",
+        "PAGANTIS_FORM_DISPLAY_TYPE",
+        "PAGANTIS_DISPLAY_MIN_AMOUNT",
+        "PAGANTIS_URL_OK",
+        "PAGANTIS_URL_KO",
+    );
 
     /**
      * Test Buy Registered
@@ -125,6 +145,8 @@ class BuyRegisteredTest extends AbstractBuy
         $this->checkConcurrency();
         $this->checkPagantisOrderId();
         $this->checkAlreadyProcessed();
+        $this->checkLog();
+        $this->checkExtraConfig();
     }
 
 
@@ -142,7 +164,7 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertContains(
             QuoteNotFoundException::ERROR_MESSAGE,
             $response->body->result,
-            "PR=>".$response->body->result
+            "PR53=>".$response->body->result
         );
     }
 
@@ -167,7 +189,7 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertContains(
             NoIdentificationException::ERROR_MESSAGE,
             $response->body->result,
-            "PR=>".$response->body->result
+            "PR58=>".$response->body->result
         );
     }
 
@@ -190,5 +212,48 @@ class BuyRegisteredTest extends AbstractBuy
             $response->body->result,
             "PR51=>".$response->body->result
         );
+    }
+
+    /**
+     * Check if log controller is writing the launched exceptions
+     */
+    protected function checkLog()
+    {
+        $logUrl = self::MAGENTO_URL.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
+        $response = Request::get($logUrl)->expects('json')->send();
+        $this->assertEquals(3, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
+    }
+
+    /**
+     * Check if config controller is configured and it works
+     */
+    protected function checkExtraConfig()
+    {
+        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
+
+        $response = Request::get($configUrl)->expects('json')->send();
+        $content = $response->body;
+        foreach ($this->configs as $config) {
+            $this->assertArrayHasKey($config, (array) $content, "PR61=>".print_r($content, true));
+        }
+
+        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
+        $requestTitle = 'changed';
+        $body = array('PAGANTIS_TITLE' => $requestTitle);
+        $response = Request::post($configUrl)
+                           ->body($body, Mime::FORM)
+                           ->expectsJSON()
+                           ->send();
+        $title = $response->body->PAGANTIS_TITLE;
+        $this->assertEquals($requestTitle, $title, "PR62=>".$configUrl." => ".$requestTitle ."!=".$title);
+
+        $requestTitle = 'Instant Financing';
+        $body = array('PAGANTIS_TITLE' => $requestTitle);
+        $response = Request::post($configUrl)
+                           ->body($body, Mime::FORM)
+                           ->expectsJSON()
+                           ->send();
+        $title = $response->body->PAGANTIS_TITLE;
+        $this->assertEquals($requestTitle, $title, "PR62b=>".$configUrl." => ".$requestTitle ."!=".$title);
     }
 }
