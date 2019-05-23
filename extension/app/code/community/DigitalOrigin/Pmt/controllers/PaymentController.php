@@ -3,20 +3,21 @@
 require_once(__DIR__.'/../../../../../../lib/DigitalOrigin/autoload.php');
 require_once(__DIR__.'/AbstractController.php');
 
-use PagaMasTarde\OrdersApiClient\Model\Order as PmtModelOrder;
-use PagaMasTarde\OrdersApiClient\Model\Order\User as PmtModelOrderUser;
-use PagaMasTarde\OrdersApiClient\Model\Order\User\Address as PmtModelOrderAddress;
-use PagaMasTarde\OrdersApiClient\Model\Order\User\OrderHistory as PmtModelOrderHistory;
-use PagaMasTarde\OrdersApiClient\Model\Order\Metadata as PmtModelOrderMetadata;
-use PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart as PmtModelOrderShoppingCart;
-use PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart\Details as PmtModelOrderShoppingCartDetails;
-use PagaMasTarde\OrdersApiClient\Model\Order\ShoppingCart\Details\Product as PmtModelOrderShoppingCartProduct;
-use PagaMasTarde\OrdersApiClient\Model\Order\Configuration as PmtModelOrderConfiguration;
-use PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Urls as PmtModelOrderUrls;
-use PagaMasTarde\OrdersApiClient\Model\Order\Configuration\Channel as PmtModelOrderChannel;
-use PagaMasTarde\OrdersApiClient\Client as PmtClient;
+use Pagantis\OrdersApiClient\Model\Order as PmtModelOrder;
+use Pagantis\OrdersApiClient\Model\Order\User as PmtModelOrderUser;
+use Pagantis\OrdersApiClient\Model\Order\User\Address as PmtModelOrderAddress;
+use Pagantis\OrdersApiClient\Model\Order\User\OrderHistory as PmtModelOrderHistory;
+use Pagantis\OrdersApiClient\Model\Order\Metadata as PmtModelOrderMetadata;
+use Pagantis\OrdersApiClient\Model\Order\ShoppingCart as PmtModelOrderShoppingCart;
+use Pagantis\OrdersApiClient\Model\Order\ShoppingCart\Details as PmtModelOrderShoppingCartDetails;
+use Pagantis\OrdersApiClient\Model\Order\ShoppingCart\Details\Product as PmtModelOrderShoppingCartProduct;
+use Pagantis\OrdersApiClient\Model\Order\Configuration as PmtModelOrderConfiguration;
+use Pagantis\OrdersApiClient\Model\Order\Configuration\Urls as PmtModelOrderUrls;
+use Pagantis\OrdersApiClient\Model\Order\Configuration\Channel as PmtModelOrderChannel;
+use Pagantis\OrdersApiClient\Client as PmtClient;
 
-use PagaMasTarde\ModuleUtils\Exception\OrderNotFoundException;
+use Pagantis\ModuleUtils\Exception\OrderNotFoundException;
+
 
 /**
  * Class DigitalOrigin_Pmt_PaymentController

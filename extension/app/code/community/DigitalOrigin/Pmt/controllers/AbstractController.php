@@ -1,5 +1,5 @@
 <?php
-use PagaMasTarde\ModuleUtils\Model\Log\LogEntry;
+use Pagantis\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class AbstractController

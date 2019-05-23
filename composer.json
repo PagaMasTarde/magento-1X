@@ -27,8 +27,8 @@
     ],
     "require": {
         "php": ">=5.3",
-        "pagamastarde/orders-api-client": "^1.0",
-        "pagamastarde/module-utils": "^1.1"
+        "pagantis/orders-api-client": "^2",
+        "pagantis/module-utils": "^2"
     },
     "require-dev": {
         "ext-json": "*",
