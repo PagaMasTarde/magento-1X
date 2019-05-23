@@ -3,5 +3,9 @@
  * @var Mage_Payment_Block_Form $this
  */
 ?>
-<img id="logo" src="<?php echo $this->getSkinUrl('images/pagantis/logopagantis.png') ?>"/>
-
+<?php
+$logoUrl = $locale == 'ES' ?
+    $this->getSkinUrl('images/pagantis/logopagamastarde.png') :
+    $this->getSkinUrl('images/pagantis/logopagantis.png');
+?>
+<img id="logo" src="<?php echo $logoUrl ?>"/>
