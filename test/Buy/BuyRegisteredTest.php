@@ -4,9 +4,9 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use PagaMasTarde\ModuleUtils\Exception\AlreadyProcessedException;
-use PagaMasTarde\ModuleUtils\Exception\NoIdentificationException;
-use PagaMasTarde\ModuleUtils\Exception\QuoteNotFoundException;
+use Pagantis\ModuleUtils\Exception\AlreadyProcessedException;
+use Pagantis\ModuleUtils\Exception\NoIdentificationException;
+use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
 
