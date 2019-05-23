@@ -172,7 +172,6 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);
         $this->assertNotEmpty($response->body->merchant_order_id, $response);
-        $this->assertNotEmpty($response->body->pmt_order_id, $response);
         $this->assertContains(AlreadyProcessedException::ERROR_MESSAGE, $response->body->result, "PR51=>".$response->body->result);
     }
 }
