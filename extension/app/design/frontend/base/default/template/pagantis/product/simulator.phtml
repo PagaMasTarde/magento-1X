@@ -31,6 +31,9 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
 
         function loadSimulator()
         {
+            if (<?=$locale;?> == 'ES') {
+                alert('es selected');
+            }
             if (typeof pgSDK != 'undefined') {
                 var price = null;
                 var quantity = null;

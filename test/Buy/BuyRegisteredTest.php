@@ -155,7 +155,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkConcurrency()
     {
-        $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order=';
+        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=';
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
@@ -175,7 +175,7 @@ class BuyRegisteredTest extends AbstractBuy
     protected function checkPagantisOrderId()
     {
         $orderId=0;
-        $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order='.$orderId;
+        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order='.$orderId;
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
@@ -200,7 +200,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkAlreadyProcessed()
     {
-        $notifyUrl = self::MAGENTO_URL.self::NOTIFICATION_FOLDER.'?order=145000008';
+        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=145000008';
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
@@ -219,7 +219,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkLog()
     {
-        $logUrl = self::MAGENTO_URL.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
+        $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
         $response = Request::get($logUrl)->expects('json')->send();
         $this->assertEquals(3, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
     }
@@ -229,7 +229,7 @@ class BuyRegisteredTest extends AbstractBuy
      */
     protected function checkExtraConfig()
     {
-        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
+        $configUrl = $this->magentoUrl.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
 
         $response = Request::get($configUrl)->expects('json')->send();
         $content = $response->body;
@@ -237,7 +237,7 @@ class BuyRegisteredTest extends AbstractBuy
             $this->assertArrayHasKey($config, (array) $content, "PR61=>".print_r($content, true));
         }
 
-        $configUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
+        $configUrl = $this->magentoUrl.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
         $requestTitle = 'changed';
         $body = array('PAGANTIS_TITLE' => $requestTitle);
         $response = Request::post($configUrl)

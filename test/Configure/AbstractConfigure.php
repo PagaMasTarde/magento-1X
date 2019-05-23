@@ -33,7 +33,7 @@ abstract class AbstractConfigure extends MagentoTest
      */
     public function getBackOffice()
     {
-        $this->webDriver->get(self::MAGENTO_URL.self::BACKOFFICE_FOLDER);
+        $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
 
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::titleContains(

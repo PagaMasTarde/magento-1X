@@ -13,8 +13,10 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $config = Mage::getStoreConfig('payment/pagantis');
         $extraConfig = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+        $locale = substr(Mage::app()->getLocale()->getLocaleCode(),0,-2);
 
         $this->assign(array(
+            'locale'            => $locale,
             'pagantisIsEnabled' => $config['active'],
         ));
 

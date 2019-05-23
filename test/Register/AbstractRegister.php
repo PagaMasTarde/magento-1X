@@ -22,7 +22,7 @@ abstract class AbstractRegister extends MagentoTest
      */
     public function openMagento()
     {
-        $this->webDriver->get(self::MAGENTO_URL);
+        $this->webDriver->get($this->magentoUrl);
 
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::titleContains(

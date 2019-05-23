@@ -26,7 +26,6 @@
         }
     ],
     "require": {
-        "php": ">=5.3",
         "pagantis/orders-api-client": "^2.1",
         "pagantis/module-utils": "^2.0"
     },
