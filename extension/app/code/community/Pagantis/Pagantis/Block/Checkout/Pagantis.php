@@ -27,6 +27,10 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         $logoHtml = '';
         if ($config['active']) {
             $logoTemplate = new $classCoreTemplate;
+            $logoTemplate->assign(array(
+                'locale'            => $locale,
+                'pagantisIsEnabled' => $config['active'],
+            ));
             $logoHtml = $logoTemplate->setTemplate('pagantis/checkout/logo.phtml')->toHtml();
 
             if ($logoHtml == '') {
