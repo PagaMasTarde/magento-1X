@@ -13,7 +13,7 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $config = Mage::getStoreConfig('payment/pagantis');
         $extraConfig = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
-        $locale = substr(Mage::app()->getLocale()->getLocaleCode(),-2,2);
+        $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
 
         $this->assign(array(
             'locale'            => $locale,
@@ -21,7 +21,6 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         ));
 
         $title = $this->__($extraConfig['PAGANTIS_TITLE']);
-
         $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
 
         $logoHtml = '';
