@@ -292,10 +292,10 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
             $this->pmtOrder = $this->orderClient->getOrder($this->pmtOrderId);
             if ($this->pmtOrder->getStatus() !== PmtModelOrder::STATUS_CONFIRMED) {
                 $this->saveLog($exception);
-                throw new WrongStatusException($this->pmtOrder->getStatus());
+                throw new UnknownException($exception->getMessage());
             } else {
                 $logEntry= new LogEntry();
-                $logEntry->info('Concurrency issue: order ' . $this->pmtOrderId . 'was confirmed by other process');
+                $logEntry->info('Concurrency issue: order '.$this->pmtOrderId.' was confirmed by other process');
             }
         }
     }
