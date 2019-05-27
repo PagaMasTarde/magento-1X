@@ -51,7 +51,4 @@ then
     extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-registered
     echo magento-cancel-buy-controllers
     extension/lib/DigitalOrigin/bin/phpunit --group magento-cancel-buy-controllers
-else
-    echo magento-configure-backoffice-redirect
-    extension/lib/DigitalOrigin/bin/phpunit --group magento-configure-backoffice-redirect
 fi
