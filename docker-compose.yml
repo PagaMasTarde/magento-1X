@@ -1,8 +1,8 @@
 version: "3.5"
 
 services:
-  magento-dev:
-    container_name: magento19dev
+  magento19-dev:
+    container_name: magento19-dev
     image: alexcheng/magento:latest
     environment:
       - MAGENTO_ADMIN_FIRSTNAME=Owner
@@ -10,7 +10,7 @@ services:
       - MAGENTO_ADMIN_EMAIL=admin@example.com
       - MAGENTO_ADMIN_USERNAME=admin
       - MAGENTO_ADMIN_PASSWORD=password123
-      - MYSQL_HOST=db-dev
+      - MYSQL_HOST=magento19-db-dev
       - MYSQL_DATABASE=magento
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
@@ -21,14 +21,14 @@ services:
     volumes:
       - ./extension:/pagantis
     links:
-      - db-dev
+      - magento19-db-dev
     ports:
       - "8080:80"
     extra_hosts:
       - "magento19-dev.docker:127.0.0.1"
 
-  magento-test:
-    container_name: magento19test
+  magento19-test:
+    container_name: magento19-test
     image: alexcheng/magento:latest
     environment:
       - MAGENTO_ADMIN_FIRSTNAME=Owner
@@ -36,7 +36,7 @@ services:
       - MAGENTO_ADMIN_EMAIL=admin@example.com
       - MAGENTO_ADMIN_USERNAME=admin
       - MAGENTO_ADMIN_PASSWORD=password123
-      - MYSQL_HOST=db-test
+      - MYSQL_HOST=magento19-db-test
       - MYSQL_DATABASE=magento
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
@@ -45,28 +45,27 @@ services:
       - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-test.docker:8082
     links:
-      - db-test
+      - magento19-db-test
     ports:
       - "8082:80"
     extra_hosts:
       - "magento19-test.docker:127.0.0.1"
 
-  db-dev:
-    container_name: magento19dbdev
+  magento19-db-dev:
+    container_name: magento19-db-dev
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=magento
 
-  db-test:
-    container_name: magento19dbtest
+  magento19-db-test:
+    container_name: magento19-db-test
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=magento
 
   selenium:
-    container_name: magento19selenium
     image: selenium/standalone-chrome:3.7.1
     ports:
       - "4444:4444"

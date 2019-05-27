@@ -28,29 +28,29 @@ jobs:
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
-            docker-compose up -d --build magento-test
+            docker-compose up -d --build magento19-test
             docker-compose up -d --build selenium
             sleep 10
       - run:
           name: Docker Copy Module Files
           command: |
-            docker cp ./extension/. magento19test:/pagantis/
-            docker exec magento19test ls -lah /pagantis
+            docker cp ./extension/. magento19-test:/pagantis/
+            docker exec magento19-test ls -lah /pagantis
       - run:
           name: Install Sample Data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            docker-compose exec magento-test install-sampledata
-            docker-compose exec magento-test install-magento
+            docker-compose exec magento19-test install-sampledata
+            docker-compose exec magento19-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            docker-compose exec magento-test modman init
-            docker-compose exec magento-test modman link /pagantis
-            docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
-            docker-compose exec magento-test chmod +x n98-magerun.phar
-            docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
+            docker-compose exec magento19-test modman init
+            docker-compose exec magento19-test modman link /pagantis
+            docker-compose exec magento19-test curl -O https://files.magerun.net/n98-magerun.phar
+            docker-compose exec magento19-test chmod +x n98-magerun.phar
+            docker-compose exec magento19-test ./n98-magerun.phar dev:symlinks 1
       - run:
           name: magento-basic
           command: |
@@ -129,7 +129,7 @@ jobs:
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
-            docker-compose up -d --build magento-test
+            docker-compose up -d --build magento19-test
             docker-compose up -d --build selenium
             sleep 10
       - run:
@@ -141,17 +141,17 @@ jobs:
           name: Install Sample Data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            docker-compose exec magento-test install-sampledata
-            docker-compose exec magento-test install-magento
+            docker-compose exec magento19-test install-sampledata
+            docker-compose exec magento19-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            docker-compose exec magento-test modman init
-            docker-compose exec magento-test modman link /pagantis
-            docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
-            docker-compose exec magento-test chmod +x n98-magerun.phar
-            docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
+            docker-compose exec magento19-test modman init
+            docker-compose exec magento19-test modman link /pagantis
+            docker-compose exec magento19-test curl -O https://files.magerun.net/n98-magerun.phar
+            docker-compose exec magento19-test chmod +x n98-magerun.phar
+            docker-compose exec magento19-test ./n98-magerun.phar dev:symlinks 1
       - run:
           name: magento-basic
           command: |

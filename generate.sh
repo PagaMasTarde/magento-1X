@@ -2,8 +2,8 @@
 while true; do
     read -p "Do you wish to run dev or test [test|dev]? " devtest
     case $devtest in
-        [dev]* ) container="magento-dev";test=false; break;;
-        [test]* ) container="magento-test";test=true; break;;
+        [dev]* ) container="magento19-dev";test=false; break;;
+        [test]* ) container="magento19-test";test=true; break;;
         * ) echo "Please answer dev or test.";;
     esac
 done

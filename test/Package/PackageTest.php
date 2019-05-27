@@ -38,7 +38,7 @@ class PackageTest extends MagentoTest
     /**
      * Docker container name
      */
-    const DOCKER_CONTAINER = 'magento19test';
+    const DOCKER_CONTAINER = 'magento19-test';
 
     /**
      * Vendor Folder
