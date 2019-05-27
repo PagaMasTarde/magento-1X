@@ -298,7 +298,11 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
                 throw new UnknownException($exception->getMessage());
             } else {
                 $logEntry= new LogEntry();
-                $logEntry->info('Concurrency issue: order '.$this->pmtOrderId.' was confirmed by other process');
+                $logEntry->info('Concurrency issue: Order_id '.$this->pmtOrderId.' was confirmed by other process');
+
+                $model = Mage::getModel('pmt/log');
+                $model->setData(array('log' => $logEntry->toJson()));
+                $model->save();
             }
         }
     }
