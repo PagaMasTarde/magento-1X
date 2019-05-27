@@ -16,6 +16,8 @@ use Pagantis\ModuleUtils\Exception\UnknownException;
 use Pagantis\ModuleUtils\Exception\WrongStatusException;
 use Pagantis\ModuleUtils\Model\Response\JsonSuccessResponse;
 use Pagantis\ModuleUtils\Model\Response\JsonExceptionResponse;
+use Pagantis\OrdersApiClient\Model\Order;
+use Pagantis\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class DigitalOrigin_Pmt_NotifyController
@@ -40,12 +42,12 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     protected $pmtOrderId;
 
     /**
-     * @var \PagaMasTarde\OrdersApiClient\Model\Order $pmtOrder
+     * @var Order $pmtOrder
      */
     protected $pmtOrder;
 
     /**
-     * @var PagaMasTarde\OrdersApiClient\Client $orderClient
+     * @var \Pagantis\OrdersApiClient\Client $orderClient
      */
     protected $orderClient;
 
@@ -177,7 +179,7 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
                 throw new AlreadyProcessedException();
             }
 
-            if ($this->pmtOrder instanceof \PagaMasTarde\OrdersApiClient\Model\Order) {
+            if ($this->pmtOrder instanceof Order) {
                 $status = $this->pmtOrder->getStatus();
             } else {
                 $status = '-';
@@ -287,7 +289,14 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
         try {
             $this->orderClient->confirmOrder($this->pmtOrderId);
         } catch (\Exception $exception) {
-            throw new UnknownException($exception->getMessage());
+            $this->pmtOrder = $this->orderClient->getOrder($this->pmtOrderId);
+            if ($this->pmtOrder->getStatus() !== PmtModelOrder::STATUS_CONFIRMED) {
+                $this->saveLog($exception);
+                throw new WrongStatusException($this->pmtOrder->getStatus());
+            } else {
+                $logEntry= new LogEntry();
+                $logEntry->info('Concurrency issue: order ' . $this->pmtOrderId . 'was confirmed by other process');
+            }
         }
     }
 
