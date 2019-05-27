@@ -44,7 +44,7 @@ class ControllerTest extends MagentoTest
      */
     public function testLogDownload()
     {
-        $logUrl = self::MAGENTO_URL.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
+        $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
         $response = Request::get($logUrl)->expects('json')->send();
         $this->assertEquals(3, count($response->body));
         $this->quit();
@@ -55,7 +55,7 @@ class ControllerTest extends MagentoTest
      */
     public function testSetConfig()
     {
-        $notifyUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
+        $notifyUrl = $this->magentoUrl.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
         $body = array('PAGANTIS_TITLE' => 'changed');
         $response = Request::post($notifyUrl)
             ->body($body, Mime::FORM)
@@ -70,7 +70,7 @@ class ControllerTest extends MagentoTest
      */
     public function testGetConfigs()
     {
-        $notifyUrl = self::MAGENTO_URL.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
+        $notifyUrl = $this->magentoUrl.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
         $response = Request::get($notifyUrl)->expects('json')->send();
 
         foreach ($this->configs as $config) {

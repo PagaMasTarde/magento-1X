@@ -1,7 +1,6 @@
 {
     "name": "pagantis/magento-1x",
     "description": "Pagantis Magento 1x module",
-    "version" : "8.0.2",
     "type": "module",
     "keywords": [
         "api",
@@ -20,13 +19,12 @@
     "homepage": "https://pagantis.com/",
     "license": "proprietary",
     "authors": [
-        {  
+        {
             "name": "Pagantis",
             "email": "integrations@pagantis.com"
         }
     ],
     "require": {
-        "php": ">=5.3",
         "pagantis/orders-api-client": "^2.1",
         "pagantis/module-utils": "^2.0"
     },

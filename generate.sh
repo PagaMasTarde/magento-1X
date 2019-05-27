@@ -1,57 +1,80 @@
 #!/bin/bash
+while true; do
+    read -p "Do you wish to run dev or test [test|dev]? " devtest
+    case $devtest in
+        [dev]* ) container="magento19-dev";test=false; break;;
+        [test]* ) container="magento19-test";test=true; break;;
+        * ) echo "Please answer dev or test.";;
+    esac
+done
+while true; do
+    read -p "You have chosen to start ${container}, are you sure [y/n]? " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+composer install
 
 # Prepare environment and build package
 docker-compose down
-docker-compose up -d --build magento-test
-if [ $1 == 'true' ]
-then
-    docker-compose up -d --build selenium
-fi
+docker-compose up -d --build ${container} selenium
+
 sleep 10
 
-# Copy Files to magento test
-docker cp ./extension/. magento19test:/pagantis/
+# Copy Files for test container
+if [ $test = true ];
+then
+    docker cp ./extension/. ${container}:/pagantis/
+    export MAGENTO_TEST_ENV=test
+else
+    export MAGENTO_TEST_ENV=dev
+fi
 
 # Install magento and sample data
-docker-compose exec magento-test install-sampledata
-docker-compose exec magento-test install-magento
+docker-compose exec ${container} install-sampledata
+docker-compose exec ${container} install-magento
 
 # Install modman and enable the link creation
-docker-compose exec magento-test modman init
-docker-compose exec magento-test modman link /pagantis
+docker-compose exec ${container} modman init
+docker-compose exec ${container} modman link /pagantis
 
 # Install n98-magerun to enable automatically dev:symlinks so that modman works
-docker-compose exec magento-test curl -O https://files.magerun.net/n98-magerun.phar
-docker-compose exec magento-test chmod +x n98-magerun.phar
-docker-compose exec magento-test ./n98-magerun.phar dev:symlinks 1
+docker-compose exec ${container} curl -O https://files.magerun.net/n98-magerun.phar
+docker-compose exec ${container} chmod +x n98-magerun.phar
+docker-compose exec ${container} ./n98-magerun.phar dev:symlinks 1
 
 set -e
 # Run test
-composer install
+echo magento-basic
+extension/lib/Pagantis/bin/phpunit --group magento-basic
+echo magento-configure-backoffice-iframe
+extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+echo magento-product-page
+extension/lib/Pagantis/bin/phpunit --group magento-product-page
+echo magento-buy-unregistered
+extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
+echo magento-cancel-buy-unregistered
+extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+echo magento-register
+extension/lib/Pagantis/bin/phpunit --group magento-register
+echo magento-fill-data
+extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+echo magento-buy-registered
+extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
+echo magento-cancel-buy-registered
+extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
+echo magento-cancel-buy-controllers
+extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
 
-if [ $1 == 'true' ]
+# Copy Files for test container
+if [ $test = true ];
 then
-    echo magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-basic
-    echo magento-configure-backoffice-iframe
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
-    echo magento-product-page
-    extension/lib/Pagantis/bin/phpunit --group magento-product-page
-    echo magento-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
-    echo magento-cancel-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
-    echo magento-register
-    extension/lib/Pagantis/bin/phpunit --group magento-register
-    echo magento-fill-data
-    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
-    echo magento-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
-    echo magento-cancel-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
-    echo magento-cancel-buy-controllers
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
-else
-    echo magento-configure-backoffice-redirect
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    # Generate Pakage
+    echo magento-package
+    extension/lib/Pagantis/bin/phpunit --group magento-package
 fi
+
+docker-compose exec ${container} ./n98-magerun.phar cache:flush

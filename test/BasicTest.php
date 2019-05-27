@@ -27,7 +27,7 @@ class BasicTest extends MagentoTest
      */
     public function testMagentoOpen()
     {
-        $this->webDriver->get(self::MAGENTO_URL);
+        $this->webDriver->get($this->magentoUrl);
 
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::titleContains(
@@ -44,7 +44,7 @@ class BasicTest extends MagentoTest
      */
     public function testBackofficeOpen()
     {
-        $this->webDriver->get(self::MAGENTO_URL.self::BACKOFFICE_FOLDER);
+        $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
 
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::titleContains(

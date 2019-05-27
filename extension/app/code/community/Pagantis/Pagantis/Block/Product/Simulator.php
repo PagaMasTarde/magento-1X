@@ -15,12 +15,14 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
      */
     protected function _construct()
     {
-        $config      = Mage::getStoreConfig('payment/pagantis');
-        $extraConfig = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+        $config         = Mage::getStoreConfig('payment/pagantis');
+        $extraConfig    = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+        $locale = substr(Mage::app()->getLocale()->getLocaleCode(),-2,2);
 
         $amount = Mage::app()->getStore()->convertPrice($this->getProduct()->getFinalPrice());
         $this->assign(
             array(
+                'locale'                     => $locale,
                 'amount'                     => $amount,
                 'pagantisIsEnabled'          => $config['active'],
                 'pagantisPublicKey'          => $config['pagantis_public_key'],

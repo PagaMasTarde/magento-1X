@@ -15,14 +15,24 @@ use PHPUnit\Framework\TestCase;
 abstract class MagentoTest extends TestCase
 {
     /**
-     * Magento URL
+     * Magento TEST
      */
-    const MAGENTO_URL = 'http://magento19-test.docker:8082/index.php';
+    const MAGENTO_URL_TEST = 'http://magento19-test.docker:8082/index.php';
+
+    /**
+     * Magento DEV
+     */
+    const MAGENTO_URL_DEV = 'http://magento19-dev.docker:8080/index.php';
 
     /**
      * Magento Backoffice URL
      */
     const BACKOFFICE_FOLDER = '/admin';
+
+    /**
+     * @var string URL for test
+     */
+    public $magentoUrl;
 
     /**
      * @var array
@@ -59,8 +69,8 @@ abstract class MagentoTest extends TestCase
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
+        $this->magentoUrl = $this->getMagentoUrl();
         $faker = Factory::create();
-
         $this->configuration['dni'] = $this->getDNI();
         $this->configuration['birthdate'] =
             $faker->numberBetween(1, 28) . '/' .
@@ -75,6 +85,20 @@ abstract class MagentoTest extends TestCase
         $this->configuration['email'] = date('ymd') . '@pagantis.com';
 
         parent::__construct($name, $data, $dataName);
+    }
+
+    /**
+     * getTestEnvironment
+     */
+    protected function getMagentoUrl()
+    {
+        $env = getenv('MAGENTO_TEST_ENV');
+
+        if ($env == 'dev') {
+            return self::MAGENTO_URL_DEV;
+        }
+
+        return self::MAGENTO_URL_TEST;
     }
 
     /**
