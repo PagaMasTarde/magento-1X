@@ -19,6 +19,9 @@ use Pagantis\ModuleUtils\Model\Response\JsonExceptionResponse;
 use Pagantis\OrdersApiClient\Model\Order;
 use Pagantis\ModuleUtils\Model\Log\LogEntry;
 
+/** Concurrency tablename */
+const CONCURRENCY_TABLENAME = 'pmt_cart_concurrency';
+
 /**
  * Class DigitalOrigin_Pmt_NotifyController
  *
@@ -412,44 +415,42 @@ class DigitalOrigin_Pmt_NotifyController extends AbstractController
     }
 
     /**
-     * Lock the concurrency to prevent duplicated inputs
-     *
      * @param $orderId
-     * @throws Exception
+     *
+     * @return bool
+     * @throws ConcurrencyException
      */
     protected function blockConcurrency($orderId)
     {
+        $sql = "INSERT INTO  " . CONCURRENCY_TABLENAME . "  VALUE (" . $orderId. "," . time() . ")";
         try {
-                $model = Mage::getModel('pmt/concurrency');
-                $model->setData(array(
-                    'id' => $orderId,
-                    'timestamp' => time(),
-                ));
-                $model->save();
-        } catch (Exception $e) {
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $conn->query($sql);
+        } catch (Exception $exception) {
             throw new ConcurrencyException();
         }
+        return true;
     }
 
     /**
-     * Unlock the concurrency
-     *
      * @param null $orderId
-     * @throws Exception
+     *
+     * @return bool
+     * @throws ConcurrencyException
      */
     protected function unblockConcurrency($orderId = null)
     {
+        if ($orderId == null) {
+            $sql = "DELETE FROM " . CONCURRENCY_TABLENAME . " WHERE timestamp <" . (time() - 10);
+        } else {
+            $sql = "DELETE FROM " . CONCURRENCY_TABLENAME . " WHERE id  = " . $orderId;
+        }
         try {
-            $this->createTableIfNotExists('pmt/concurrency');
-            if ($orderId == null) {
-                Mage::getModel('pmt/concurrency')->getCollection()->truncate();
-            } else {
-                $model = Mage::getModel('pmt/concurrency');
-                $model->load($orderId, 'id');
-                $model->delete();
-            }
-        } catch (Exception $e) {
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $conn->query($sql);
+        } catch (Exception $exception) {
             throw new ConcurrencyException();
         }
+        return true;
     }
 }
