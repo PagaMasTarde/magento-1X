@@ -1,7 +1,6 @@
 {
     "name": "pagantis/magento-1x",
     "description": "Pagantis Magento 1x module",
-    "version": "8.0.2",
     "type": "module",
     "keywords": [
         "api",
