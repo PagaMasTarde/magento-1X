@@ -4,6 +4,7 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Test\MagentoTest;
 
 /**
@@ -303,7 +304,6 @@ abstract class AbstractBuy extends MagentoTest
      */
     public function checkPurchaseReturn($message = '')
     {
-        // Check if all goes good
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(
                 WebDriverBy::cssSelector('.page-title h1')
@@ -314,5 +314,32 @@ abstract class AbstractBuy extends MagentoTest
             $message,
             $successMessage->getText()
         );
+    }
+
+    /**
+     * Commit Purchase
+     * @throws \Exception
+     */
+    public function commitPurchase()
+    {
+
+        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
+        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->assertTrue((bool)$condition, "PR32");
+
+        // complete the purchase with redirect
+        SeleniumHelper::finishForm($this->webDriver);
+    }
+
+    /**
+     * Verify Pagantis
+     *
+     * @throws \Exception
+     */
+    public function verifyPagantis()
+    {
+        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
+        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->assertTrue((bool)$condition, $this->webDriver->getCurrentURL());
     }
 }

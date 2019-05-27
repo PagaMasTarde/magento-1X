@@ -201,7 +201,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
 
             $orderUser
                 ->setFullName($fullName)
-                ->setDateOfBirth($this->customer->birthday)
+                ->setDateOfBirth($this->customer->dob)
                 ->setEmail($email)
                 ->setMobilePhone($telephone)
                 ->setAddress($userAddress)
