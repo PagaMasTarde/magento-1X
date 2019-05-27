@@ -135,8 +135,8 @@ jobs:
       - run:
           name: Docker Copy Module Files
           command: |
-            docker cp ./extension/. magento19test:/pagantis/
-            docker exec magento19test ls -lah /pagantis
+            docker cp ./extension/. magento19-test:/pagantis/
+            docker exec magento19-test ls -lah /pagantis
       - run:
           name: Install Sample Data
           command: |
