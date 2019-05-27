@@ -26,7 +26,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
 {
 
     /** Concurrency tablename */
-    const CONCURRENCY_TABLENAME = 'pmt_cart_concurrency';
+    const CONCURRENCY_TABLENAME = 'pagantis_cart_concurrency';
 
     /**
      * @var string $merchantOrderId
