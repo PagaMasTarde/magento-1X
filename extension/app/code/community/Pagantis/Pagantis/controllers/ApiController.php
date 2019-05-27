@@ -34,7 +34,8 @@ class Pagantis_Pagantis_ApiController extends AbstractController
             header('Content-Type: application/json', true);
             header('Content-Length: ' . strlen($result));
 
-            return $this->_response($result);
+            echo($result);
+            exit();
         }
         /** @var Mage_Core_Controller_Request_Http $request */
         $request = Mage::app()->getRequest();
@@ -77,7 +78,8 @@ class Pagantis_Pagantis_ApiController extends AbstractController
         header('Content-Type: application/json', true);
         header('Content-Length: ' . strlen($result));
 
-        return $this->_response($result);
+        echo($result);
+        exit();
     }
 
     /**

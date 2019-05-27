@@ -14,8 +14,13 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 class BuyUnregisteredTest extends AbstractBuy
 {
     const AMOUNT = '497.54';
+
     /**
      * Test Buy unregistered
+     *
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     * @throws \Exception
      */
     public function testBuyUnregistered()
     {
@@ -25,6 +30,9 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
         $this->goToPagantis();
+        $this->verifyPagantis();
+        $this->commitPurchase();
+        $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->quit();
     }
 
@@ -83,5 +91,4 @@ class BuyUnregisteredTest extends AbstractBuy
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepBillingSearch)
         );
     }
-
 }

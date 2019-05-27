@@ -113,33 +113,6 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertTrue((bool) $condition);
     }
 
-    /**
-     * Commit Purchase
-     * @throws \Exception
-     */
-    public function commitPurchase()
-    {
-
-        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
-        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
-        $this->assertTrue((bool)$condition, "PR32");
-
-        // complete the purchase with redirect
-        SeleniumHelper::finishForm($this->webDriver);
-    }
-
-    /**
-     * Verify Pagantis
-     *
-     * @throws \Exception
-     */
-    public function verifyPagantis()
-    {
-        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
-        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
-        $this->assertTrue((bool)$condition, $this->webDriver->getCurrentURL());
-    }
-
     public function makeValidation()
     {
         $this->checkConcurrency();

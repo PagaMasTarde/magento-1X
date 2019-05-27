@@ -24,6 +24,10 @@ use Pagantis\ModuleUtils\Model\Response\JsonExceptionResponse;
  */
 class Pagantis_Pagantis_NotifyController extends AbstractController
 {
+
+    /** Concurrency tablename */
+    const CONCURRENCY_TABLENAME = 'pmt_cart_concurrency';
+
     /**
      * @var string $merchantOrderId
      */
@@ -345,7 +349,19 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         try {
             $this->orderClient->confirmOrder($this->pagantisOrderId);
         } catch (Exception $exception) {
-            throw new UnknownException($exception->getMessage());
+            $this->pagantisOrder = $this->orderClient->getOrder($this->pagantisOrderId);
+            if ($this->pagantisOrderId->getStatus() !== \Pagantis\OrdersApiClient\Model\Order::STATUS_CONFIRMED) {
+                $this->saveLog($exception);
+                throw new UnknownException($exception->getMessage());
+            } else {
+                $logEntry= new \Pagantis\ModuleUtils\Model\Log\LogEntry();
+                $logEntry->info(
+                    'Concurrency issue: Order_id '.$this->pagantisOrderId.' was confirmed by other process'
+                );
+                $model = Mage::getModel('pagantis/log');
+                $model->setData(array('log' => $logEntry->toJson()));
+                $model->save();
+            }
         }
     }
 
@@ -407,41 +423,45 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
      * Lock the concurrency to prevent duplicated inputs
      *
      * @param $orderId
-     * @throws Exception
+     *
+     * @return bool
+     * @throws ConcurrencyException
      */
     protected function blockConcurrency($orderId)
     {
+        $sql = "INSERT INTO  " . self::CONCURRENCY_TABLENAME . "  VALUE (" . $orderId. "," . time() . ")";
+
         try {
-                $model = Mage::getModel('pagantis/concurrency');
-                $model->setData(array(
-                    'id' => $orderId,
-                    'timestamp' => time(),
-                ));
-                $model->save();
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $conn->query($sql);
         } catch (Exception $e) {
             throw new ConcurrencyException();
         }
+
+        return true;
     }
 
     /**
      * Unlock the concurrency
      *
      * @param null $orderId
-     * @throws Exception
+     *
+     * @return bool
+     * @throws ConcurrencyException
      */
     protected function unblockConcurrency($orderId = null)
     {
+        if ($orderId == null) {
+            $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE timestamp <" . (time() - 10);
+        } else {
+            $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE id  = " . $orderId;
+        }
         try {
-            $this->createTableIfNotExists('pagantis/concurrency');
-            if ($orderId == null) {
-                Mage::getModel('pagantis/concurrency')->getCollection()->truncate();
-            } else {
-                $model = Mage::getModel('pagantis/concurrency');
-                $model->load($orderId, 'id');
-                $model->delete();
-            }
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $conn->query($sql);
         } catch (Exception $e) {
             throw new ConcurrencyException();
         }
+        return true;
     }
 }
