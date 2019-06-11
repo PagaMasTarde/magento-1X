@@ -39,7 +39,7 @@
                             <show_in_store>1</show_in_store>
                         </pagantis_private_key>
                         <pagantis_simulator_is_enabled translate="label">
-                            <label>Product Simulator Enabled</label>
+                            <label>Simulator Enabled</label>
                             <frontend_type>radios</frontend_type>
                             <source_model>pagantis/YesNo</source_model>
                             <sort_order>04</sort_order>

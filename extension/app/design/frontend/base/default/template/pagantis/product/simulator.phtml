@@ -4,18 +4,21 @@
  * @var bool $enabled
  * @var string $publicKey
  */
-if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
+if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '') {
 ?>
     <script>
         function findPriceSelector()
         {
-            //Trying to find the product price selector
             var priceDOM = document.querySelector('[id^="product-price"]');
-            if (priceDOM != null) {
+            if (priceDOM != null ) {
                 return '[id^="product-price"]';
             }
+            priceDOM = document.querySelector('div.add-to-box > div.price-info > div.price-box > p.special-price');
+            if (priceDOM != null ) {
+                return 'div.add-to-box > div.price-info > div.price-box > p.special-price';
+            }
 
-            //Keep default for checkout price.
+            // Keep default for checkout price.
             return 'default';
         }
 
@@ -32,11 +35,21 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
         function loadSimulator()
         {
             var sdk = pgSDK;
-
+            console.log('<?=$locale;?>');
             if ('<?=$locale;?>' == 'ES') {
                 var sdk = pmtSDK;
             } else {
                 var sdk = 'undefined';
+            }
+
+            var pgDiv = document.getElementsByClassName("PagantisSimulator");
+            if(typeof pgDiv != 'undefined') {
+                var pmtElement = pgDiv[0];
+                if (pmtElement.innerHTML != '')
+                {
+                    clearInterval(window.MGSimulatorId);
+                    return true;
+                }
             }
 
             if (typeof sdk != 'undefined') {
@@ -87,10 +100,10 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled) {
                 }
 
                 sdk.simulator.init(sdk.product_simulator);
-                clearInterval(window.PSSimulatorId);
+                clearInterval(window.MGSimulatorId);
             }
         }
-        window.PSSimulatorId = setInterval(function () {
+        window.MGSimulatorId = setInterval(function () {
             loadSimulator();
         }, 2000);
     </script>

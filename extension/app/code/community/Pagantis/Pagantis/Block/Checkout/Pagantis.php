@@ -14,11 +14,8 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         $config = Mage::getStoreConfig('payment/pagantis');
         $extraConfig = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
         $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
-
-        $this->assign(array(
-            'locale'            => $locale,
-            'pagantisIsEnabled' => $config['active'],
-        ));
+        $quote = $checkoutSession->getQuote();
+        $amount = $quote->getGrandTotal();
 
         $title = $this->__($extraConfig['PAGANTIS_TITLE']);
         $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
@@ -27,8 +24,11 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         if ($config['active']) {
             $logoTemplate = new $classCoreTemplate;
             $logoTemplate->assign(array(
-                'locale'            => $locale,
-                'pagantisIsEnabled' => $config['active'],
+                'publicKey'          => $config['pagantis_public_key'],
+                'amount'             => $amount,
+                'locale'             => $locale,
+                'pagantisIsEnabled'  => $config['active'],
+                'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
             ));
             $logoHtml = $logoTemplate->setTemplate('pagantis/checkout/logo.phtml')->toHtml();
 

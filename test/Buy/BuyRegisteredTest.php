@@ -4,10 +4,9 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Pagantis\ModuleUtils\Exception\AlreadyProcessedException;
+use Pagantis\ModuleUtils\Model\Response\JsonSuccessResponse;
 use Pagantis\ModuleUtils\Exception\NoIdentificationException;
 use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
-use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
 use Httpful\Mime;
 
@@ -84,6 +83,31 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertTrue(($cartPrice == $checkoutPrice));
         $this->makeValidation();
         $this->quit();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testMGtotalAmount()
+    {
+        $this->assertEquals('900', $this->getTotalAmount(9));
+        $this->assertEquals('99900', $this->getTotalAmount(999));
+        $this->assertEquals('99999', $this->getTotalAmount(999.99));
+        $this->assertEquals('900', $this->getTotalAmount('9'));
+        $this->assertEquals('99999', $this->getTotalAmount('999.99'));
+        $this->assertEquals('900', $this->getTotalAmount((float) 9));
+        $this->assertEquals('99999', $this->getTotalAmount((float) 999.99));
+        $this->assertEquals('900', $this->getTotalAmount((int) 9));
+        $this->assertEquals('99900', $this->getTotalAmount((int) 999.99));
+        $this->quit();
+    }
+    /**
+     * @param null $amount
+     * @return string
+     */
+    public function getTotalAmount($amount = null)
+    {
+        return (string) floor(100 * $amount);
     }
 
     /**
@@ -181,7 +205,7 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($response->body->merchant_order_id, $response);
         $this->assertNotEmpty($response->body->pagantis_order_id, $response);
         $this->assertContains(
-            AlreadyProcessedException::ERROR_MESSAGE,
+            JsonSuccessResponse::RESULT,
             $response->body->result,
             "PR51=>".$response->body->result
         );
