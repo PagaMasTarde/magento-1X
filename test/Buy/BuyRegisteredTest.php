@@ -139,7 +139,7 @@ class BuyRegisteredTest extends AbstractBuy
 
     public function makeValidation()
     {
-        $this->checkConcurrency();
+        $this->checkQuoteNotFound();
         $this->checkPagantisOrderId();
         $this->checkAlreadyProcessed();
         $this->checkLog();
@@ -150,7 +150,7 @@ class BuyRegisteredTest extends AbstractBuy
     /**
      * Check if with a empty parameter called order-received we can get a QuoteNotFoundException
      */
-    protected function checkConcurrency()
+    protected function checkQuoteNotFound()
     {
         $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=';
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
@@ -218,7 +218,7 @@ class BuyRegisteredTest extends AbstractBuy
     {
         $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
         $response = Request::get($logUrl)->expects('json')->send();
-        $this->assertEquals(3, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
+        $this->assertEquals(2, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
     }
 
     /**

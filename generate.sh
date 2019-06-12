@@ -54,7 +54,9 @@ while true; do
     esac
 done
 
-if [ $tests eq 'full' ];
+echo $tests
+
+if [ $tests = "full" ];
 then
     export MAGENTO_TEST_ENV=test
     # Run test
