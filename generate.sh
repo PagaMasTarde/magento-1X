@@ -28,9 +28,6 @@ sleep 10
 if [ $test = true ];
 then
     docker cp ./extension/. ${container}:/pagantis/
-    export MAGENTO_TEST_ENV=test
-else
-    export MAGENTO_TEST_ENV=dev
 fi
 
 # Install magento and sample data
@@ -47,34 +44,54 @@ docker-compose exec ${container} chmod +x n98-magerun.phar
 docker-compose exec ${container} ./n98-magerun.phar dev:symlinks 1
 
 set -e
-# Run test
-echo magento-basic
-extension/lib/Pagantis/bin/phpunit --group magento-basic
-echo magento-configure-backoffice-iframe
-extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
-echo magento-product-page
-extension/lib/Pagantis/bin/phpunit --group magento-product-page
-echo magento-buy-unregistered
-extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
-echo magento-cancel-buy-unregistered
-extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
-echo magento-register
-extension/lib/Pagantis/bin/phpunit --group magento-register
-echo magento-fill-data
-extension/lib/Pagantis/bin/phpunit --group magento-fill-data
-echo magento-buy-registered
-extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
-echo magento-cancel-buy-registered
-extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
-echo magento-cancel-buy-controllers
-extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
 
-# Copy Files for test container
-if [ $test = true ];
+while true; do
+    read -p "Do you want to run full tests battery or only configure the module [full/configure]? " tests
+    case $tests in
+        [full]* ) break;;
+        [configure]* ) break;;
+        * ) echo "Please answer full or configure."; exit;;
+    esac
+done
+
+if [ $tests eq 'full' ];
 then
-    # Generate Pakage
-    echo magento-package
-    extension/lib/Pagantis/bin/phpunit --group magento-package
+    export MAGENTO_TEST_ENV=test
+    # Run test
+    echo magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    echo magento-configure-backoffice
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    echo magento-product-page
+    extension/lib/Pagantis/bin/phpunit --group magento-product-page
+    echo magento-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
+    echo magento-cancel-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+    echo magento-register
+    extension/lib/Pagantis/bin/phpunit --group magento-register
+    echo magento-fill-data
+    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+    echo magento-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
+    echo magento-cancel-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
+    echo magento-cancel-buy-controllers
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
+
+    # Copy Files for test container
+    if [ $test = true ];
+    then
+        # Generate Pakage
+        echo magento-package
+        extension/lib/Pagantis/bin/phpunit --group magento-package
+    fi
+else
+    export MAGENTO_TEST_ENV=dev
+    echo magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    echo magento-configure-backoffice
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
 fi
 
 docker-compose exec ${container} ./n98-magerun.phar cache:flush
