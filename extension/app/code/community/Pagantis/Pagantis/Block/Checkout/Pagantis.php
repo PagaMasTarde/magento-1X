@@ -25,11 +25,7 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         if ($config['active']) {
             $logoTemplate = new $classCoreTemplate;
             $logoTemplate->assign(array(
-                'publicKey'          => $config['pagantis_public_key'],
-                'amount'             => $amount,
                 'locale'             => $locale,
-                'pagantisIsEnabled'  => $config['active'],
-                'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
             ));
             $logoHtml = $logoTemplate->setTemplate('pagantis/checkout/logo.phtml')->toHtml();
 
@@ -40,6 +36,13 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         }
 
         $template = $this->setTemplate('pagantis/checkout/pagantis.phtml');
+        $template->assign(array(
+            'publicKey'          => $config['pagantis_public_key'],
+            'amount'             => $amount,
+            'locale'             => $locale,
+            'pagantisIsEnabled'  => $config['active'],
+            'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
+        ));
 
         if ($template->toHtml() == '') {
             $this->_allowSymlinks = true;

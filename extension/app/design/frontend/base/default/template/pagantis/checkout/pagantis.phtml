@@ -8,35 +8,38 @@
 ?>
 <style>
     #logo {height:25px; margin-right: 10px;}
+    #dd_method_pagantis fieldset.form-list {
+        padding-left: 0px;
+    }
 </style>
 <fieldset class="form-list">
     <?php if($simulatorIsEnabled && $pagantisIsEnabled && $publicKey!='') { ?>
-        <div class="PmtSimulator"></div>
+        <div class="PagantisSimulator"></div>
         <script type="text/javascript">
-            document.querySelectorAll('[value="paylater"]','[type="radio"]')[0].addEventListener('click', function() { pmtClient.simulator.reload(); });
-
             function loadSimulator()
             {
                 var sdk = pgSDK;
 
                 if ('<?=$locale;?>' == 'ES' || '<?=$locale;?>' == '') {
                     var sdk = pmtSDK;
+                } else {
+                    var sdk = 'undefined';
                 }
 
                 var pgDiv = document.getElementsByClassName("PagantisSimulator");
                 if(typeof pgDiv != 'undefined') {
-                    var pmtElement = pgDiv[0];
-                    if (pmtElement.innerHTML != '')
+                    var pgElement = pgDiv[0];
+                    if (pgElement.innerHTML != '')
                     {
                         clearInterval(window.MGSimulatorId);
                         return true;
                     }
                 }
 
-                if (typeof sdk != 'undefined') {
+                if (sdk != 'undefined') {
                     sdk.simulator.init({
                         publicKey: '<?php echo $publicKey; ?>',
-                        selector: '.PmtSimulator',
+                        selector: '.PagantisSimulator',
                         totalAmount: <?php echo $amount; ?>,
                     });
                     return false;

@@ -35,7 +35,6 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
         function loadSimulator()
         {
             var sdk = pgSDK;
-            console.log('<?=$locale;?>');
             if ('<?=$locale;?>' == 'ES') {
                 var sdk = pmtSDK;
             } else {
@@ -52,7 +51,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
                 }
             }
 
-            if (typeof sdk != 'undefined') {
+            if (sdk != 'undefined') {
                 var price = null;
                 var quantity = null;
                 var positionSelector = '<?=$pagantisCSSSelector;?>';

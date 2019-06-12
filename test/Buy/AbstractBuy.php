@@ -192,6 +192,16 @@ abstract class AbstractBuy extends MagentoTest
         );
         $this->findById('p_method_pagantis')->click();
 
+        $pgSimulator = WebDriverBy::className('PagantisSimulator');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::presenceOfElementLocated(
+                $pgSimulator
+            )
+        );
+        $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
+            $pgSimulator
+        ));
+
         $this->webDriver->executeScript("payment.save()");
         $reviewStepSearch = WebDriverBy::id('review-buttons-container');
         $this->webDriver->wait()->until(
