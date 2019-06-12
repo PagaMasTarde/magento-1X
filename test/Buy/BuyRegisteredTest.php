@@ -212,16 +212,6 @@ class BuyRegisteredTest extends AbstractBuy
     }
 
     /**
-     * Check if log controller is writing the launched exceptions
-     */
-    protected function checkLog()
-    {
-        $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
-        $response = Request::get($logUrl)->expects('json')->send();
-        $this->assertEquals(2, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
-    }
-
-    /**
      * Check if config controller is configured and it works
      */
     protected function checkExtraConfig()

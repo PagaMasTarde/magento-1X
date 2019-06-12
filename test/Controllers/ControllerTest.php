@@ -46,7 +46,7 @@ class ControllerTest extends MagentoTest
     {
         $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
         $response = Request::get($logUrl)->expects('json')->send();
-        $this->assertEquals(3, count($response->body));
+        $this->assertEquals(2, count($response->body));
         $this->quit();
     }
 
