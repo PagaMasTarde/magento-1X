@@ -142,7 +142,6 @@ class BuyRegisteredTest extends AbstractBuy
         $this->checkQuoteNotFound();
         $this->checkPagantisOrderId();
         $this->checkAlreadyProcessed();
-        $this->checkLog();
         $this->checkExtraConfig();
     }
 
