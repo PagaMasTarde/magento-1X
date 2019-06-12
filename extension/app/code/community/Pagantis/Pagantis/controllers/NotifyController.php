@@ -95,7 +95,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     {
         $jsonResponse = array();
         try {
-            $this->checkQuoteNotFound();
+            $this->checkConcurrency();
             $this->getMerchantOrder();
             $this->getPagantisOrderId();
             $this->getPagantisOrder();
@@ -180,7 +180,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
      *
      * @throws Exception
      */
-    public function checkQuoteNotFound()
+    public function checkConcurrency()
     {
         $this->prepareVariables();
         $this->unblockConcurrency();
