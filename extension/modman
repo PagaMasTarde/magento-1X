@@ -20,6 +20,7 @@ lib/Pagantis/            lib/Pagantis/
 # skin
 skin/frontend/base/default/images/pagantis/logopagantis.png            skin/frontend/base/default/images/pagantis/logopagantis.png
 skin/frontend/base/default/images/pagantis/logosimple.png            skin/frontend/base/default/images/pagantis/logosimple.png
+skin/frontend/base/default/images/pagantis/logopagamastarde.png            skin/frontend/base/default/images/pagantis/logopagamastarde.png
 skin/adminhtml/default/default/images/pagantis/logopagantis.png            skin/adminhtml/default/default/images/pagantis/logopagantis.png
 skin/adminhtml/default/default/images/pagantis/logosimple.png            skin/adminhtml/default/default/images/pagantis/logosimple.png
 skin/adminhtml/default/default/images/pagantis/logopagamastarde.png            skin/adminhtml/default/default/images/pagantis/logopagamastarde.png

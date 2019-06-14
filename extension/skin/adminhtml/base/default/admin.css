@@ -4,6 +4,14 @@
     background:url(../../default/default/images/pagantis/logopagantis.png) no-repeat 0 2px;
     background-size: 150px;
 }
+
+.adminLogo.ES{
+    width:700px;
+    height:100px;
+    background:url(../../default/default/images/pagantis/logopagamastarde.png) no-repeat 0 2px;
+    background-size: 150px;
+}
+
 .description {
     margin-left: 170px;
     padding: 6px;

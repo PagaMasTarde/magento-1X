@@ -4,10 +4,9 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Pagantis\ModuleUtils\Exception\AlreadyProcessedException;
+use Pagantis\ModuleUtils\Model\Response\JsonSuccessResponse;
 use Pagantis\ModuleUtils\Exception\NoIdentificationException;
 use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
-use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Httpful\Request;
 use Httpful\Mime;
 
@@ -87,6 +86,31 @@ class BuyRegisteredTest extends AbstractBuy
     }
 
     /**
+     * @throws \Exception
+     */
+    public function testMGtotalAmount()
+    {
+        $this->assertEquals('900', $this->getTotalAmount(9));
+        $this->assertEquals('99900', $this->getTotalAmount(999));
+        $this->assertEquals('99999', $this->getTotalAmount(999.99));
+        $this->assertEquals('900', $this->getTotalAmount('9'));
+        $this->assertEquals('99999', $this->getTotalAmount('999.99'));
+        $this->assertEquals('900', $this->getTotalAmount((float) 9));
+        $this->assertEquals('99999', $this->getTotalAmount((float) 999.99));
+        $this->assertEquals('900', $this->getTotalAmount((int) 9));
+        $this->assertEquals('99900', $this->getTotalAmount((int) 999.99));
+        $this->quit();
+    }
+    /**
+     * @param null $amount
+     * @return string
+     */
+    public function getTotalAmount($amount = null)
+    {
+        return (string) floor(100 * $amount);
+    }
+
+    /**
      * Fill the billing information
      */
     public function fillBillingInformation()
@@ -115,10 +139,9 @@ class BuyRegisteredTest extends AbstractBuy
 
     public function makeValidation()
     {
-        $this->checkConcurrency();
+        $this->checkQuoteNotFound();
         $this->checkPagantisOrderId();
         $this->checkAlreadyProcessed();
-        $this->checkLog();
         $this->checkExtraConfig();
     }
 
@@ -126,7 +149,7 @@ class BuyRegisteredTest extends AbstractBuy
     /**
      * Check if with a empty parameter called order-received we can get a QuoteNotFoundException
      */
-    protected function checkConcurrency()
+    protected function checkQuoteNotFound()
     {
         $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=';
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
@@ -181,20 +204,10 @@ class BuyRegisteredTest extends AbstractBuy
         $this->assertNotEmpty($response->body->merchant_order_id, $response);
         $this->assertNotEmpty($response->body->pagantis_order_id, $response);
         $this->assertContains(
-            AlreadyProcessedException::ERROR_MESSAGE,
+            JsonSuccessResponse::RESULT,
             $response->body->result,
             "PR51=>".$response->body->result
         );
-    }
-
-    /**
-     * Check if log controller is writing the launched exceptions
-     */
-    protected function checkLog()
-    {
-        $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
-        $response = Request::get($logUrl)->expects('json')->send();
-        $this->assertEquals(3, count($response->body), "PR57=>".$logUrl." = ".count($response->body));
     }
 
     /**

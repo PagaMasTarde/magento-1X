@@ -216,7 +216,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                     $orderHistory = new PagantisModelOrderHistory();
                     $orderHistory
                         ->setAmount(floatval($cOrder->getGrandTotal())*100)
-                        ->setDate((string)$cOrder->getCreatedAtFormated()->getDate());
+                        ->setDate($cOrder->getCreatedAt());
                     $orderUser->addOrderHistory($orderHistory);
                 }
             }
@@ -237,7 +237,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 ->setDetails($details)
                 ->setOrderReference($this->magentoOrderId)
                 ->setPromotedAmount(0)
-                ->setTotalAmount(floatval($this->magentoOrder->getGrandTotal())*100);
+                ->setTotalAmount((string) floor(100 * $this->magentoOrder->getGrandTotal()));
 
             $orderConfigurationUrls = new PagantisModelOrderUrls();
             $orderConfigurationUrls

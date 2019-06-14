@@ -1,14 +1,54 @@
 <?php
 /**
  * @var Mage_Payment_Block_Form $this
- * @var $pagantisIsEnabled boolean
+ * @var $publicKey string
+ * @var $amount string decimal
+ * @var $simulatorType int
  */
-if ($pagantisIsEnabled) { ?>
-   <style>
-       #logo {
-            height:25px;
-            margin-right: 10px;
-        }
-   </style>
-<?php } ?>
+?>
+<style>
+    #logo {height:25px; margin-right: 10px;}
+    #dd_method_pagantis fieldset.form-list {
+        padding-left: 0px;
+    }
+</style>
+<fieldset class="form-list">
+    <?php if($simulatorIsEnabled && $pagantisIsEnabled && $publicKey!='') { ?>
+        <div class="PagantisSimulator"></div>
+        <script type="text/javascript">
+            function loadSimulator()
+            {
+                var sdk = pgSDK;
 
+                if ('<?=$locale;?>' == 'ES' || '<?=$locale;?>' == '') {
+                    var sdk = pmtSDK;
+                } else {
+                    var sdk = 'undefined';
+                }
+
+                var pgDiv = document.getElementsByClassName("PagantisSimulator");
+                if(typeof pgDiv != 'undefined') {
+                    var pgElement = pgDiv[0];
+                    if (pgElement.innerHTML != '')
+                    {
+                        clearInterval(window.MGSimulatorId);
+                        return true;
+                    }
+                }
+
+                if (sdk != 'undefined') {
+                    sdk.simulator.init({
+                        publicKey: '<?php echo $publicKey; ?>',
+                        selector: '.PagantisSimulator',
+                        totalAmount: <?php echo $amount; ?>,
+                    });
+                    return false;
+                }
+            }
+            window.MGSimulatorId = setInterval(function () {
+                loadSimulator();
+            }, 2000);
+
+        </script>
+    <?php } ?>
+</fieldset>

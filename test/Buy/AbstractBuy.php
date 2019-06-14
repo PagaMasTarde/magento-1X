@@ -24,6 +24,11 @@ abstract class AbstractBuy extends MagentoTest
     const SIZE = 'S';
 
     /**
+     * Number of products
+     */
+    const QTY = '1';
+
+    /**
      * Grand Total
      */
     const GRAND_TOTAL = 'GRAND TOTAL';
@@ -144,6 +149,8 @@ abstract class AbstractBuy extends MagentoTest
         $sizeLabelElement = $this->webDriver->findElement($sizeLabelSearch);
         $size = $sizeLabelElement->getText();
         $this->assertSame(self::SIZE, $size);
+
+        $this->findById('qty')->clear()->sendKeys(self::QTY);
     }
 
     /**
@@ -184,6 +191,16 @@ abstract class AbstractBuy extends MagentoTest
             WebDriverExpectedCondition::elementToBeClickable($reviewStepSearch)
         );
         $this->findById('p_method_pagantis')->click();
+
+        $pgSimulator = WebDriverBy::className('PagantisSimulator');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::presenceOfElementLocated(
+                $pgSimulator
+            )
+        );
+        $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
+            $pgSimulator
+        ));
 
         $this->webDriver->executeScript("payment.save()");
         $reviewStepSearch = WebDriverBy::id('review-buttons-container');

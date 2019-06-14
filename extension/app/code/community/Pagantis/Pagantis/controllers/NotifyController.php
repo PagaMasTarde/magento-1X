@@ -5,7 +5,6 @@ require_once(__DIR__.'/AbstractController.php');
 
 use Pagantis\OrdersApiClient\Client as PagantisClient;
 use Pagantis\OrdersApiClient\Model\Order as PagantisModelOrder;
-use Pagantis\ModuleUtils\Exception\AlreadyProcessedException;
 use Pagantis\ModuleUtils\Exception\AmountMismatchException;
 use Pagantis\ModuleUtils\Exception\ConcurrencyException;
 use Pagantis\ModuleUtils\Exception\MerchantOrderNotFoundException;
@@ -59,6 +58,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     protected $config;
 
     /**
+     * @var string $origin
+     */
+    protected $origin;
+
+    /**
      * Cancel order
      *
      * @var bool
@@ -95,7 +99,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->getMerchantOrder();
             $this->getPagantisOrderId();
             $this->getPagantisOrder();
-            $this->checkOrderStatus();
+            $checkAlreadyProcessed = $this->checkOrderStatus();
+            if ($checkAlreadyProcessed) {
+                $this->unblockConcurrency($this->merchantOrderId);
+                return $this->redirect(false);
+            }
             $this->checkMerchantOrderStatus();
             $this->validateAmount();
             $this->processMerchantOrder();
@@ -150,6 +158,8 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         if ($this->merchantOrderId == '') {
             throw new QuoteNotFoundException();
         }
+
+        $this->origin = ($_SERVER['REQUEST_METHOD'] == 'POST') ? 'Notification' : 'Order';
 
         try {
             $config = Mage::getStoreConfig('payment/pagantis');
@@ -234,15 +244,20 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
      */
     public function checkOrderStatus()
     {
-        if ($this->pagantisOrder->getStatus() !== PagantisModelOrder::STATUS_AUTHORIZED) {
-            if ($this->merchantOrder->getStatus() == Mage_Sales_Model_Order::STATE_PROCESSING) {
-                throw new AlreadyProcessedException();
+        if ($this->pagantisOrder->getStatus() === PagantisModelOrder::STATUS_CONFIRMED) {
+            $jsonResponse = new JsonSuccessResponse();
+            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
+            $jsonResponse->setPagantisOrderId($this->pagantisOrder->getId());
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $jsonResponse->printResponse();
+            } else {
+                return true;
             }
-
+        }
+        if ($this->pagantisOrder->getStatus() !== PagantisModelOrder::STATUS_AUTHORIZED) {
+            $status = "-";
             if ($this->pagantisOrder instanceof PagantisModelOrder) {
                 $status = $this->pagantisOrder->getStatus();
-            } else {
-                $status = '-';
             }
             throw new WrongStatusException($status);
         }
@@ -291,7 +306,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     public function validateAmount()
     {
         $pagantisAmount = $this->pagantisOrder->getShoppingCart()->getTotalAmount();
-        $merchantAmount = intval($this->merchantOrder->getGrandTotal()*100);
+        $merchantAmount = (string) floor(100 * $this->merchantOrder->getGrandTotal());
         if ($pagantisAmount != $merchantAmount) {
             throw new AmountMismatchException($pagantisAmount, $merchantAmount);
         }
@@ -324,7 +339,8 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 Mage_Sales_Model_Order::STATE_PROCESSING,
                 Mage_Sales_Model_Order::STATE_PROCESSING,
                 'pagantisOrderId: ' . $this->pagantisOrder->getId(). ' ' .
-                'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(),
+                'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(). ' ' .
+                'via: '. $this->origin,
                 true
             );
             $this->merchantOrder->save();
@@ -376,7 +392,8 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
                 Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
                 'pagantisOrderId: ' . $this->pagantisOrder->getId(). ' ' .
-                'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(),
+                'pagantisOrderStatus: '. $this->pagantisOrder->getStatus(). ' ' .
+                'via: '. $this->origin,
                 false
             );
             $this->merchantOrder->save();
