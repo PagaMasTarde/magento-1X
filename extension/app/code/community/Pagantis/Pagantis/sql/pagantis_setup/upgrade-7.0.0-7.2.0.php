@@ -28,6 +28,7 @@ $installer->run("INSERT INTO `pagantis_config`
     ('PAGANTIS_FORM_DISPLAY_TYPE', '0'),
     ('PAGANTIS_DISPLAY_MIN_AMOUNT', '1'),
     ('PAGANTIS_URL_OK', 'checkout/onepage/success/'),
+    ('PAGANTIS_ALLOWED_COUNTRIES', 'a:2:{i:0;s:2:\"es\";i:1;s:2:\"it\";}'),
     ('PAGANTIS_URL_KO', 'checkout/cart/')");
 
 $installer->endSetup();

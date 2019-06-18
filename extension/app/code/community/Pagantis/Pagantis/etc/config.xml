@@ -17,6 +17,14 @@
                     </Pagantis_Pagantis>
                 </observers>
             </sales_order_place_after>
+            <payment_method_is_active>
+                <observers>
+                    <disable_paymentmethod>
+                        <class>pagantis/observer</class>
+                        <method>paymentMethodIsActive</method>
+                    </disable_paymentmethod>
+                </observers>
+            </payment_method_is_active>
         </events>
 
         <helpers>
