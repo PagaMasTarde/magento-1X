@@ -18,33 +18,37 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $config         = Mage::getStoreConfig('payment/pagantis');
         $extraConfig    = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
         $locale         = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
-        $amount = Mage::app()->getStore()->convertPrice($this->getProduct()->getFinalPrice());
-        $this->assign(
-            array(
-                'locale'                     => $locale,
-                'amount'                     => $amount,
-                'pagantisIsEnabled'          => $config['active'],
-                'pagantisPublicKey'          => $config['pagantis_public_key'],
-                'pagantisSimulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
-                'pagantisMinAmount'          => $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'],
-                'pagantisCSSSelector'        => $extraConfig['PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR'],
-                'pagantisPriceSelector'      => $extraConfig['PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR'],
-                'pagantisQuotesStart'        => $extraConfig['PAGANTIS_SIMULATOR_START_INSTALLMENTS'],
-                'pagantisSimulatorType'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_TYPE'],
-                'pagantisSimulatorSkin'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_SKIN'],
-                'pagantisSimulatorPosition'  => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION'],
-                'pagantisQuantitySelector'   => $extraConfig['PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR'],
-                'pagantisTitle'              => $this->__($extraConfig['PAGANTIS_TITLE']),
-            )
-        );
+        $amount         = Mage::app()->getStore()->convertPrice($this->getProduct()->getFinalPrice());
+        $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
 
-        // check symlinks
-        $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
-        $simulatorTemplate = new $classCoreTemplate;
-        $simulator = $simulatorTemplate->setTemplate('pagantis/product/simulator.phtml')->toHtml();
+        if (in_array(strtolower($locale), $allowedCountries)) {
+            $this->assign(
+                array(
+                    'locale'                     => $locale,
+                    'amount'                     => $amount,
+                    'pagantisIsEnabled'          => $config['active'],
+                    'pagantisPublicKey'          => $config['pagantis_public_key'],
+                    'pagantisSimulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
+                    'pagantisMinAmount'          => $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'],
+                    'pagantisCSSSelector'        => $extraConfig['PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR'],
+                    'pagantisPriceSelector'      => $extraConfig['PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR'],
+                    'pagantisQuotesStart'        => $extraConfig['PAGANTIS_SIMULATOR_START_INSTALLMENTS'],
+                    'pagantisSimulatorType'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_TYPE'],
+                    'pagantisSimulatorSkin'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_SKIN'],
+                    'pagantisSimulatorPosition'  => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION'],
+                    'pagantisQuantitySelector'   => $extraConfig['PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR'],
+                    'pagantisTitle'              => $this->__($extraConfig['PAGANTIS_TITLE']),
+                )
+            );
 
-        if ($simulator == '') {
-            $this->_allowSymlinks = true;
+            // check symlinks
+            $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+            $simulatorTemplate = new $classCoreTemplate;
+            $simulator = $simulatorTemplate->setTemplate('pagantis/product/simulator.phtml')->toHtml();
+
+            if ($simulator == '') {
+                $this->_allowSymlinks = true;
+            }
         }
         parent::_construct();
     }

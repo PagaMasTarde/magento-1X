@@ -6,18 +6,18 @@
 ?>
 <script type="text/javascript">
     if (typeof pgSDK !== 'undefined') {
-        pgSDK.modal.open("<?=$orderUrl; ?>",
+        pgSDK.modal.open("<?php echo $orderUrl; ?>",
             {
                 id: 'iframe-pagantis',
                 closeOnBackDropClick: false,
                 closeOnEscPress: false,
                 backDropDark: false,
                 largeSize: true,
-                closeConfirmationMessage: '<?=$leaveMessage;?>'
+                closeConfirmationMessage: '<?php echo $leaveMessage;?>'
             }
         );
         pgSDK.modal.onClose(function() {
-            window.location.href = "<?=$checkoutUrl; ?>";
+            window.location.href = "<?php echo $checkoutUrl; ?>";
         });
     }
 </script>

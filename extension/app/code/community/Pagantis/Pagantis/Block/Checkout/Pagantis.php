@@ -17,38 +17,40 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         $checkoutSession = Mage::getModel('checkout/session');
         $quote = $checkoutSession->getQuote();
         $amount = $quote->getGrandTotal();
+        $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
 
-        $title = $this->__($extraConfig['PAGANTIS_TITLE']);
-        $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+        if (in_array(strtolower($locale), $allowedCountries)) {
+            $title = $this->__($extraConfig['PAGANTIS_TITLE']);
+            $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
 
-        $logoHtml = '';
-        if ($config['active']) {
-            $logoTemplate = new $classCoreTemplate;
-            $logoTemplate->assign(array(
-                'locale'             => $locale,
-            ));
-            $logoHtml = $logoTemplate->setTemplate('pagantis/checkout/logo.phtml')->toHtml();
-
-            if ($logoHtml == '') {
-                $logoTemplate->_allowSymlinks = true;
+            $logoHtml = '';
+            if ($config['active']) {
+                $logoTemplate = new $classCoreTemplate;
+                $logoTemplate->assign(array(
+                    'locale'             => $locale,
+                ));
                 $logoHtml = $logoTemplate->setTemplate('pagantis/checkout/logo.phtml')->toHtml();
+
+                if ($logoHtml == '') {
+                    $logoTemplate->_allowSymlinks = true;
+                    $logoHtml = $logoTemplate->setTemplate('pagantis/checkout/logo.phtml')->toHtml();
+                }
             }
+
+            $template = $this->setTemplate('pagantis/checkout/pagantis.phtml');
+            $template->assign(array(
+                'publicKey'          => $config['pagantis_public_key'],
+                'amount'             => $amount,
+                'locale'             => $locale,
+                'pagantisIsEnabled'  => $config['active'],
+                'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
+            ));
+
+            if ($template->toHtml() == '') {
+                $this->_allowSymlinks = true;
+            }
+            $template->setMethodTitle($title)->setMethodLabelAfterHtml($logoHtml);
         }
-
-        $template = $this->setTemplate('pagantis/checkout/pagantis.phtml');
-        $template->assign(array(
-            'publicKey'          => $config['pagantis_public_key'],
-            'amount'             => $amount,
-            'locale'             => $locale,
-            'pagantisIsEnabled'  => $config['active'],
-            'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
-        ));
-
-        if ($template->toHtml() == '') {
-            $this->_allowSymlinks = true;
-        }
-        $template->setMethodTitle($title)->setMethodLabelAfterHtml($logoHtml);
-
         parent::_construct();
     }
 }

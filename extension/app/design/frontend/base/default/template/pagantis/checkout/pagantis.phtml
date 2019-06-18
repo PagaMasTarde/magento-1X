@@ -20,14 +20,12 @@
             {
                 var sdk = pgSDK;
 
-                if ('<?=$locale;?>' == 'ES' || '<?=$locale;?>' == '') {
-                    var sdk = pmtSDK;
-                } else {
-                    var sdk = 'undefined';
+                if ('<?php echo $locale;?>' == 'ES' || '<?php echo $locale;?>' == '') {
+                    sdk = pmtSDK;
                 }
 
                 var pgDiv = document.getElementsByClassName("PagantisSimulator");
-                if(typeof pgDiv != 'undefined') {
+                if(typeof pgDiv != 'undefined' && typeof pgDiv[0] != 'undefined') {
                     var pgElement = pgDiv[0];
                     if (pgElement.innerHTML != '')
                     {
@@ -38,16 +36,20 @@
 
                 if (sdk != 'undefined') {
                     sdk.simulator.init({
+                        locale: '<?php echo strtolower($locale);?>',
                         publicKey: '<?php echo $publicKey; ?>',
                         selector: '.PagantisSimulator',
                         totalAmount: <?php echo $amount; ?>,
                     });
                     return false;
                 }
+                return true;
             }
-            window.MGSimulatorId = setInterval(function () {
-                loadSimulator();
-            }, 2000);
+            if (!loadSimulator()) {
+                window.MGSimulatorId = setInterval(function () {
+                    loadSimulator();
+                }, 2000);
+            }
 
         </script>
     <?php } ?>

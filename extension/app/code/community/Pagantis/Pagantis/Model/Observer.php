@@ -44,4 +44,25 @@ class Pagantis_Pagantis_Model_Observer
             Mage::logException($exception);
         }
     }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function paymentMethodIsActive(Varien_Event_Observer $observer)
+    {
+        $method = $observer->getMethodInstance();
+        if ($method->getCode() == 'pagantis') {
+            $extraConfig      = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+            $locale           = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
+            $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
+            $minAmount        = $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'];
+            $checkoutSession  = Mage::getModel('checkout/session');
+            $quote = $checkoutSession->getQuote();
+            $amount = $quote->getGrandTotal();
+            if (!in_array(strtolower($locale), $allowedCountries) || (int)$amount < (int)$minAmount) {
+                $result = $observer->getResult();
+                $result->isAvailable = false;
+            }
+        }
+    }
 }

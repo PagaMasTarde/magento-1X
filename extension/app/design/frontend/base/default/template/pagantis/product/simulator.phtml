@@ -35,14 +35,12 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
         function loadSimulator()
         {
             var sdk = pgSDK;
-            if ('<?=$locale;?>' == 'ES') {
-                var sdk = pmtSDK;
-            } else {
-                var sdk = 'undefined';
+            if ('<?php echo $locale;?>' == 'ES') {
+                sdk = pmtSDK;
             }
 
             var pgDiv = document.getElementsByClassName("PagantisSimulator");
-            if(typeof pgDiv != 'undefined') {
+            if(typeof pgDiv != 'undefined' && typeof pgDiv[0] != 'undefined') {
                 var pmtElement = pgDiv[0];
                 if (pmtElement.innerHTML != '')
                 {
@@ -54,9 +52,9 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
             if (sdk != 'undefined') {
                 var price = null;
                 var quantity = null;
-                var positionSelector = '<?=$pagantisCSSSelector;?>';
-                var priceSelector = '<?=$pagantisPriceSelector;?>';
-                var quantitySelector = '<?=$pagantisQuantitySelector;?>';
+                var positionSelector = '<?php echo $pagantisCSSSelector;?>';
+                var priceSelector = '<?php echo $pagantisPriceSelector;?>';
+                var quantitySelector = '<?php echo $pagantisQuantitySelector;?>';
 
                 if (positionSelector === 'default') {
                     positionSelector = '.PagantisSimulator';
@@ -65,7 +63,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
                 if (priceSelector === 'default') {
                     priceSelector = findPriceSelector();
                     if (priceSelector === 'default') {
-                        price = '<?=$amount;?>';
+                        price = '<?php echo $amount;?>';
                     }
                 }
 
@@ -77,13 +75,14 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
                 }
 
                 sdk.product_simulator = {};
+                sdk.product_simulator.locale = '<?php echo strtolower($locale);?>',
                 sdk.product_simulator.id = 'product-simulator';
-                sdk.product_simulator.publicKey = '<?=$pagantisPublicKey;?>';
+                sdk.product_simulator.publicKey = '<?php echo $pagantisPublicKey;?>';
                 sdk.product_simulator.selector = positionSelector;
-                sdk.product_simulator.numInstalments = '<?=$pagantisQuotesStart;?>';
-                sdk.product_simulator.type = <?=$pagantisSimulatorType;?>;
-                sdk.product_simulator.skin = <?=$pagantisSimulatorSkin;?>;
-                sdk.product_simulator.position = <?=$pagantisSimulatorPosition;?>;
+                sdk.product_simulator.numInstalments = '<?php echo $pagantisQuotesStart;?>';
+                sdk.product_simulator.type = <?php echo $pagantisSimulatorType;?>;
+                sdk.product_simulator.skin = <?php echo $pagantisSimulatorSkin;?>;
+                sdk.product_simulator.position = <?php echo $pagantisSimulatorPosition;?>;
 
                 if (priceSelector !== 'default') {
                     sdk.product_simulator.itemAmountSelector = priceSelector;
@@ -100,11 +99,15 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
 
                 sdk.simulator.init(sdk.product_simulator);
                 clearInterval(window.MGSimulatorId);
+                return true;
             }
+            return false;
         }
-        window.MGSimulatorId = setInterval(function () {
-            loadSimulator();
-        }, 2000);
+        if (!loadSimulator()) {
+            window.MGSimulatorId = setInterval(function () {
+                loadSimulator();
+            }, 2000);
+        }
     </script>
     <div id="pagantis-simulator-product-page" class="PagantisSimulator"></div>
 <?php
