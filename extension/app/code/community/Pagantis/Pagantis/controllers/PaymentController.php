@@ -385,12 +385,14 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
     {
         if (isset($this->customer->tax_id)) {
             return $this->customer->tax_id;
+        } elseif (isset($this->customer->privatecompany_fiscalcode)) {
+            return $this->customer->privatecompany_fiscalcode;
         } elseif ($billigAddress !== null and isset($billigAddress['tax_id'])) {
             return $billigAddress['tax_id'];
         } elseif ($shippingAddress !== null and isset($shippingAddress['tax_id'])) {
             return $shippingAddress['tax_id'];
         } else {
-        return null;
-    }
+            return null;
+        }
     }
 }
