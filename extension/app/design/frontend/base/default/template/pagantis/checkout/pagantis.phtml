@@ -20,10 +20,8 @@
             {
                 var sdk = pgSDK;
 
-                if ('<?=$locale;?>' == 'ES' || '<?=$locale;?>' == '') {
+                if ('<?php echo $locale;?>' == 'ES' || '<?php echo $locale;?>' == '') {
                     var sdk = pmtSDK;
-                } else {
-                    var sdk = 'undefined';
                 }
 
                 var pgDiv = document.getElementsByClassName("PagantisSimulator");
@@ -38,6 +36,7 @@
 
                 if (sdk != 'undefined') {
                     sdk.simulator.init({
+                        locale: <?php echo strtolower($locale);?>,
                         publicKey: '<?php echo $publicKey; ?>',
                         selector: '.PagantisSimulator',
                         totalAmount: <?php echo $amount; ?>,

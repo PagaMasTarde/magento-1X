@@ -132,40 +132,49 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
         $userAddress = null;
         $orderShippingAddress = null;
         $orderBillingAddress = null;
+        $mgShippingAddress = null;
+        $mgBillingAddress = null;
         try {
             for ($i = 0; $i <= count($this->addressData); $i++) {
                 if (isset($this->addressData[$i]) && array_search('shipping', $this->addressData[$i])) {
-                    $fullName = $this->addressData[$i]['firstname'] . ' ' . $this->addressData[$i]['lastname'];
-                    $telephone = $this->addressData[$i]['telephone'];
+                    $mgShippingAddress = $this->addressData[$i];
+                    $fullName = $mgShippingAddress['firstname'] . ' ' . $mgShippingAddress['lastname'];
+                    $telephone = $mgShippingAddress['telephone'];
                     $userAddress = new PagantisModelOrderAddress();
                     $userAddress
-                        ->setZipCode($this->addressData[$i]['postcode'])
+                        ->setZipCode($mgShippingAddress['postcode'])
                         ->setFullName($fullName)
-                        ->setCountryCode($this->addressData[$i]['country_id'])
-                        ->setCity($this->addressData[$i]['city'])
-                        ->setAddress($this->addressData[$i]['street'])
-                        ->setMobilePhone($telephone);
+                        ->setCountryCode($mgShippingAddress['country_id'])
+                        ->setCity($mgShippingAddress['city'])
+                        ->setAddress($mgShippingAddress['street'])
+                        ->setMobilePhone($telephone)
+                        ->setNationalId($this->getNationalId($mgShippingAddress, null))
+                        ->setTaxId($this->getTaxId($mgShippingAddress, null))
+                    ;
                     $orderShippingAddress = new PagantisModelOrderAddress();
                     $orderShippingAddress
-                        ->setZipCode($this->addressData[$i]['postcode'])
+                        ->setZipCode($mgShippingAddress['postcode'])
                         ->setFullName($fullName)
-                        ->setCountryCode($this->addressData[$i]['country_id'])
-                        ->setCity($this->addressData[$i]['city'])
-                        ->setAddress($this->addressData[$i]['street'])
-                        ->setMobilePhone($telephone);
+                        ->setCountryCode($mgShippingAddress['country_id'])
+                        ->setCity($mgShippingAddress['city'])
+                        ->setAddress($mgShippingAddress['street'])
+                        ->setMobilePhone($telephone)
+                    ;
                 }
                 if (isset($this->addressData[$i]) && array_search('billing', $this->addressData[$i])) {
+                    $mgBillingAddress = $this->addressData[$i];
                     $orderBillingAddress = new PagantisModelOrderAddress();
                     $orderBillingAddress
-                        ->setZipCode($this->addressData[$i]['postcode'])
+                        ->setZipCode($mgBillingAddress['postcode'])
                         ->setFullName(
-                            $this->addressData[$i]['firstname'] . ' ' .
-                            $this->addressData[$i]['lastname']
+                            $mgBillingAddress['firstname'] . ' ' .
+                            $mgBillingAddress['lastname']
                         )
-                        ->setCountryCode($this->addressData[$i]['country_id'])
-                        ->setCity($this->addressData[$i]['city'])
-                        ->setAddress($this->addressData[$i]['street'])
-                        ->setMobilePhone($this->addressData[$i]['telephone']);
+                        ->setCountryCode($mgBillingAddress['country_id'])
+                        ->setCity($mgBillingAddress['city'])
+                        ->setAddress($mgBillingAddress['street'])
+                        ->setMobilePhone($mgBillingAddress['telephone'])
+                    ;
                 }
             }
 
@@ -206,7 +215,10 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 ->setMobilePhone($telephone)
                 ->setAddress($userAddress)
                 ->setShippingAddress($orderShippingAddress)
-                ->setBillingAddress($orderBillingAddress);
+                ->setBillingAddress($orderBillingAddress)
+                ->setNationalId($this->getNationalId($mgShippingAddress, $mgBillingAddress))
+                ->setTaxId($this->getTaxId($mgShippingAddress, $mgBillingAddress))
+            ;
 
 
             $orderCollection = Mage::getModel('sales/order')->getCollection();
@@ -257,6 +269,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             $orderConfiguration
                 ->setChannel($orderChannel)
                 ->setUrls($orderConfigurationUrls)
+                ->setPurchaseCountry(substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2))
             ;
 
             $metadataOrder = new PagantisModelOrderMetadata();
@@ -343,5 +356,41 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             'mg_order_id' => $magentoOrderId,
         ));
         $model->save();
+    }
+
+    /**
+     * @param null $shippingAddress
+     * @param null $billigAddress
+     * @return mixed|null
+     */
+    private function getNationalId($shippingAddress = null, $billigAddress = null)
+    {
+        if (isset($this->customer->national_id)) {
+            return $this->customer->national_id;
+        } elseif ($billigAddress !== null and isset($billigAddress['national_id'])) {
+            return $billigAddress['national_id'];
+        } elseif ($shippingAddress !== null and isset($shippingAddress['national_id'])) {
+            return $shippingAddress['national_id'];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param null $shippingAddress
+     * @param null $billigAddress
+     * @return mixed|null
+     */
+    private function getTaxId($shippingAddress = null, $billigAddress = null)
+    {
+        if (isset($this->customer->tax_id)) {
+            return $this->customer->tax_id;
+        } elseif ($billigAddress !== null and isset($billigAddress['tax_id'])) {
+            return $billigAddress['tax_id'];
+        } elseif ($shippingAddress !== null and isset($shippingAddress['tax_id'])) {
+            return $shippingAddress['tax_id'];
+        } else {
+        return null;
+    }
     }
 }
