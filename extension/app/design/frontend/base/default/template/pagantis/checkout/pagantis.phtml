@@ -36,7 +36,7 @@
 
                 if (sdk != 'undefined') {
                     sdk.simulator.init({
-                        locale: <?php echo strtolower($locale);?>,
+                        locale: '<?php echo strtolower($locale);?>',
                         publicKey: '<?php echo $publicKey; ?>',
                         selector: '.PagantisSimulator',
                         totalAmount: <?php echo $amount; ?>,
