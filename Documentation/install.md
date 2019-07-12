@@ -11,7 +11,7 @@ To access to Pagantis admin panel, we need to open the Magento admin panel and f
 ![Step 2](./install-step2.png?raw=true "Step 2")
 
 3. Download the zip file from [here](https://github.com/pagantis/magento-1x/releases/latest). The name could be different according the last version of the plugin(Vx.x.x)
-![Step 3](./install-step2b?raw=true "Step 3")
+![Step 3](./install-step2b.png?raw=true "Step 3")
 
 4 – Upload the package (.tgz file)
 ![Step 4](./install-step3.png?raw=true "Step 4")
