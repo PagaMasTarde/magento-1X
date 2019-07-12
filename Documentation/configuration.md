@@ -50,7 +50,32 @@ Here you have a complete list of configurations you can change and it's explanat
 | PAGANTIS_ALLOWED_COUNTRIES               | Array of country codes where the method can be used 
 
 
-Example using postman
+##### Edit using database
+1 - Open your database management (Frequently Cpanel->phpmyadmin) 
+
+2 - Connect to wordpress database. (Frequently called wordpress)
+
+3 - Launch a query to check if the table exists: select * from wp_pagantis_config
+![Step 3](./sql_step3.png?raw=true "Step 1")
+
+4 - Find the config field to edit, in this example we are going to edit: PAGANTIS_TITlE 
+
+5 - Launch a query to edit their value: Update wp_pagantis_config set value='New title' where config='PAGANTIS_TITLE'
+![Step 5](./sql_step5.png?raw=true "Step 5")
+
+6 - After the modification, you can check it launching the query: "select * from wp_pagantis_config"
+![Step 6](./sql_step6.png?raw=true "Step 6")
+
+7 - Finally you can see the change in checkout page
+![Step 7](./sql_step7.png?raw=true "Step 7")
+
+##### Edit using postman
+
+To modify the configuration you only need to make a post to:
+
+<strong>{your-domain-url}/index.php/pagantis/config/get?secret={your-secret-key}</strong>
+
+Sending in the form data the key of the config you want to change and the new value.
 
 1 - Open the application
 ![Step 1](./postman_step1.png?raw=true "Step 1")
