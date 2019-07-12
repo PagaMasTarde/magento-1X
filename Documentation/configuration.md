@@ -27,12 +27,7 @@ In Pagantis admin panel, we can set the following options:
 ## :clipboard: Advanced configuration:
 The module has many configuration options you can set, but we recommend use it as is.
 
-If you want to manage it, you have a way to update the values via HTTP, you only need to make a post to:
-
-<strong>{your-domain-url}/index.php/pagantis/config/get?secret={your-secret-key}</strong>
-
-sending in the form data the key of the config you want to change and the new value.
-
+If you want to manage it, you have 2 ways to update the values [using database](./configuration.md#edit-using-database) or [via HTTP](./configuration.md#edit-using-postman), see below.
 
 Here you have a complete list of configurations you can change and it's explanation. 
 
@@ -52,6 +47,8 @@ Here you have a complete list of configurations you can change and it's explanat
 | PAGANTIS_DISPLAY_MIN_AMOUNT              | Minimum amount to use the module and show the payment method in the checkout page.
 | PAGANTIS_URL_OK                          | Location where user will be redirected after a successful payment. This string will be concatenated to the base url to build the full url
 | PAGANTIS_URL_KO                          | Location where user will be redirected after a wrong payment. This string will be concatenated to the base url to build the full url
+| PAGANTIS_ALLOWED_COUNTRIES               | Array of country codes where the method can be used 
+
 
 Example using postman
 
