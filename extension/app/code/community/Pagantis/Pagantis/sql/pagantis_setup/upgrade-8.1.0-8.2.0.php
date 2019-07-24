@@ -37,6 +37,6 @@ $setup->addAttribute('catalog_product', $code, array(
 $installer->run("INSERT INTO `pagantis_config` 
     (`config`, `value`)
     VALUES
-    ('PAGANTIS_PROMOTION_MESSAGE', '¡Financia este producto sin intereses! - 0% TAE')");
+    ('PAGANTIS_PROMOTION_MESSAGE', '<strong>¡Financia este producto sin intereses! - 0% TAE</strong>')");
 
 $installer->endSetup();
