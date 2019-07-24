@@ -5,7 +5,8 @@
  * @var string $publicKey
  */
 if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '') {
-?>
+    if ($promoted) echo $pagantisPromotedMessage;
+    ?>
     <script>
         function findPriceSelector()
         {

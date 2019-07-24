@@ -34,4 +34,9 @@ $setup->addAttribute('catalog_product', $code, array(
     'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
 ));
 
+$installer->run("INSERT INTO `pagantis_config` 
+    (`config`, `value`)
+    VALUES
+    ('PAGANTIS_PROMOTION_MESSAGE', '¡Financia este producto sin intereses! - 0% TAE')");
+
 $installer->endSetup();
