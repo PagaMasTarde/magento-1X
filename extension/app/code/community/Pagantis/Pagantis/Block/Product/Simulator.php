@@ -20,7 +20,7 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $locale         = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
         $amount         = Mage::app()->getStore()->convertPrice($this->getProduct()->getFinalPrice());
         $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
-        $pagantisPromoted = $this->getProduct()->getData("pagantis_promoted");
+        $pagantisPromoted = $this->getProduct()->getData("pagantis_promoted") ? 1 : 0;
 
         if (in_array(strtolower($locale), $allowedCountries)) {
             $this->assign(
