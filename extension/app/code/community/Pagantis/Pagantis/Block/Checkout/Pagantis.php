@@ -18,6 +18,16 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         $quote = $checkoutSession->getQuote();
         $amount = $quote->getGrandTotal();
         $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
+        $promotedAmount =  0;
+        $cart = Mage::getModel('checkout/cart')->getQuote();
+        foreach ($cart->getAllItems() as $item) {
+            $product = $item->getProduct()->load();
+            $pagantisPromoted = $product->getData("pagantis_promoted") ? 1 : 0;
+            $productPrice = $item->getProduct()->getPrice();
+            if ($pagantisPromoted) {
+                $promotedAmount += $productPrice;
+            }
+        }
 
         if (in_array(strtolower($locale), $allowedCountries)) {
             $title = $this->__($extraConfig['PAGANTIS_TITLE']);
@@ -41,6 +51,7 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
             $template->assign(array(
                 'publicKey'          => $config['pagantis_public_key'],
                 'amount'             => $amount,
+                'promotedAmount'     => $promotedAmount,
                 'locale'             => $locale,
                 'pagantisIsEnabled'  => $config['active'],
                 'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
