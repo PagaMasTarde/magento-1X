@@ -20,10 +20,10 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
         $promotedAmount =  0;
         $cart = Mage::getModel('checkout/cart')->getQuote();
-        foreach ($cart->getAllItems() as $item) {
+        foreach ($cart->getAllVisibleItems() as $item) {
             $product = $item->getProduct()->load();
             $pagantisPromoted = $product->getData("pagantis_promoted") ? 1 : 0;
-            $productPrice = $item->getProduct()->getPrice();
+            $productPrice = $item->getPrice();
             if ($pagantisPromoted) {
                 $promotedAmount += $productPrice;
             }
