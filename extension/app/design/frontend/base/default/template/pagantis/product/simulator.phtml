@@ -5,7 +5,8 @@
  * @var string $publicKey
  */
 if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '') {
-?>
+    if ($promoted) echo $pagantisPromotedMessage;
+    ?>
     <script>
         function findPriceSelector()
         {
@@ -86,13 +87,20 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
 
                 if (priceSelector !== 'default') {
                     sdk.product_simulator.itemAmountSelector = priceSelector;
+                    if (<? echo $promoted ?> == 1) {
+                        sdk.product_simulator.itemPromotedAmountSelector = priceSelector;
+                    }
                 }
                 if (quantitySelector !== 'default' && quantitySelector !== 'none') {
                     sdk.product_simulator.itemQuantitySelector = quantitySelector;
                 }
                 if (price != null) {
                     sdk.product_simulator.itemAmount = price;
+                    if (<? echo $promoted ?> == 1) {
+                        sdk.product_simulator.itemPromotedAmount = price;
+                    }
                 }
+
                 if (quantity != null) {
                     sdk.product_simulator.itemQuantity = quantity;
                 }

@@ -233,22 +233,35 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 }
             }
 
+            $promotedAmount = 0;
             $details = new PagantisModelOrderShoppingCartDetails();
             $details->setShippingCost(floatval($this->magentoOrder->getShippingAmount())*100);
             foreach ($this->itemCollection as $item) {
+                $magentoProduct = $item->getProduct()->load();
                 $product = new PagantisModelOrderShoppingCartProduct();
                 $product
                     ->setAmount(floatval($item->getRowTotalInclTax())*100)
                     ->setQuantity($item->getQtyToShip())
                     ->setDescription($item->getName());
                 $details->addProduct($product);
+                $pagantisPromoted = $magentoProduct->getData("pagantis_promoted") ? 1 : 0;
+                $productPrice = floatval($item->getRowTotalInclTax())*100;
+                if ($pagantisPromoted) {
+                    $metadata[$item->getId()] =
+                        'Promoted Item: ' . $item->getName() .
+                        ' Price: ' . floatval($item->getRowTotalInclTax())*100 .
+                        ' Qty: ' . $item->getQtyToShip() .
+                        ' Item ID: ' . $item->getId();
+                    $promotedAmount += $productPrice;
+
+                }
             }
 
             $orderShoppingCart = new PagantisModelOrderShoppingCart();
             $orderShoppingCart
                 ->setDetails($details)
                 ->setOrderReference($this->magentoOrderId)
-                ->setPromotedAmount(0)
+                ->setPromotedAmount($promotedAmount)
                 ->setTotalAmount((string) floor(100 * $this->magentoOrder->getGrandTotal()));
 
             $orderConfigurationUrls = new PagantisModelOrderUrls();
