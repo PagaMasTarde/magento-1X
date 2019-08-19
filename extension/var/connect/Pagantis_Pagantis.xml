@@ -81,7 +81,7 @@
          <path>adminhtml/default/default/layout/pagantis.xml</path>
          <path>adminhtml/default/default/images/pagantis</path>
          <path>frontend/base/default/images/pagantis</path>
-         <path>adminhtml/base/default/admin.css</path>
+         <path>adminhtml/base/default/admin_pagantis.css</path>
       </path>
       <type>
          <type>file</type>
