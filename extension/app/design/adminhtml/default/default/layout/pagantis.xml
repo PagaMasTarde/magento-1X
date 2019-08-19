@@ -2,7 +2,7 @@
 <layout>
     <default>
         <reference name="head">
-            <action method="addCss"><name>admin.css</name></action>
+            <action method="addCss"><name>admin_pagantis.css</name></action>
         </reference>
     </default>
 </layout>
