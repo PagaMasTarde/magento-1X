@@ -21,7 +21,7 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
         $promotedAmount =  0;
         $cart = Mage::getModel('checkout/cart')->getQuote();
         foreach ($cart->getAllVisibleItems() as $item) {
-            $magentoProduct = $item->getProduct();
+            $magentoProduct = $item->getProduct()->load();
             $pagantisPromoted = $magentoProduct->getData("pagantis_promoted") ? 1 : 0;
             $productPrice = $item->getRowTotalInclTax();
             if ($pagantisPromoted) {
