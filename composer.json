@@ -33,11 +33,6 @@
         "pagantis/selenium-form-utils": "^2.0",
         "magento/core": "1.9.3.9"
     },
-    "autoload": {
-        "psr-4": {
-            "": "extension/"
-        }
-    },
     "autoload-dev": {
         "psr-4": {
             "Test\\": "test/"
