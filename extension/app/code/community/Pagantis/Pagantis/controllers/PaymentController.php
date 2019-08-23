@@ -237,7 +237,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             $details = new PagantisModelOrderShoppingCartDetails();
             $details->setShippingCost(floatval($this->magentoOrder->getShippingAmount())*100);
             foreach ($this->itemCollection as $item) {
-                $magentoProduct = $item->getProduct()->load();
+                $magentoProduct = $item->getProduct();
                 $product = new PagantisModelOrderShoppingCartProduct();
                 $product
                     ->setAmount(floatval($item->getRowTotalInclTax())*100)
