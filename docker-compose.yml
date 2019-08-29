@@ -3,7 +3,9 @@ version: "3.5"
 services:
   magento19-dev:
     container_name: magento19-dev
-    image: alexcheng/magento:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
     environment:
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
@@ -29,7 +31,9 @@ services:
 
   magento19-test:
     container_name: magento19-test
-    image: alexcheng/magento:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
     environment:
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
