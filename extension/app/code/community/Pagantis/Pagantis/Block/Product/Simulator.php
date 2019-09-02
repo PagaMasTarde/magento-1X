@@ -41,6 +41,8 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
                     'pagantisSimulatorPosition'  => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION'],
                     'pagantisQuantitySelector'   => $extraConfig['PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR'],
                     'pagantisTitle'              => $this->__($extraConfig['PAGANTIS_TITLE']),
+                    'pagantisSimulatorThousandSeparator' => $extraConfig['PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR'],
+                    'pagantisSimulatorDecimalSeparator' => $extraConfig['PAGANTIS_SIMULATOR_DECIMAL_SEPARATOR']
                 )
             );
 

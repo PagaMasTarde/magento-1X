@@ -84,6 +84,10 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
                 sdk.product_simulator.type = <?php echo $pagantisSimulatorType;?>;
                 sdk.product_simulator.skin = <?php echo $pagantisSimulatorSkin;?>;
                 sdk.product_simulator.position = <?php echo $pagantisSimulatorPosition;?>;
+                sdk.product_simulator.amountParserConfig =  {
+                    thousandSeparator: '<?php echo $pagantisSimulatorThousandSeparator;?>',
+                    decimalSeparator: '<?php echo $pagantisSimulatorDecimalSeparator;?>'
+                };
 
                 if (priceSelector !== 'default') {
                     sdk.product_simulator.itemAmountSelector = priceSelector;
