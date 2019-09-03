@@ -5,7 +5,21 @@
  * @var string $publicKey
  */
 if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '') {
-    if ($promoted) echo $pagantisPromotedMessage;
+    if ($promoted) {
+        echo "<style>
+        .pagantis-promotion {
+            font-size: 11px;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            color: #828282;
+        }
+        .pagantis-promotion .pmt-no-interest{
+            color: #00c1d5
+        }
+    </style>";
+        echo "<div class='pagantis-promotion'>$pagantisPromotedMessage</div>";
+    }
     ?>
     <script>
         function findPriceSelector()
