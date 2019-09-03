@@ -55,6 +55,8 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
                 'locale'             => $locale,
                 'pagantisIsEnabled'  => $config['active'],
                 'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
+                'thousandSeparator'  => $extraConfig['PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR'],
+                'decimalSeparator'   => $extraConfig['PAGANTIS_SIMULATOR_DECIMAL_SEPARATOR']
             ));
 
             if ($template->toHtml() == '') {
