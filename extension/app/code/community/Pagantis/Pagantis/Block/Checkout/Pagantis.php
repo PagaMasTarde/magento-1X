@@ -56,7 +56,18 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
                 'pagantisIsEnabled'  => $config['active'],
                 'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
                 'thousandSeparator'  => $extraConfig['PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR'],
-                'decimalSeparator'   => $extraConfig['PAGANTIS_SIMULATOR_DECIMAL_SEPARATOR']
+                'decimalSeparator'   => $extraConfig['PAGANTIS_SIMULATOR_DECIMAL_SEPARATOR'],
+                'minAmount'          => $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'],
+                'pagantisCSSSelector'        => $extraConfig['PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR'],
+                'pagantisPriceSelector'      => $extraConfig['PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR'],
+                'pagantisQuotesStart'        => $extraConfig['PAGANTIS_SIMULATOR_START_INSTALLMENTS'],
+                'pagantisSimulatorType'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_TYPE'],
+                'pagantisSimulatorSkin'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_SKIN'],
+                'pagantisSimulatorPosition'  => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION'],
+                'pagantisQuantitySelector'   => $extraConfig['PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR'],
+                'pagantisTitle'              => $this->__($extraConfig['PAGANTIS_TITLE']),
+                'pagantisSimulatorThousandSeparator' => $extraConfig['PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR'],
+                'pagantisSimulatorDecimalSeparator' => $extraConfig['PAGANTIS_SIMULATOR_DECIMAL_SEPARATOR']
             ));
 
             if ($template->toHtml() == '') {
