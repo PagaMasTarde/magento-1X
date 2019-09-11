@@ -16,6 +16,17 @@
     <?php if($simulatorIsEnabled && $pagantisIsEnabled && $publicKey!='') { ?>
         <div class="PagantisSimulator"></div>
         <script type="text/javascript">
+
+            function getPositionSelector() {
+                var positionSelector = '<?php echo $pagantisCSSSelector;?>';
+
+                if (positionSelector === 'default') {
+                    positionSelector = '.PagantisSimulator';
+                }
+
+                return positionSelector;
+            }
+
             function loadSimulator()
             {
                 var sdk = pgSDK;
@@ -24,8 +35,9 @@
                     sdk = pmtSDK;
                 }
 
-                var pgDiv = document.getElementsByClassName("PagantisSimulator");
-                if(typeof pgDiv != 'undefined' && typeof pgDiv[0] != 'undefined') {
+                var positionSelector = getPositionSelector();
+                var pgDiv = document.querySelectorAll(positionSelector);
+                if(typeof pgDiv!='undefined' && typeof pgDiv[0]!='undefined' && typeof window.MGSimulatorId!='undefined') {
                     var pgElement = pgDiv[0];
                     if (pgElement.innerHTML != '')
                     {
@@ -35,19 +47,27 @@
                 }
 
                 if (sdk != 'undefined') {
-                    sdk.simulator.init({
+                    window.MGSimulatorId = sdk.simulator.init({
+                        numInstalments : '<?php echo $pagantisQuotesStart;?>',
+                        type : <?php echo $pagantisSimulatorType;?>,
+                        skin : <?php echo $pagantisSimulatorSkin;?>,
                         locale: '<?php echo strtolower($locale);?>',
+                        position : <?php echo $pagantisSimulatorPosition;?>,
                         publicKey: '<?php echo $publicKey; ?>',
-                        selector: '.PagantisSimulator',
+                        selector: positionSelector,
                         totalAmount: <?php echo $amount; ?>,
                         totalPromotedAmount:  <?php echo $promotedAmount; ?>,
+                        amountParserConfig :  {
+                            thousandSeparator: '<?php echo $thousandSeparator;?>',
+                            decimalSeparator: '<?php echo $decimalSeparator;?>'
+                        }
                     });
                     return false;
                 }
                 return true;
             }
             if (!loadSimulator()) {
-                window.MGSimulatorId = setInterval(function () {
+                window.loadingSimulator = setInterval(function () {
                     loadSimulator();
                 }, 2000);
             }
