@@ -53,6 +53,7 @@ class Pagantis_Pagantis_Block_Checkout_Pagantis extends Mage_Payment_Block_Form
                 'amount'             => $amount,
                 'promotedAmount'     => $promotedAmount,
                 'locale'             => $locale,
+                'country'            => $locale,
                 'pagantisIsEnabled'  => $config['active'],
                 'simulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
                 'thousandSeparator'  => $extraConfig['PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR'],
