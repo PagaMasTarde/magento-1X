@@ -26,6 +26,7 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
             $this->assign(
                 array(
                     'locale'                     => $locale,
+                    'country'                     => $locale,
                     'amount'                     => $amount,
                     'promoted'                   => $pagantisPromoted,
                     'pagantisPromotedMessage'    => $extraConfig['PAGANTIS_PROMOTION_MESSAGE'],

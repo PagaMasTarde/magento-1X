@@ -99,6 +99,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
 
                 sdk.product_simulator = {};
                 sdk.product_simulator.locale = '<?php echo strtolower($locale);?>',
+                sdk.product_simulator.country = '<?php echo strtolower($country);?>',
                 sdk.product_simulator.id = 'product-simulator';
                 sdk.product_simulator.publicKey = '<?php echo $pagantisPublicKey;?>';
                 sdk.product_simulator.selector = positionSelector;
