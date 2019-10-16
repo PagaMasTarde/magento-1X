@@ -114,7 +114,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
 
                 if (priceSelector !== 'default') {
                     sdk.product_simulator.itemAmountSelector = priceSelector;
-                    if (<? echo $promoted ?> == 1) {
+                    if (<?php echo $promoted ?> == 1) {
                         sdk.product_simulator.itemPromotedAmountSelector = priceSelector;
                     }
                 }
@@ -123,7 +123,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
                 }
                 if (price != null) {
                     sdk.product_simulator.itemAmount = price;
-                    if (<? echo $promoted ?> == 1) {
+                    if (<?php echo $promoted ?> == 1) {
                         sdk.product_simulator.itemPromotedAmount = price;
                     }
                 }

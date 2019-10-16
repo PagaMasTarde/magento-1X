@@ -30,7 +30,7 @@
     },
     "require-dev": {
         "ext-json": "*",
-        "pagantis/selenium-form-utils": "^2.0",
+        "pagantis/selenium-form-utils": "^3.0",
         "magento/core": "1.9.3.9"
     },
     "autoload-dev": {
