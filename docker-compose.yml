@@ -70,7 +70,7 @@ services:
       - MYSQL_DATABASE=magento
 
   selenium:
-    image: selenium/standalone-chrome:3.7.1
+    image: selenium/standalone-chrome:3.141.59-neon
     ports:
       - "4444:4444"
     extra_hosts:
