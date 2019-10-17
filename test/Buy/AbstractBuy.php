@@ -321,6 +321,7 @@ abstract class AbstractBuy extends MagentoTest
      */
     public function checkPurchaseReturn($message = '')
     {
+        var_dump("checkPurchaseReturn prev:" . $this->webDriver->getCurrentURL());
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(
                 WebDriverBy::cssSelector('.page-title h1')
