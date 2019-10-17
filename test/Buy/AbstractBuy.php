@@ -350,7 +350,7 @@ abstract class AbstractBuy extends MagentoTest
 
         // cancel the purchase with redirect
         var_dump("commitPurchase prev:" . $this->webDriver->getCurrentURL());
-        SeleniumHelper::finishForm($this->webDriver);
+        var_dump(SeleniumHelper::finishForm($this->webDriver));
         var_dump("commitPurchase post:" . $this->webDriver->getCurrentURL());
         sleep(10);
         var_dump("commitPurchase sleep(10):" . $this->webDriver->getCurrentURL());
