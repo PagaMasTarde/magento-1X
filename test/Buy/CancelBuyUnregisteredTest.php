@@ -99,12 +99,7 @@ class CancelBuyUnregisteredTest extends AbstractBuy
         $this->assertTrue((bool)$condition, "PR32");
 
         // cancel the purchase with redirect
-        var_dump("cancelPurchase prev:" . $this->webDriver->getCurrentURL());
         SeleniumHelper::cancelForm($this->webDriver);
-        var_dump("cancelPurchase post:" . $this->webDriver->getCurrentURL());
-        sleep(10);
-        var_dump("cancelPurchase sleep(10):" . $this->webDriver->getCurrentURL());
-
     }
 
 }
