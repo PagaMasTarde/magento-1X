@@ -7,8 +7,8 @@ $installer->startSetup();
 
 $installer->run('DROP TABLE IF EXISTS pagantis_cart_concurrency');
 $installer->run('CREATE TABLE `pagantis_cart_concurrency` (
-  `id` INT NOT NULL ,
-  `timestamp` INT NOT NULL ,
+  `id` varchar(50) NOT NULL,
+  `timestamp` INT NOT NULL,
   PRIMARY KEY (`id`)
   )');
 

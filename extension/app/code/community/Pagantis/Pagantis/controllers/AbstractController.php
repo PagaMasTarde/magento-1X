@@ -10,8 +10,8 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
      * Concurrency Tablename
      */
     const PAGANTIS_CONCURRENCY_TABLE = 'CREATE TABLE `pagantis_cart_concurrency` (
-  `id` INT NOT NULL ,
-  `timestamp` INT NOT NULL ,
+  `id` varchar(50) NOT NULL,
+  `timestamp` INT NOT NULL,
   PRIMARY KEY (`id`)
   )';
 
