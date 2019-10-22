@@ -274,18 +274,20 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         $statusHistory = $this->merchantOrder->getAllStatusHistory();
         if (!(is_array($statusHistory) &&  is_object($statusHistory[0]) &&
             $statusHistory[0]->getStatus() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)) {
-            throw new WrongStatusException($statusHistory[0]->getStatus());
+            throw new WrongStatusException('magento order status: '. $statusHistory[0]->getStatus());
         }
 
         // Order has been processed at least once in the past.
         foreach ($this->merchantOrder->getAllStatusHistory() as $oStatus) {
             if (in_array(
                 $oStatus->getStatus(),
-                array(Mage_Sales_Model_Order::STATE_PROCESSING,
-                    Mage_Sales_Model_Order::STATE_COMPLETE)
+                array(
+                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                    Mage_Sales_Model_Order::STATE_COMPLETE,
+                )
             )
             ) {
-                throw new WrongStatusException($oStatus->getStatus());
+                throw new WrongStatusException('magento order history status: '. $oStatus->getStatus());
             }
         }
 
@@ -366,7 +368,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $this->orderClient->confirmOrder($this->pagantisOrderId);
         } catch (Exception $exception) {
             $this->pagantisOrder = $this->orderClient->getOrder($this->pagantisOrderId);
-            if ($this->pagantisOrderId->getStatus() !== \Pagantis\OrdersApiClient\Model\Order::STATUS_CONFIRMED) {
+            if ($this->pagantisOrder->getStatus() !== \Pagantis\OrdersApiClient\Model\Order::STATUS_CONFIRMED) {
                 $this->saveLog($exception);
                 throw new UnknownException($exception->getMessage());
             } else {
