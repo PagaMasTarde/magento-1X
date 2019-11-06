@@ -457,7 +457,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
             $conn->query($sql);
         } catch (Exception $e) {
-            if ($this->getOrigin() == 'Notify') {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 throw new ConcurrencyException();
             } else {
                 $query = sprintf(
