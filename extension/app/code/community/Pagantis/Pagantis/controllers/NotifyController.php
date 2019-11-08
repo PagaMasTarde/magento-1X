@@ -466,6 +466,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                     self::CONCURRENCY_TABLENAME,
                     "order_id=$orderId"
                 );
+                $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
                 $resultSeconds = $conn->query($query);
                 $restSeconds = isset($resultSeconds) ? ($resultSeconds->rest) : 0;
                 $secondsToExpire = ($restSeconds>self::CONCURRENCY_TIMEOUT) ? self::CONCURRENCY_TIMEOUT : $restSeconds;
