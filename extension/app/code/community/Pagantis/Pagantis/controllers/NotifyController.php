@@ -28,7 +28,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     const CONCURRENCY_TABLENAME = 'pagantis_cart_concurrency';
 
     /** Seconds to expire a locked request */
-    const CONCURRENCY_TIMEOUT = 5;
+    const CONCURRENCY_TIMEOUT = 10;
 
     /**
      * @var string $merchantOrderId
