@@ -461,7 +461,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 throw new ConcurrencyException();
             } else {
                 $query = sprintf(
-                    "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, createdAt) as rest FROM %s WHERE %s",
+                    "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, FROM_UNIXTIME(timestamp)) as rest FROM %s WHERE %s",
                     self::CONCURRENCY_TIMEOUT,
                     self::CONCURRENCY_TABLENAME,
                     "order_id=$orderId"
