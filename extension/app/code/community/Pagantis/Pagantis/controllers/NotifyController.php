@@ -27,6 +27,9 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     /** Concurrency tablename */
     const CONCURRENCY_TABLENAME = 'pagantis_cart_concurrency';
 
+    /** Seconds to expire a locked request */
+    const CONCURRENCY_TIMEOUT = 10;
+
     /**
      * @var string $merchantOrderId
      */
@@ -454,7 +457,32 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
             $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
             $conn->query($sql);
         } catch (Exception $e) {
-            throw new ConcurrencyException();
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                throw new ConcurrencyException();
+            } else {
+                $query = sprintf(
+                    "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, FROM_UNIXTIME(timestamp)) as rest FROM %s WHERE %s",
+                    self::CONCURRENCY_TIMEOUT,
+                    self::CONCURRENCY_TABLENAME,
+                    "id=$orderId"
+                );
+                $dbObject = Mage::getSingleton('core/resource')->getConnection('core_write');
+                $resultSeconds = $dbObject->fetchOne($query);
+                $restSeconds = isset($resultSeconds) ? ($resultSeconds) : 0;
+                $secondsToExpire = ($restSeconds>self::CONCURRENCY_TIMEOUT) ? self::CONCURRENCY_TIMEOUT : $restSeconds;
+                sleep($secondsToExpire+1);
+                $logMessage = sprintf(
+                    "User waiting %s seconds, default seconds %s, bd time to expire %s seconds",
+                    $secondsToExpire,
+                    self::CONCURRENCY_TIMEOUT,
+                    $restSeconds
+                );
+                $logEntry= new \Pagantis\ModuleUtils\Model\Log\LogEntry();
+                $logEntry->info($logMessage);
+                $model = Mage::getModel('pagantis/log');
+                $model->setData(array('log' => $logEntry->toJson()));
+                $model->save();
+            }
         }
 
         return true;
@@ -471,7 +499,8 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     protected function unblockConcurrency($orderId = null)
     {
         if ($orderId == null) {
-            $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE timestamp <" . (time() - 10);
+            $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE timestamp <" .
+                (time() - self::CONCURRENCY_TIMEOUT);
         } else {
             $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE id  = " . $orderId;
         }
