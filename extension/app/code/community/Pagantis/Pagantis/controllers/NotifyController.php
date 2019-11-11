@@ -28,7 +28,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     const CONCURRENCY_TABLENAME = 'pagantis_cart_concurrency';
 
     /** Seconds to expire a locked request */
-    const CONCURRENCY_TIMEOUT = 5;
+    const CONCURRENCY_TIMEOUT = 10;
 
     /**
      * @var string $merchantOrderId
@@ -461,14 +461,14 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 throw new ConcurrencyException();
             } else {
                 $query = sprintf(
-                    "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, createdAt) as rest FROM %s WHERE %s",
+                    "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, FROM_UNIXTIME(timestamp)) as rest FROM %s WHERE %s",
                     self::CONCURRENCY_TIMEOUT,
                     self::CONCURRENCY_TABLENAME,
-                    "order_id=$orderId"
+                    "id=$orderId"
                 );
-                $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-                $resultSeconds = $conn->query($query);
-                $restSeconds = isset($resultSeconds) ? ($resultSeconds->rest) : 0;
+                $dbObject = Mage::getSingleton('core/resource')->getConnection('core_write');
+                $resultSeconds = $dbObject->fetchOne($query);
+                $restSeconds = isset($resultSeconds) ? ($resultSeconds) : 0;
                 $secondsToExpire = ($restSeconds>self::CONCURRENCY_TIMEOUT) ? self::CONCURRENCY_TIMEOUT : $restSeconds;
                 sleep($secondsToExpire+1);
                 $logMessage = sprintf(
@@ -477,7 +477,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                     self::CONCURRENCY_TIMEOUT,
                     $restSeconds
                 );
-                $this->insertLog(null, $logMessage);
+                $logEntry= new \Pagantis\ModuleUtils\Model\Log\LogEntry();
+                $logEntry->info($logMessage);
+                $model = Mage::getModel('pagantis/log');
+                $model->setData(array('log' => $logEntry->toJson()));
+                $model->save();
             }
         }
 
