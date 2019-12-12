@@ -6,9 +6,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - MAGENTO_MAYOR_VERSION=16
+        - MAGENTO_VERSION=1.6.0.0
+        - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.6.1.0.tgz
+        - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.6
     environment:
-      - MAGENTO_MAYOR_VERSION=16
-      - MAGENTO_VERSION=1.6.0.0
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
       - MAGENTO_ADMIN_EMAIL=admin@example.com
@@ -22,8 +25,6 @@ services:
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento16-dev.docker:8016
-      - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.6.1.0.tgz
-      - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.6
     volumes:
       - ./extension:/pagantis
     links:
@@ -38,6 +39,11 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - MAGENTO_MAYOR_VERSION=16
+        - MAGENTO_VERSION=1.6.0.0
+        - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.6.1.0.tgz
+        - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.6
     environment:
       - MAGENTO_MAYOR_VERSION=16
       - MAGENTO_VERSION=1.6.0.0
@@ -70,9 +76,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - MAGENTO_MAYOR_VERSION=19
+        - MAGENTO_VERSION=1.9.4.2
+        - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.9.1.0.tgz
+        - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.9
     environment:
-      - MAGENTO_MAYOR_VERSION=19
-      - MAGENTO_VERSION=1.9.4.2
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
       - MAGENTO_ADMIN_EMAIL=admin@example.com
@@ -86,8 +95,6 @@ services:
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-dev.docker:8080
-      - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.9.1.0.tgz
-      - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.9
     volumes:
       - ./extension:/pagantis
     links:
@@ -102,9 +109,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - MAGENTO_MAYOR_VERSION=19
+        - MAGENTO_VERSION=1.9.4.2
+        - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.9.1.0.tgz
+        - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.9
     environment:
-      - MAGENTO_MAYOR_VERSION=19
-      - MAGENTO_VERSION=1.9.4.2
       - MAGENTO_ADMIN_FIRSTNAME=Owner
       - MAGENTO_ADMIN_LASTNAME=Store
       - MAGENTO_ADMIN_EMAIL=admin@example.com
@@ -118,8 +128,6 @@ services:
       - MAGENTO_TIMEZONE=Europe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-test.docker:8082
-      - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.9.1.0.tgz
-      - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.9
     links:
       - magento19-db-test
     ports:

@@ -3,6 +3,10 @@ FROM alexcheng/apache2-php5:5.6.33
 RUN a2enmod rewrite
 
 ENV INSTALL_DIR /var/www/html
+ARG MAGENTO_MAYOR_VERSION
+ARG MAGENTO_VERSION
+ARG MAGENTO_SAMPLEDATA_TGZ
+ARG MAGENTO_SAMPLEDATA_INSTALLER
 
 RUN cd /tmp && \
     curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && \
