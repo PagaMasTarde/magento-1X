@@ -1,12 +1,21 @@
 #!/bin/bash
 while true; do
+    read -p "Do you want to install magento 1.9.x or 1.6.x [19|16]? " version
+    case $version in
+        [19]* ) break;;
+        [16]* ) break;;
+        * ) echo "Please answer 19 or 16.";;
+    esac
+done
+while true; do
     read -p "Do you wish to run dev or test [test|dev]? " devtest
     case $devtest in
-        [dev]* ) container="magento19-dev";test=false; break;;
-        [test]* ) container="magento19-test";test=true; break;;
+        [dev]* ) container="magento$version-dev";test=false; break;;
+        [test]* ) container="magento$version-test";test=true; break;;
         * ) echo "Please answer dev or test.";;
     esac
 done
+
 while true; do
     read -p "You have chosen to start ${container}, are you sure [y/n]? " yn
     case $yn in
@@ -19,9 +28,8 @@ done
 composer install
 
 # Prepare environment and build package
-docker-compose down
+# docker-compose down
 docker-compose up -d --build ${container} selenium
-
 sleep 10
 
 # Copy Files for test container
@@ -30,6 +38,11 @@ then
     docker cp ./extension/. ${container}:/pagantis/
 fi
 
+if [ $version = "16" ];
+then
+    echo "copying ./resources/Mysql4.php into ${container}:/var/www/html/app/code/core/Mage/Install/Model/Installer/Db/"
+    docker cp ./resources/Mysql4.php ${container}:/var/www/html/app/code/core/Mage/Install/Model/Installer/Db/
+fi
 # Install magento and sample data
 docker-compose exec ${container} install-sampledata
 docker-compose exec ${container} install-magento
