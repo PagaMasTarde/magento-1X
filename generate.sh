@@ -70,6 +70,8 @@ done
 if [ $tests = "full" ];
 then
     export MAGENTO_TEST_ENV=test
+    export MG_VERSION=$version
+    echo "magento $version tests start"
     # Run test
     echo magento-basic
     extension/lib/Pagantis/bin/phpunit --group magento-basic
@@ -101,6 +103,8 @@ then
     fi
 else
     export MAGENTO_TEST_ENV=dev
+    export MG_VERSION=$version
+    echo "magento $version configuration start"
     echo magento-basic
     extension/lib/Pagantis/bin/phpunit --group magento-basic
     echo magento-configure-backoffice

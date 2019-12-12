@@ -144,8 +144,6 @@ commands:
             extension/lib/Pagantis/bin/phpunit --group magento-controllers
 jobs:
   runTestMagento16:
-    environment:
-      MG_VERSION: "16"
     machine:
       image: ubuntu-1604:201903-01
     working_directory: ~/repo
@@ -156,8 +154,6 @@ jobs:
       - build_and_install_magento_16
       - run_tests
   runTestMagento19:
-    environment:
-      MG_VERSION: "19"
     machine:
       image: ubuntu-1604:201903-01
     working_directory: ~/repo

@@ -103,7 +103,7 @@ abstract class MagentoTest extends TestCase
     protected function getMagentoUrl()
     {
         $env = getenv('MAGENTO_TEST_ENV');
-        $version = getenv('MG_VERSION');
+        $version = getenv('MAGENTO_MAYOR_VERSION');
 
         if ($env == 'dev') {
             if ($version == "16") {
