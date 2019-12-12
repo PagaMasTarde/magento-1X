@@ -17,7 +17,12 @@ abstract class MagentoTest extends TestCase
     /**
      * Magento TEST
      */
-    const MAGENTO_URL_TEST = 'http://magento19-test.docker:8082/index.php';
+    const MAGENTO16_URL_TEST = 'http://magento16-test.docker:8017/index.php';
+
+    /**
+     * Magento TEST
+     */
+    const MAGENTO19_URL_TEST = 'http://magento19-test.docker:8082/index.php';
 
     /**
      * Magento DEV
@@ -98,7 +103,10 @@ abstract class MagentoTest extends TestCase
             return self::MAGENTO_URL_DEV;
         }
 
-        return self::MAGENTO_URL_TEST;
+        if (MG_VERSION == "16") {
+            return self::MAGENTO16_URL_TEST;
+        }
+        return self::MAGENTO19_URL_TEST;
     }
 
     /**

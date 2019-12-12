@@ -1,56 +1,74 @@
-version: 2
-jobs:
-  build:
-    machine:
-      image: ubuntu-1604:201903-01
-    working_directory: ~/repo
+version: 2.1
+commands:
+  host_and_docker_compose:
+    description: "Add Docker Host && DockerCompose install"
     steps:
-      - checkout
       - run:
-          name: Add Docker Host
+          name: Add Docker Host && DockerCompose install
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            echo $DOCKERHOST
             echo 127.0.0.1 magento19-test.docker | sudo tee -a /etc/hosts
+            echo 127.0.0.1 magento16-test.docker | sudo tee -a /etc/hosts
+            sudo curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+  install_dependencies:
+    description: "Install php7.2 && Composer Install"
+    steps:
       - run:
-          name: Composer Install
+          name: Install php7.0 && Composer Install
           command: |
             sudo apt install -y software-properties-common
             sudo add-apt-repository -y ppa:ondrej/php
             sudo apt-get update
-            sudo apt install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom
+            sudo apt-get install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom npm
             curl -s https://getcomposer.org/installer | php
             sudo mv composer.phar /usr/local/bin/composer
             composer install --ignore-platform-reqs
+  build_and_install_magento:
+    description: "Build image, install magento and sampledata, modman and linksys"
+    steps:
       - run:
           name: Docker UP
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose up -d --build magento16-test
             docker-compose up -d --build magento19-test
             docker-compose up -d --build selenium
             sleep 10
       - run:
           name: Docker Copy Module Files
           command: |
+            docker cp ./extension/. magento16-test:/pagantis/
+            docker exec magento16-test ls -lah /pagantis
             docker cp ./extension/. magento19-test:/pagantis/
             docker exec magento19-test ls -lah /pagantis
       - run:
           name: Install Sample Data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            docker-compose exec magento16-test install-sampledata
+            docker-compose exec magento16-test install-magento
             docker-compose exec magento19-test install-sampledata
             docker-compose exec magento19-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            docker-compose exec magento16-test modman init
+            docker-compose exec magento16-test modman link /pagantis
+            docker-compose exec magento16-test curl -O https://files.magerun.net/n98-magerun.phar
+            docker-compose exec magento16-test chmod +x n98-magerun.phar
+            docker-compose exec magento16-test ./n98-magerun.phar dev:symlinks 1
             docker-compose exec magento19-test modman init
             docker-compose exec magento19-test modman link /pagantis
             docker-compose exec magento19-test curl -O https://files.magerun.net/n98-magerun.phar
             docker-compose exec magento19-test chmod +x n98-magerun.phar
             docker-compose exec magento19-test ./n98-magerun.phar dev:symlinks 1
+  run_tests:
+    description: "Run tests magento 1.9.x"
+    steps:
       - run:
           name: magento-basic
           command: |
@@ -101,6 +119,31 @@ jobs:
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             extension/lib/Pagantis/bin/phpunit --group magento-controllers
+jobs:
+  runTestMagento16:
+    environment:
+      MG_VERSION: "16"
+    machine:
+      image: ubuntu-1604:201903-01
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - host_and_docker_compose
+      - install_dependencies
+      - build_and_install_magento
+      - run_tests
+  runTestMagento19:
+    environment:
+      MG_VERSION: "19"
+    machine:
+      image: ubuntu-1604:201903-01
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - host_and_docker_compose
+      - install_dependencies
+      - build_and_install_magento
+      - run_tests
   pushRelease:
     machine:
       image: ubuntu-1604:201903-01
@@ -185,10 +228,14 @@ jobs:
                 --name Pagantis_$CIRCLE_TAG.tgz \
                 --file Pagantis_$CIRCLE_TAG.tgz
 workflows:
-  version: 2
+  version: 2.1
   build:
     jobs:
-      - build:
+      - runTestMagento16:
+          filters:
+            branches:
+              only: /.*/
+      - runTestMagento19:
           filters:
             branches:
               only: /.*/
