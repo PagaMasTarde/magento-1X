@@ -24,8 +24,8 @@ commands:
             curl -s https://getcomposer.org/installer | php
             sudo mv composer.phar /usr/local/bin/composer
             composer install --ignore-platform-reqs
-  build_and_install_magento:
-    description: "Build image, install magento and sampledata, modman and linksys"
+  build_and_install_magento_16:
+    description: "Build image, install magento 16and sampledata, modman and linksys"
     steps:
       - run:
           name: Docker UP
@@ -34,24 +34,20 @@ commands:
             sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
             docker-compose up -d --build magento16-test
-            docker-compose up -d --build magento19-test
             docker-compose up -d --build selenium
             sleep 10
       - run:
           name: Docker Copy Module Files
           command: |
             docker cp ./extension/. magento16-test:/pagantis/
+            docker cp ./resources/Mysql4.php magento16-test:/var/www/html/app/code/core/Mage/Install/Model/Installer/Db/
             docker exec magento16-test ls -lah /pagantis
-            docker cp ./extension/. magento19-test:/pagantis/
-            docker exec magento19-test ls -lah /pagantis
       - run:
           name: Install Sample Data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose exec magento16-test install-sampledata
             docker-compose exec magento16-test install-magento
-            docker-compose exec magento19-test install-sampledata
-            docker-compose exec magento19-test install-magento
       - run:
           name: Modman, Links, N98, dev:symlinks enable
           command: |
@@ -61,13 +57,40 @@ commands:
             docker-compose exec magento16-test curl -O https://files.magerun.net/n98-magerun.phar
             docker-compose exec magento16-test chmod +x n98-magerun.phar
             docker-compose exec magento16-test ./n98-magerun.phar dev:symlinks 1
+  build_and_install_magento_19:
+    description: "Build image, install magento 19 and sampledata, modman and linksys"
+    steps:
+      - run:
+          name: Docker UP
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose up -d --build magento19-test
+            docker-compose up -d --build selenium
+            sleep 10
+      - run:
+          name: Docker Copy Module Files
+          command: |
+            docker cp ./extension/. magento19-test:/pagantis/
+            docker exec magento19-test ls -lah /pagantis
+      - run:
+          name: Install Sample Data
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            docker-compose exec magento19-test install-sampledata
+            docker-compose exec magento19-test install-magento
+      - run:
+          name: Modman, Links, N98, dev:symlinks enable
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
             docker-compose exec magento19-test modman init
             docker-compose exec magento19-test modman link /pagantis
             docker-compose exec magento19-test curl -O https://files.magerun.net/n98-magerun.phar
             docker-compose exec magento19-test chmod +x n98-magerun.phar
             docker-compose exec magento19-test ./n98-magerun.phar dev:symlinks 1
   run_tests:
-    description: "Run tests magento 1.9.x"
+    description: "Run tests"
     steps:
       - run:
           name: magento-basic
@@ -130,7 +153,7 @@ jobs:
       - checkout
       - host_and_docker_compose
       - install_dependencies
-      - build_and_install_magento
+      - build_and_install_magento_16
       - run_tests
   runTestMagento19:
     environment:
@@ -142,7 +165,7 @@ jobs:
       - checkout
       - host_and_docker_compose
       - install_dependencies
-      - build_and_install_magento
+      - build_and_install_magento_19
       - run_tests
   pushRelease:
     machine:

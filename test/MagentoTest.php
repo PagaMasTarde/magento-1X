@@ -27,7 +27,12 @@ abstract class MagentoTest extends TestCase
     /**
      * Magento DEV
      */
-    const MAGENTO_URL_DEV = 'http://magento19-dev.docker:8080/index.php';
+    const MAGENTO16_URL_DEV = 'http://magento16-dev.docker:8016/index.php';
+
+    /**
+     * Magento DEV
+     */
+    const MAGENTO19_URL_DEV = 'http://magento19-dev.docker:8080/index.php';
 
     /**
      * Magento Backoffice URL
@@ -98,12 +103,16 @@ abstract class MagentoTest extends TestCase
     protected function getMagentoUrl()
     {
         $env = getenv('MAGENTO_TEST_ENV');
+        $version = getenv('MG_VERSION');
 
         if ($env == 'dev') {
-            return self::MAGENTO_URL_DEV;
+            if ($version == "16") {
+                return self::MAGENTO16_URL_DEV;
+            }
+            return self::MAGENTO19_URL_DEV;
         }
 
-        if (MG_VERSION == "16") {
+        if ($version == "16") {
             return self::MAGENTO16_URL_TEST;
         }
         return self::MAGENTO19_URL_TEST;
