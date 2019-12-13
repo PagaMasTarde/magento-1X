@@ -15,7 +15,12 @@ class BasicTest extends MagentoTest
     /**
      * String
      */
-    const TITLE = 'Madison Island';
+    const TITLE_16 = 'Home page';
+
+    /**
+     * String
+     */
+    const TITLE_19 = 'Madison Island';
 
     /**
      * String
@@ -29,13 +34,14 @@ class BasicTest extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl);
 
+        $title = $this->version = "16" ? self::TITLE_16 : self::TITLE_19;
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::titleContains(
-                self::TITLE
+                $title
             )
         );
 
-        $this->assertEquals(self::TITLE, $this->webDriver->getTitle());
+        $this->assertEquals($title, $this->webDriver->getTitle());
         $this->quit();
     }
 

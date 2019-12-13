@@ -4,23 +4,20 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Pagantis\SeleniumFormUtils\SeleniumHelper;
+use Test\Common\AbstractBuy19;
 
 /**
  * Class BuyUnregisteredTest
  * @package Test\Buy
  *
- * @group magento-buy-unregistered
+ * @group magento-cancel-buy-unregistered
  */
-class BuyUnregisteredTest extends AbstractBuy
+class CancelBuyUnregisteredTest19 extends AbstractBuy19
 {
     const AMOUNT = '497.54';
-
     /**
      * Test Buy unregistered
-     *
-     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
-     * @throws \Facebook\WebDriver\Exception\TimeOutException
-     * @throws \Exception
      */
     public function testBuyUnregistered()
     {
@@ -30,9 +27,8 @@ class BuyUnregisteredTest extends AbstractBuy
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
         $this->goToPagantis();
-        $this->verifyPagantis();
-        $this->commitPurchase();
-        $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
+        $this->cancelPurchase();
+        $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
         $this->quit();
     }
 
@@ -41,6 +37,7 @@ class BuyUnregisteredTest extends AbstractBuy
      */
     public function fillBillingInformation()
     {
+        sleep(5);
         // Fill the form
         $this->findById('billing:firstname')->sendKeys($this->configuration['firstname']);
         $this->findById('billing:lastname')->sendKeys($this->configuration['lastname']);
@@ -55,7 +52,6 @@ class BuyUnregisteredTest extends AbstractBuy
         //Continue to shipping, in this case shipping == billing
         $this->webDriver->executeScript('billing.save()');
 
-        sleep(10);
         //Verify
         $checkoutStepShippingMethodSearch = WebDriverBy::id('checkout-shipping-method-load');
         $this->webDriver->wait()->until(
@@ -91,4 +87,19 @@ class BuyUnregisteredTest extends AbstractBuy
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($checkoutStepBillingSearch)
         );
     }
+
+    /**
+     * Cancel Purchase
+     * @throws \Exception
+     */
+    public function cancelPurchase()
+    {
+        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
+        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->assertTrue((bool)$condition, "PR32");
+
+        // cancel the purchase with redirect
+        SeleniumHelper::cancelForm($this->webDriver);
+    }
+
 }

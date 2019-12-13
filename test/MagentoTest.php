@@ -45,6 +45,11 @@ abstract class MagentoTest extends TestCase
     public $magentoUrl;
 
     /**
+     * @var string mayor MG Version
+     */
+    public $version;
+
+    /**
      * @var array
      */
     protected $configuration = array(
@@ -79,6 +84,7 @@ abstract class MagentoTest extends TestCase
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
+        $this->version = getenv('MAGENTO_MAYOR_VERSION');
         $this->magentoUrl = $this->getMagentoUrl();
         $faker = Factory::create();
         $this->configuration['dni'] = $this->getDNI();
@@ -103,16 +109,15 @@ abstract class MagentoTest extends TestCase
     protected function getMagentoUrl()
     {
         $env = getenv('MAGENTO_TEST_ENV');
-        $version = getenv('MAGENTO_MAYOR_VERSION');
 
         if ($env == 'dev') {
-            if ($version == "16") {
+            if ($this->version == "16") {
                 return self::MAGENTO16_URL_DEV;
             }
             return self::MAGENTO19_URL_DEV;
         }
 
-        if ($version == "16") {
+        if ($this->version == "16") {
             return self::MAGENTO16_URL_TEST;
         }
         return self::MAGENTO19_URL_TEST;
@@ -143,10 +148,10 @@ abstract class MagentoTest extends TestCase
     protected function setUp()
     {
         $this->webDriver = PagantisWebDriver::create(
-            'http://magento19-test.docker:4444/wd/hub',
+            'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            120000,
-            120000
+            1000,
+            3000
         );
     }
 

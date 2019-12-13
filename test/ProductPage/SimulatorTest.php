@@ -16,9 +16,14 @@ use Test\MagentoTest;
 class SimulatorTest extends MagentoTest
 {
     /**
-     * Product name
+     * Product name in magento 16
      */
-    const PRODUCT_NAME = 'Linen Blazer';
+    const PRODUCT_NAME_16 = 'Olympus Stylus 750 7.1MP Digital Camera';
+
+    /**
+     * Product name in magento 19
+     */
+    const PRODUCT_NAME_19 = 'Linen Blazer';
 
     /**
      * testSimulatorDivExists
@@ -48,10 +53,9 @@ class SimulatorTest extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl);
 
-        /** @var WebDriverBy $productGrid */
-        $productGridSearch = WebDriverBy::className('products-grid');
-        /** @var WebDriverBy $productLink */
-        $productLinkSearch = $productGridSearch->linkText(strtoupper(self::PRODUCT_NAME));
+        $productName = $this->version = "16" ? self::PRODUCT_NAME_16 : self::PRODUCT_NAME_19;
+        /** @var WebDriverBy $pattialProductLink */
+        $productLinkSearch = WebDriverBy::partialLinkText($productName);
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable(
@@ -63,8 +67,8 @@ class SimulatorTest extends MagentoTest
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($productLinkElement));
         $productLinkElement->click();
 
-        $this->assertSame(
-            self::PRODUCT_NAME,
+        $this->assertContains(
+            $productName,
             $this->webDriver->getTitle()
         );
     }

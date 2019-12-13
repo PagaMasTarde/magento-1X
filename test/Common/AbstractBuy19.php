@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Buy;
+namespace Test\Common;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
@@ -8,10 +8,10 @@ use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Test\MagentoTest;
 
 /**
- * Class AbstractBuy
- * @package Test\Buy
+ * Class AbstractBuy19
+ * @package Test\Common
  */
-abstract class AbstractBuy extends MagentoTest
+abstract class AbstractBuy19 extends MagentoTest
 {
     /**
      * Color of jacket

@@ -29,8 +29,8 @@ composer install
 
 # Prepare environment and build package
 # docker-compose down
-docker-compose up -d --build ${container} selenium
-sleep 10
+docker-compose up -d ${container} selenium
+sleep 10c
 
 # Copy Files for test container
 if [ $test = true ];
@@ -70,7 +70,7 @@ done
 if [ $tests = "full" ];
 then
     export MAGENTO_TEST_ENV=test
-    export MG_VERSION=$version
+    export MAGENTO_MAYOR_VERSION=$version
     echo "magento $version tests start"
     # Run test
     echo magento-basic
@@ -80,19 +80,19 @@ then
     echo magento-product-page
     extension/lib/Pagantis/bin/phpunit --group magento-product-page
     echo magento-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered-$version
     echo magento-cancel-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered-$version
     echo magento-register
-    extension/lib/Pagantis/bin/phpunit --group magento-register
+    extension/lib/Pagantis/bin/phpunit --group magento-register-$version
     echo magento-fill-data
-    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+    extension/lib/Pagantis/bin/phpunit --group magento-fill-data-$version
     echo magento-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered-$version
     echo magento-cancel-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered-$version
     echo magento-cancel-buy-controllers
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers-$version
 
     # Copy Files for test container
     if [ $test = true ];
@@ -103,7 +103,7 @@ then
     fi
 else
     export MAGENTO_TEST_ENV=dev
-    export MG_VERSION=$version
+    export MAGENTO_MAYOR_VERSION=$version
     echo "magento $version configuration start"
     echo magento-basic
     extension/lib/Pagantis/bin/phpunit --group magento-basic
