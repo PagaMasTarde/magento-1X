@@ -5,7 +5,7 @@ namespace Test\Buy;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
-use Test\Common\AbstractBuy19;
+use Test\common\AbstractBuy19;
 
 /**
  * Class BuyUnregisteredTest
@@ -13,7 +13,7 @@ use Test\Common\AbstractBuy19;
  *
  * @group magento-cancel-buy-unregistered
  */
-class CancelBuyUnregisteredTest19 extends AbstractBuy19
+class CancelBuyUnregistered19Test extends AbstractBuy19
 {
     const AMOUNT = '497.54';
     /**

@@ -4,7 +4,7 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Test\Common\AbstractBuy19;
+use Test\common\AbstractBuy19;
 
 /**
  * Class BuyUnregisteredTest
@@ -12,7 +12,7 @@ use Test\Common\AbstractBuy19;
  *
  * @group magento-buy-unregistered-19
  */
-class BuyUnregisteredTest19 extends AbstractBuy19
+class BuyUnregistered19Test extends AbstractBuy19
 {
     const AMOUNT = '497.54';
 

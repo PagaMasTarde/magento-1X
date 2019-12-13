@@ -150,8 +150,8 @@ abstract class MagentoTest extends TestCase
         $this->webDriver = PagantisWebDriver::create(
             'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome(),
-            1000,
-            3000
+            120000,
+            120000
         );
     }
 

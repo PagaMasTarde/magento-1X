@@ -7,17 +7,14 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use Test\Common\AbstractBuy16;
 
 /**
- * Class BuyUnregisteredTest16
- * @package Test\Buy
- *
  * @group magento-buy-unregistered-16
  */
-class BuyUnregisteredTest16 extends AbstractBuy16
+class BuyUnregistered16Test extends AbstractBuy16
 {
     const AMOUNT = '161.94';
 
     /**
-     * Test Buy unregistered 16
+     * Test Buy unregistered
      *
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException

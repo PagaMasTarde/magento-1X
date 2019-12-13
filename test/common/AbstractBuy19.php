@@ -8,20 +8,36 @@ use Pagantis\SeleniumFormUtils\SeleniumHelper;
 use Test\MagentoTest;
 
 /**
- * Class AbstractBuy16
+ * Class AbstractBuy19
+ *
  * @package Test\Common
  */
-abstract class AbstractBuy16 extends MagentoTest
+abstract class AbstractBuy19 extends MagentoTest
 {
     /**
-     * Product name in magento 16
+     * Color of jacket
      */
-    const PRODUCT_NAME = 'Olympus Stylus 750 7.1MP Digital Camera';
+    const COLOR = 'White';
+
+    /**
+     * Size of jacket
+     */
+    const SIZE = 'S';
+
+    /**
+     * Number of products
+     */
+    const QTY = '1';
 
     /**
      * Grand Total
      */
-    const GRAND_TOTAL = 'Grand Total';
+    const GRAND_TOTAL = 'GRAND TOTAL';
+
+    /**
+     * Product name
+     */
+    const PRODUCT_NAME = 'Linen Blazer';
 
     /**
      * Correct purchase message
@@ -69,6 +85,7 @@ abstract class AbstractBuy16 extends MagentoTest
     public function prepareProductAndCheckout()
     {
         $this->goToProductPage();
+        $this->selectColorAndSize();
         $this->addToCart();
     }
 
@@ -77,11 +94,11 @@ abstract class AbstractBuy16 extends MagentoTest
      */
     public function addToCart()
     {
-        $addToCartButtonSearch = WebDriverBy::cssSelector('.add-to-cart button');
+        $addToCartButtonSearch = WebDriverBy::cssSelector('.add-to-cart-buttons button');
         $addToCartButtonElement = $this->webDriver->findElement($addToCartButtonSearch);
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($addToCartButtonElement));
         $addToCartButtonElement->click();
-        $cartTotalsSearch = WebDriverBy::className('totals');
+        $cartTotalsSearch = WebDriverBy::className('cart-totals');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementTextContains(
                 $cartTotalsSearch,
@@ -103,26 +120,61 @@ abstract class AbstractBuy16 extends MagentoTest
     }
 
     /**
+     * selectColorAndSize
+     */
+    public function selectColorAndSize()
+    {
+        $colorWhiteSearch = WebDriverBy::className('option-white');
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable(
+                $colorWhiteSearch
+            )
+        );
+        $colorWhiteElement = $this->webDriver->findElement($colorWhiteSearch);
+        $colorWhiteElement->click();
+
+        $optionSmallSearch = WebDriverBy::className('option-s');
+
+        $this->webDriver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable(
+                $optionSmallSearch
+            )
+        );
+        $optionSmallElement = $this->webDriver->findElement($optionSmallSearch);
+        $optionSmallElement->click();
+        $colorSelectorLabelSearch = WebDriverBy::id('select_label_color');
+        $colorSelectorLabelElement = $this->webDriver->findElement($colorSelectorLabelSearch);
+        $color = $colorSelectorLabelElement->getText();
+        $this->assertSame(self::COLOR, $color);
+        $sizeLabelSearch = WebDriverBy::id('select_label_size');
+        $sizeLabelElement = $this->webDriver->findElement($sizeLabelSearch);
+        $size = $sizeLabelElement->getText();
+        $this->assertSame(self::SIZE, $size);
+
+        $this->findById('qty')->clear()->sendKeys(self::QTY);
+    }
+
+    /**
      * Go to the product page
      */
     public function goToProductPage()
     {
         $this->webDriver->get($this->magentoUrl);
-
-        /** @var WebDriverBy $pattialProductLink */
-        $productLinkSearch = WebDriverBy::partialLinkText(self::PRODUCT_NAME);
+        /** @var WebDriverBy $productGrid */
+        $productGridSearch = WebDriverBy::className('products-grid');
+        /** @var WebDriverBy $productLink */
+        $productLinkSearch = $productGridSearch->linkText(strtoupper(self::PRODUCT_NAME));
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable(
                 $productLinkSearch
             )
         );
-
         $productLinkElement = $this->webDriver->findElement($productLinkSearch);
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($productLinkElement));
+        sleep(3);
         $productLinkElement->click();
-
-        $this->assertContains(
+        $this->assertSame(
             self::PRODUCT_NAME,
             $this->webDriver->getTitle()
         );

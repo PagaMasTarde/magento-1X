@@ -9,7 +9,7 @@ use Pagantis\ModuleUtils\Exception\NoIdentificationException;
 use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
 use Httpful\Request;
 use Httpful\Mime;
-use Test\Common\AbstractBuy19;
+use Test\common\AbstractBuy19;
 
 /**
  * Class BuyRegisteredTest
@@ -17,7 +17,7 @@ use Test\Common\AbstractBuy19;
  *
  * @group magento-buy-registered-19
  */
-class BuyRegisteredTest19 extends AbstractBuy19
+class BuyRegistered19Test extends AbstractBuy19
 {
     /**
      * @var String $orderUrl
