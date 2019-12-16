@@ -342,7 +342,7 @@ abstract class AbstractBuy19 extends MagentoTest
     {
 
         $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
-        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->webDriver->wait()->until($condition, $this->webDriver->getCurrentURL());
         $this->assertTrue((bool)$condition, "PR32");
 
         // complete the purchase with redirect
@@ -357,7 +357,7 @@ abstract class AbstractBuy19 extends MagentoTest
     public function verifyPagantis()
     {
         $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
-        $this->webDriver->wait(300)->until($condition, $this->webDriver->getCurrentURL());
+        $this->webDriver->wait()->until($condition, $this->webDriver->getCurrentURL());
         $this->assertTrue((bool)$condition, $this->webDriver->getCurrentURL());
     }
 }

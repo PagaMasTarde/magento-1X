@@ -35,7 +35,7 @@ abstract class AbstractConfigure extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
 
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_TITLE
             )
@@ -59,7 +59,7 @@ abstract class AbstractConfigure extends MagentoTest
 
         //Verify
         $this->webDriver->executeScript('closeMessagePopup()');
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_LOGGED_IN_TITLE
             )
@@ -85,7 +85,7 @@ abstract class AbstractConfigure extends MagentoTest
         $this->findByLinkText('System')->click();
         $this->findByLinkText('Configuration')->click();
 
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_CONFIGURATION_TITLE
             )
@@ -134,7 +134,7 @@ abstract class AbstractConfigure extends MagentoTest
         $paymentMethodsLinkElement->click();
 
         $pagantisHeaderSearch = WebDriverBy::id('payment_pagantis-head');
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(
                 $pagantisHeaderSearch
             )

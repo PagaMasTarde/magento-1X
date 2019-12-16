@@ -196,7 +196,7 @@ class PackageTest extends MagentoTest
 
         //Verify
         $this->webDriver->executeScript('closeMessagePopup()');
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_LOGGED_IN_TITLE
             )
@@ -211,7 +211,7 @@ class PackageTest extends MagentoTest
     public function goToBackOffice()
     {
         $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_TITLE
             )
@@ -236,7 +236,7 @@ class PackageTest extends MagentoTest
         $this->findByLinkText('System')->click();
         $this->findByLinkText('Configuration')->click();
 
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_CONFIGURATION_TITLE
             )

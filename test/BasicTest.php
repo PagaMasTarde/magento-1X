@@ -35,7 +35,7 @@ class BasicTest extends MagentoTest
         $this->webDriver->get($this->magentoUrl);
 
         $title = $this->version = '16' ? self::TITLE_16 : self::TITLE_19;
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 $title
             )
@@ -52,7 +52,7 @@ class BasicTest extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
 
-        $this->webDriver->wait(10, 500)->until(
+        $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_TITLE
             )
