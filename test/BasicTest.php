@@ -34,7 +34,7 @@ class BasicTest extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl);
 
-        $title = $this->version = '16' ? self::TITLE_16 : self::TITLE_19;
+        $title = $this->version == '16' ? self::TITLE_16 : self::TITLE_19;
         sleep(10);
         var_dump("testMagentoOpen", $this->version, $this->magentoUrl, $this->webDriver->getTitle(), $title);
 //        $this->webDriver->wait()->until(
