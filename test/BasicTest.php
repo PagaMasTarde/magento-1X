@@ -36,11 +36,7 @@ class BasicTest extends MagentoTest
 
         $title = $this->version = '16' ? self::TITLE_16 : self::TITLE_19;
         sleep(10);
-        var_dump($this->webDriver->getTitle(), $title);
-        sleep(10);
-        var_dump($this->webDriver->getTitle(), $title);
-        sleep(10);
-        var_dump($this->webDriver->getTitle(), $title);
+        var_dump("testMagentoOpen", $this->version, $this->magentoUrl, $this->webDriver->getTitle(), $title);
 //        $this->webDriver->wait()->until(
 //            WebDriverExpectedCondition::titleContains(
 //                $title
@@ -59,11 +55,7 @@ class BasicTest extends MagentoTest
         $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
 
         sleep(10);
-        var_dump($this->webDriver->getTitle(), self::BACKOFFICE_TITLE);
-        sleep(10);
-        var_dump($this->webDriver->getTitle(), self::BACKOFFICE_TITLE);
-        sleep(10);
-        var_dump($this->webDriver->getTitle(), self::BACKOFFICE_TITLE);
+        var_dump("testBackofficeOpen", $this->version, $this->magentoUrl, $this->webDriver->getTitle(), $title);
 //        $this->webDriver->wait()->until(
 //            WebDriverExpectedCondition::titleContains(
 //                self::BACKOFFICE_TITLE
@@ -74,3 +66,4 @@ class BasicTest extends MagentoTest
         $this->quit();
     }
 }
+v
