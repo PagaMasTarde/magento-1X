@@ -5,15 +5,15 @@ namespace Test\Buy;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
-use Test\common\AbstractBuy19;
+use Test\common\AbstractBuy16;
 
 /**
  * Class CancelBuyRegisteredTest
  * @package Test\Buy
  *
- * @group magento-cancel-buy-registered-19
+ * @group magento-cancel-buy-registered-16
  */
-class CancelBuyRegistered19Test extends AbstractBuy19
+class CancelBuyRegistered16Test extends AbstractBuy16
 {
     /**
      * Test Buy Registered

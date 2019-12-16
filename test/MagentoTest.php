@@ -86,6 +86,7 @@ abstract class MagentoTest extends TestCase
     {
         $this->version = getenv('MAGENTO_MAYOR_VERSION');
         $this->magentoUrl = $this->getMagentoUrl();
+        var_dump($this->magentoUrl);
         $faker = Factory::create();
         $this->configuration['dni'] = $this->getDNI();
         $this->configuration['birthdate'] =

@@ -37,12 +37,12 @@ abstract class AbstractBuy16 extends MagentoTest
     /**
      * Shopping cart message
      */
-    const SHOPPING_CART_MESSAGE = 'SHOPPING CART';
+    const SHOPPING_CART_MESSAGE = 'Shopping Cart';
 
     /**
      * Empty shopping cart message
      */
-    const EMPTY_SHOPPING_CART = 'SHOPPING CART IS EMPTY';
+    const EMPTY_SHOPPING_CART = 'Shopping Cart is empty';
 
     /**
      * Pagantis Order Title
