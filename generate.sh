@@ -30,7 +30,7 @@ composer install
 # Prepare environment and build package
 # docker-compose down
 docker-compose up -d ${container} selenium
-sleep 10c
+sleep 10
 
 # Copy Files for test container
 if [ $test = true ];
