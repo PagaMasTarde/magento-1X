@@ -53,7 +53,7 @@ class SimulatorTest extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl);
 
-        $productName = $this->version = "16" ? self::PRODUCT_NAME_16 : self::PRODUCT_NAME_19;
+        $productName = $this->version = '16' ? self::PRODUCT_NAME_16 : self::PRODUCT_NAME_19;
         /** @var WebDriverBy $pattialProductLink */
         $productLinkSearch = WebDriverBy::partialLinkText($productName);
 

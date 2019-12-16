@@ -34,7 +34,7 @@ class BasicTest extends MagentoTest
     {
         $this->webDriver->get($this->magentoUrl);
 
-        $title = $this->version = "16" ? self::TITLE_16 : self::TITLE_19;
+        $title = $this->version = '16' ? self::TITLE_16 : self::TITLE_19;
         $this->webDriver->wait(10, 500)->until(
             WebDriverExpectedCondition::titleContains(
                 $title
