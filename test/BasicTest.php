@@ -66,4 +66,3 @@ class BasicTest extends MagentoTest
         $this->quit();
     }
 }
-v
