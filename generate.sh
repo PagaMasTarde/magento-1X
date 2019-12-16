@@ -67,10 +67,15 @@ while true; do
     esac
 done
 
-if [ $tests = "full" ];
+export MAGENTO_MAYOR_VERSION=$version
+export MAGENTO_TEST_ENV=dev
+if [ $test = true ];
 then
     export MAGENTO_TEST_ENV=test
-    export MAGENTO_MAYOR_VERSION=$version
+fi
+
+if [ $tests = "full" ];
+then
     echo "magento $version tests start"
     # Run test
     echo magento-basic
@@ -92,7 +97,7 @@ then
     echo magento-cancel-buy-registered
     extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered-$version
     echo magento-cancel-buy-controllers
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers-$version
+    extension/lib/Pagantis/bin/phpunit --group magento-controllers
 
     # Copy Files for test container
     if [ $test = true ];
@@ -102,8 +107,6 @@ then
         extension/lib/Pagantis/bin/phpunit --group magento-package
     fi
 else
-    export MAGENTO_TEST_ENV=dev
-    export MAGENTO_MAYOR_VERSION=$version
     echo "magento $version configuration start"
     echo magento-basic
     extension/lib/Pagantis/bin/phpunit --group magento-basic
