@@ -132,7 +132,7 @@ class BuyRegistered16Test extends AbstractBuy16
         $this->findById('login-password')->clear()->sendKeys($this->configuration['password']);
         $this->findById('login-form')->submit();
 
-        $billingAddressSelector = WebDriverBy::id('billing-address-select');
+        $billingAddressSelector = WebDriverBy::id('checkout-step-billing');
         $condition = WebDriverExpectedCondition::visibilityOfElementLocated($billingAddressSelector);
         $this->webDriver->wait()->until($condition);
         $this->assertTrue((bool) $condition);

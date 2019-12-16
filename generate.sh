@@ -79,14 +79,14 @@ then
     extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
     echo magento-product-page
     extension/lib/Pagantis/bin/phpunit --group magento-product-page
+    echo magento-register
+    extension/lib/Pagantis/bin/phpunit --group magento-register
+    echo magento-fill-data
+    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
     echo magento-buy-unregistered
     extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered-$version
     echo magento-cancel-buy-unregistered
     extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered-$version
-    echo magento-register
-    extension/lib/Pagantis/bin/phpunit --group magento-register-$version
-    echo magento-fill-data
-    extension/lib/Pagantis/bin/phpunit --group magento-fill-data-$version
     echo magento-buy-registered
     extension/lib/Pagantis/bin/phpunit --group magento-buy-registered-$version
     echo magento-cancel-buy-registered

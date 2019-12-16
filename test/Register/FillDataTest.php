@@ -43,7 +43,11 @@ class FillDataTest extends AbstractRegister
      */
     public function goToAddressBookAndFillAddress()
     {
-        $this->findByPartialLinkText(strtoupper('Address Book'))->click();
+        $linkText = strtoupper('Address Book');
+        if ($this->version = '16') {
+            $linkText = 'Edit Address';
+        }
+        $this->findByPartialLinkText($linkText)->click();
         try {
             $this->findById('firstname')->clear()->sendKeys($this->configuration['firstname']);
             $this->findById('telephone')->clear()->sendKeys($this->configuration['phone']);

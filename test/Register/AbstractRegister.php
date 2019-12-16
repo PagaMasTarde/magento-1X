@@ -54,16 +54,12 @@ abstract class AbstractRegister extends MagentoTest
             $condition = WebDriverExpectedCondition::elementToBeClickable($createAccountButton);
             $this->webDriver->wait()->until($condition);
             $this->assertTrue((bool) $condition);
-            $createAccountElement = $this->webDriver->findElement($createAccountButton);
-            $createAccountElement->click();
             return;
         }
         $createAccountButton = WebDriverBy::partialLinkText(strtoupper('Create an Account'));
         $condition = WebDriverExpectedCondition::elementToBeClickable($createAccountButton);
         $this->webDriver->wait()->until($condition);
         $this->assertTrue((bool) $condition);
-        $createAccountElement = $this->webDriver->findElement($createAccountButton);
-        $createAccountElement->click();
     }
 
     /**
@@ -71,6 +67,12 @@ abstract class AbstractRegister extends MagentoTest
      */
     public function goToAccountCreate()
     {
+        $createAccountButton = WebDriverBy::partialLinkText(strtoupper('Create an Account'));
+        if ($this->version = '16') {
+            $createAccountButton = WebDriverBy::cssSelector('.new-users .button');
+        }
+        $createAccountElement = $this->webDriver->findElement($createAccountButton);
+        $createAccountElement->click();
         $firstNameSearch = WebDriverBy::id('firstname');
         $condition = WebDriverExpectedCondition::presenceOfElementLocated($firstNameSearch);
         $this->webDriver->wait()->until($condition);
