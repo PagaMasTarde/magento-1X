@@ -137,7 +137,7 @@ abstract class Magento16Test extends TestCase
     protected function setUp()
     {
         $this->webDriver = PagantisWebDriver::create(
-            'http://magento19-test.docker:4444/wd/hub',
+            'http://magento16-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
             120000,
             120000
