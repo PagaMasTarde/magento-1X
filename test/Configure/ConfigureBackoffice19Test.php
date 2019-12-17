@@ -4,14 +4,15 @@ namespace Test\Configure;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Test\Common\AbstractConfigure19;
 
 /**
- * Class ConfigureBackofficeTest
+ * Class ConfigureBackoffice19Test
  * @package Test\Configure
  *
- * @group magento-configure-backoffice
+ * @group magento-configure-backoffice-19
  */
-class ConfigureBackofficeTest extends AbstractConfigure
+class ConfigureBackoffice19Test extends AbstractConfigure19
 {
     /**
      * testConfigureBackoffice

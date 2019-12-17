@@ -5,22 +5,17 @@ namespace Test;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
 /**
- * Class BasicTest
+ * Class Basic19Test
  * @package Test
  *
- * @group magento-basic
+ * @group magento-basic-19
  */
-class BasicTest extends MagentoTest
+class Basic19Test extends MagentoTest
 {
     /**
      * String
      */
-    const TITLE_16 = 'Home page';
-
-    /**
-     * String
-     */
-    const TITLE_19 = 'Madison Island';
+    const TITLE = 'Madison Island';
 
     /**
      * String
@@ -32,17 +27,14 @@ class BasicTest extends MagentoTest
      */
     public function testMagentoOpen()
     {
-        $this->webDriver->get($this->magentoUrl);
-        $title = $this->version == '16' ? self::TITLE_16 : self::TITLE_19;
-
-        var_dump("testMagentoOpen", $this->version, $this->magentoUrl, $this->webDriver->getTitle(), $title);
+        $this->webDriver->get($this->magentoUrl19);
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
-                $title
+                self::TITLE
             )
         );
 
-        $this->assertEquals($title, $this->webDriver->getTitle());
+        $this->assertEquals(self::TITLE, $this->webDriver->getTitle());
         $this->quit();
     }
 
@@ -51,9 +43,7 @@ class BasicTest extends MagentoTest
      */
     public function testBackofficeOpen()
     {
-        $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
-
-        var_dump("testBackofficeOpen", $this->version, $this->magentoUrl, $this->webDriver->getTitle(), self::BACKOFFICE_TITLE);
+        $this->webDriver->get($this->magentoUrl19.self::BACKOFFICE_FOLDER);
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_TITLE

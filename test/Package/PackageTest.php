@@ -210,7 +210,7 @@ class PackageTest extends MagentoTest
      */
     public function goToBackOffice()
     {
-        $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
+        $this->webDriver->get($this->magentoUrl19.self::BACKOFFICE_FOLDER);
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_TITLE

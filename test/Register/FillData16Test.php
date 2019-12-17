@@ -4,14 +4,15 @@ namespace Test\Register;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use Test\Common\AbstractRegister16;
 
 /**
- * Class FillDataTest
+ * Class FillData16Test
  * @package Test\Register
  *
- * @group magento-fill-data
+ * @group magento-fill-data-16
  */
-class FillDataTest extends AbstractRegister
+class FillData16Test extends AbstractRegister16
 {
     /**
      * Complete info
@@ -43,10 +44,7 @@ class FillDataTest extends AbstractRegister
      */
     public function goToAddressBookAndFillAddress()
     {
-        $linkText = strtoupper('Address Book');
-        if ($this->version = '16') {
-            $linkText = 'Edit Address';
-        }
+        $linkText = 'Edit Address';
         $this->findByPartialLinkText($linkText)->click();
         try {
             $this->findById('firstname')->clear()->sendKeys($this->configuration['firstname']);

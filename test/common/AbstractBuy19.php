@@ -159,7 +159,7 @@ abstract class AbstractBuy19 extends MagentoTest
      */
     public function goToProductPage()
     {
-        $this->webDriver->get($this->magentoUrl);
+        $this->webDriver->get($this->magentoUrl19);
         /** @var WebDriverBy $productGrid */
         $productGridSearch = WebDriverBy::className('products-grid');
         /** @var WebDriverBy $productLink */

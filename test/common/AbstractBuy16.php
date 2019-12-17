@@ -108,7 +108,7 @@ abstract class AbstractBuy16 extends MagentoTest
      */
     public function goToProductPage()
     {
-        $this->webDriver->get($this->magentoUrl);
+        $this->webDriver->get($this->magentoUrl16);
 
         /** @var WebDriverBy $pattialProductLink */
         $productLinkSearch = WebDriverBy::partialLinkText(self::PRODUCT_NAME);

@@ -152,7 +152,7 @@ class BuyRegistered16Test extends AbstractBuy16
      */
     protected function checkQuoteNotFound()
     {
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=';
+        $notifyUrl = $this->magentoUrl16.self::NOTIFICATION_FOLDER.'?order=';
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
@@ -172,7 +172,7 @@ class BuyRegistered16Test extends AbstractBuy16
     protected function checkPagantisOrderId()
     {
         $orderId=0;
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order='.$orderId;
+        $notifyUrl = $this->magentoUrl16.self::NOTIFICATION_FOLDER.'?order='.$orderId;
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
@@ -197,7 +197,7 @@ class BuyRegistered16Test extends AbstractBuy16
      */
     protected function checkAlreadyProcessed()
     {
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=145000008';
+        $notifyUrl = $this->magentoUrl16.self::NOTIFICATION_FOLDER.'?order=145000008';
         $response = Request::post($notifyUrl)->expects('json')->send();
         var_dump($notifyUrl, $response->body);
         $this->assertNotEmpty($response->body->result, $response);
@@ -217,7 +217,7 @@ class BuyRegistered16Test extends AbstractBuy16
      */
     protected function checkExtraConfig()
     {
-        $configUrl = $this->magentoUrl.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
+        $configUrl = $this->magentoUrl16.self::CONFIG_FOLDER.'get?secret='.$this->configuration['secretKey'];
 
         $response = Request::get($configUrl)->expects('json')->send();
         $content = $response->body;
@@ -225,7 +225,7 @@ class BuyRegistered16Test extends AbstractBuy16
             $this->assertArrayHasKey($config, (array) $content, "PR61=>".print_r($content, true));
         }
 
-        $configUrl = $this->magentoUrl.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
+        $configUrl = $this->magentoUrl16.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
         $requestTitle = 'changed';
         $body = array('PAGANTIS_TITLE' => $requestTitle);
         $response = Request::post($configUrl)

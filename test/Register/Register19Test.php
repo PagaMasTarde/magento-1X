@@ -4,14 +4,14 @@ namespace Test\Register;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-
+use Test\Common\AbstractRegister19;
 /**
- * Class RegisterTest
+ * Class Register19Test
  * @package Test\Register
  *
- * @group magento-register
+ * @group magento-register-19
  */
-class RegisterTest extends AbstractRegister
+class Register19Test extends AbstractRegister19
 {
     /**
      * Register into Magento 1

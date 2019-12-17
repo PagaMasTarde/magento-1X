@@ -40,9 +40,14 @@ abstract class MagentoTest extends TestCase
     const BACKOFFICE_FOLDER = '/admin';
 
     /**
-     * @var string URL for test
+     * @var string URL for test in MG16
      */
-    public $magentoUrl;
+    public $magentoUrl16;
+
+    /**
+     * @var string URL for test in MG19
+     */
+    public $magentoUrl19;
 
     /**
      * @var string mayor MG Version
@@ -84,8 +89,8 @@ abstract class MagentoTest extends TestCase
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        $this->version = getenv('MAGENTO_MAYOR_VERSION');
-        $this->magentoUrl = $this->getMagentoUrl();
+        $this->magentoUrl16 = $this->getMagentoUrl('16');
+        $this->magentoUrl19 = $this->getMagentoUrl('19');
         $faker = Factory::create();
         $this->configuration['dni'] = $this->getDNI();
         $this->configuration['birthdate'] =
@@ -105,19 +110,21 @@ abstract class MagentoTest extends TestCase
 
     /**
      * getTestEnvironment
+     * @param string $version
+     * @return string
      */
-    protected function getMagentoUrl()
+    protected function getMagentoUrl($version = '19')
     {
         $env = getenv('MAGENTO_TEST_ENV');
 
         if ($env == 'dev') {
-            if ($this->version == "16") {
+            if ($version == "16") {
                 return self::MAGENTO16_URL_DEV;
             }
             return self::MAGENTO19_URL_DEV;
         }
 
-        if ($this->version == "16") {
+        if ($version == "16") {
             return self::MAGENTO16_URL_TEST;
         }
         return self::MAGENTO19_URL_TEST;
@@ -147,11 +154,8 @@ abstract class MagentoTest extends TestCase
      */
     protected function setUp()
     {
-        $url = $this->version == '16' ?
-            'http://magento16-test.docker:4444/wd/hub' :
-            'http://magento19-test.docker:4444/wd/hub';
         $this->webDriver = PagantisWebDriver::create(
-            $url,
+            'localhost:4444/wd/hub',
             DesiredCapabilities::chrome(),
             120000,
             120000

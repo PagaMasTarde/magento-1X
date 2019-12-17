@@ -8,22 +8,17 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use Test\MagentoTest;
 
 /**
- * Class SimulatorTest
+ * Class Simulator19Test
  * @package Test\ProductPage
  *
- * @group magento-product-page
+ * @group magento-product-page-19
  */
-class SimulatorTest extends MagentoTest
+class Simulator19Test extends MagentoTest
 {
-    /**
-     * Product name in magento 16
-     */
-    const PRODUCT_NAME_16 = 'Olympus Stylus 750 7.1MP Digital Camera';
-
     /**
      * Product name in magento 19
      */
-    const PRODUCT_NAME_19 = 'Linen Blazer';
+    const PRODUCT_NAME = 'Linen Blazer';
 
     /**
      * testSimulatorDivExists
@@ -51,11 +46,10 @@ class SimulatorTest extends MagentoTest
      */
     public function goToProductPage()
     {
-        $this->webDriver->get($this->magentoUrl);
+        $this->webDriver->get($this->magentoUrl19);
 
-        $productName = $this->version = '16' ? self::PRODUCT_NAME_16 : self::PRODUCT_NAME_19;
         /** @var WebDriverBy $pattialProductLink */
-        $productLinkSearch = WebDriverBy::partialLinkText($productName);
+        $productLinkSearch = WebDriverBy::partialLinkText(self::PRODUCT_NAME);
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable(
@@ -68,7 +62,7 @@ class SimulatorTest extends MagentoTest
         $productLinkElement->click();
 
         $this->assertContains(
-            $productName,
+            self::PRODUCT_NAME,
             $this->webDriver->getTitle()
         );
     }

@@ -67,27 +67,20 @@ while true; do
     esac
 done
 
-export MAGENTO_MAYOR_VERSION=$version
-export MAGENTO_TEST_ENV=dev
-if [ $test = true ];
-then
-    export MAGENTO_TEST_ENV=test
-fi
-
 if [ $tests = "full" ];
 then
     echo "magento $version tests start"
     # Run test
     echo magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-basic-$version
     echo magento-configure-backoffice
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-$version
     echo magento-product-page
-    extension/lib/Pagantis/bin/phpunit --group magento-product-page
+    extension/lib/Pagantis/bin/phpunit --group magento-product-page-$version
     echo magento-register
-    extension/lib/Pagantis/bin/phpunit --group magento-register
+    extension/lib/Pagantis/bin/phpunit --group magento-register-$version
     echo magento-fill-data
-    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+    extension/lib/Pagantis/bin/phpunit --group magento-fill-data-$version
     echo magento-buy-unregistered
     extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered-$version
     echo magento-cancel-buy-unregistered
@@ -109,7 +102,7 @@ then
 else
     echo "magento $version configuration start"
     echo magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-basic-$version
     echo magento-configure-backoffice
     extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
 fi
