@@ -1,9 +1,10 @@
 <?php
 
-namespace Test;
+namespace Test\Controllers;
 
 use Httpful\Request;
 use Httpful\Mime;
+use Test\MagentoTest;
 
 /**
  * Class ControllerTest

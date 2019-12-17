@@ -9,7 +9,7 @@ use Pagantis\ModuleUtils\Exception\NoIdentificationException;
 use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
 use Httpful\Request;
 use Httpful\Mime;
-use Test\common\AbstractBuy19;
+use Test\Common\AbstractBuy19;
 
 /**
  * Class BuyRegisteredTest

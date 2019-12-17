@@ -5,7 +5,7 @@ namespace Test\Buy;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
-use Test\common\AbstractBuy19;
+use Test\Common\AbstractBuy19;
 
 /**
  * Class CancelBuyRegisteredTest
