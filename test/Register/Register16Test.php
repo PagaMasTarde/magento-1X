@@ -11,7 +11,7 @@ use Test\Common\AbstractRegister16;
  *
  * @group magento-register-16
  */
-class Register19Test extends AbstractRegister16
+class Register16Test extends AbstractRegister16
 {
     /**
      * Register into Magento 1
