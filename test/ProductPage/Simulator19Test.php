@@ -49,7 +49,7 @@ class Simulator19Test extends Magento19Test
         $this->webDriver->get($this->magentoUrl);
 
         /** @var WebDriverBy $pattialProductLink */
-        $productLinkSearch = WebDriverBy::partialLinkText(self::PRODUCT_NAME);
+        $productLinkSearch = WebDriverBy::partialLinkText(strtoupper(self::PRODUCT_NAME));
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable(
