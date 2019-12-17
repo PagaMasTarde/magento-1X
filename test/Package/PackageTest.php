@@ -5,7 +5,7 @@ namespace Test\ProductPage;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Test\MagentoTest;
+use Test\Magento19Test;
 
 /**
  * Class PackageTest
@@ -13,7 +13,7 @@ use Test\MagentoTest;
  *
  * @group magento-package
  */
-class PackageTest extends MagentoTest
+class PackageTest extends Magento19Test
 {
     /**
      * Backoffice Title
@@ -210,7 +210,7 @@ class PackageTest extends MagentoTest
      */
     public function goToBackOffice()
     {
-        $this->webDriver->get($this->magentoUrl19.self::BACKOFFICE_FOLDER);
+        $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::BACKOFFICE_TITLE

@@ -5,14 +5,14 @@ namespace Test\Common;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
-use Test\MagentoTest;
+use Test\Magento19Test;
 
 /**
  * Class AbstractBuy19
  *
  * @package Test\Common
  */
-abstract class AbstractBuy19 extends MagentoTest
+abstract class AbstractBuy19 extends Magento19Test
 {
     /**
      * Color of jacket
@@ -159,7 +159,7 @@ abstract class AbstractBuy19 extends MagentoTest
      */
     public function goToProductPage()
     {
-        $this->webDriver->get($this->magentoUrl19);
+        $this->webDriver->get($this->magentoUrl);
         /** @var WebDriverBy $productGrid */
         $productGridSearch = WebDriverBy::className('products-grid');
         /** @var WebDriverBy $productLink */

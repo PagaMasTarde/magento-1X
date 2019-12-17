@@ -5,7 +5,7 @@ namespace Test\ProductPage;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Test\MagentoTest;
+use Test\Magento16Test;
 
 /**
  * Class Simulator16Test
@@ -13,7 +13,7 @@ use Test\MagentoTest;
  *
  * @group magento-product-page-16
  */
-class Simulator16Test extends MagentoTest
+class Simulator16Test extends Magento16Test
 {
     /**
      * Product name in magento 16
@@ -46,7 +46,7 @@ class Simulator16Test extends MagentoTest
      */
     public function goToProductPage()
     {
-        $this->webDriver->get($this->magentoUrl16);
+        $this->webDriver->get($this->magentoUrl);
 
         /** @var WebDriverBy $pattialProductLink */
         $productLinkSearch = WebDriverBy::partialLinkText(self::PRODUCT_NAME);

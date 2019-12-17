@@ -9,30 +9,20 @@ use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MagentoTest
+ * Class Magento19Test
  * @package Test
  */
-abstract class MagentoTest extends TestCase
+abstract class Magento19Test extends TestCase
 {
     /**
      * Magento TEST
      */
-    const MAGENTO16_URL_TEST = 'http://magento16-test.docker:8017/index.php';
-
-    /**
-     * Magento TEST
-     */
-    const MAGENTO19_URL_TEST = 'http://magento19-test.docker:8082/index.php';
+    const MAGENTO_URL_TEST = 'http://magento19-test.docker:8082/index.php';
 
     /**
      * Magento DEV
      */
-    const MAGENTO16_URL_DEV = 'http://magento16-dev.docker:8016/index.php';
-
-    /**
-     * Magento DEV
-     */
-    const MAGENTO19_URL_DEV = 'http://magento19-dev.docker:8080/index.php';
+    const MAGENTO_URL_DEV = 'http://magento19-dev.docker:8080/index.php';
 
     /**
      * Magento Backoffice URL
@@ -53,6 +43,11 @@ abstract class MagentoTest extends TestCase
      * @var string mayor MG Version
      */
     public $version;
+
+    /**
+     * @var RemoteWebDriver
+     */
+    protected $webDriver;
 
     /**
      * @var array
@@ -81,7 +76,7 @@ abstract class MagentoTest extends TestCase
     );
 
     /**
-     * MagentoTest constructor.
+     * Magento19Test constructor.
      *
      * @param null   $name
      * @param array  $data
@@ -89,8 +84,7 @@ abstract class MagentoTest extends TestCase
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        $this->magentoUrl16 = $this->getMagentoUrl('16');
-        $this->magentoUrl19 = $this->getMagentoUrl('19');
+        $this->magentoUrl = $this->getMagentoUrl();
         $faker = Factory::create();
         $this->configuration['dni'] = $this->getDNI();
         $this->configuration['birthdate'] =
@@ -113,21 +107,14 @@ abstract class MagentoTest extends TestCase
      * @param string $version
      * @return string
      */
-    protected function getMagentoUrl($version = '19')
+    protected function getMagentoUrl()
     {
         $env = getenv('MAGENTO_TEST_ENV');
-
         if ($env == 'dev') {
-            if ($version == "16") {
-                return self::MAGENTO16_URL_DEV;
-            }
-            return self::MAGENTO19_URL_DEV;
+            return self::MAGENTO_URL_DEV;
         }
 
-        if ($version == "16") {
-            return self::MAGENTO16_URL_TEST;
-        }
-        return self::MAGENTO19_URL_TEST;
+        return self::MAGENTO_URL_TEST;
     }
 
     /**
@@ -145,17 +132,12 @@ abstract class MagentoTest extends TestCase
     }
 
     /**
-     * @var RemoteWebDriver
-     */
-    protected $webDriver;
-
-    /**
      * Configure selenium
      */
     protected function setUp()
     {
         $this->webDriver = PagantisWebDriver::create(
-            'localhost:4444/wd/hub',
+            'http://magento19-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
             120000,
             120000

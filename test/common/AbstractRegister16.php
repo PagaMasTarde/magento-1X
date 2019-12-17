@@ -4,13 +4,13 @@ namespace Test\Common;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Test\MagentoTest;
+use Test\Magento16Test;
 
 /**
  * Class AbstractRegister16
  * @package Test\Register
  */
-abstract class AbstractRegister16 extends MagentoTest
+abstract class AbstractRegister16 extends Magento16Test
 {
     /**
      * String
@@ -22,7 +22,7 @@ abstract class AbstractRegister16 extends MagentoTest
      */
     public function openMagento()
     {
-        $this->webDriver->get($this->magentoUrl16);
+        $this->webDriver->get($this->magentoUrl);
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
                 self::TITLE

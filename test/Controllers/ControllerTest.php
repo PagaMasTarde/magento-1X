@@ -4,7 +4,7 @@ namespace Test\Controllers;
 
 use Httpful\Request;
 use Httpful\Mime;
-use Test\MagentoTest;
+use Test\Magento19Test;
 
 /**
  * Class ControllerTest
@@ -12,7 +12,7 @@ use Test\MagentoTest;
  *
  * @group magento-controllers
  */
-class ControllerTest extends MagentoTest
+class ControllerTest extends Magento19Test
 {
     /**
      * log route

@@ -5,14 +5,14 @@ namespace Test\Common;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pagantis\SeleniumFormUtils\SeleniumHelper;
-use Test\MagentoTest;
+use Test\Magento16Test;
 
 /**
  * Class AbstractBuy16Test
  *
  * @package Test\Common
  */
-abstract class AbstractBuy16 extends MagentoTest
+abstract class AbstractBuy16 extends Magento16Test
 {
     /**
      * Product name in magento 16
@@ -108,7 +108,7 @@ abstract class AbstractBuy16 extends MagentoTest
      */
     public function goToProductPage()
     {
-        $this->webDriver->get($this->magentoUrl16);
+        $this->webDriver->get($this->magentoUrl);
 
         /** @var WebDriverBy $pattialProductLink */
         $productLinkSearch = WebDriverBy::partialLinkText(self::PRODUCT_NAME);

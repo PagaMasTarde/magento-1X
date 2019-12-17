@@ -5,13 +5,13 @@ namespace Test\Common;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverSelect;
-use Test\MagentoTest;
+use Test\Magento16Test;
 
 /**
  * Class AbstractConfigure16
  * @package Test\Configure
  */
-abstract class AbstractConfigure16 extends MagentoTest
+abstract class AbstractConfigure16 extends Magento16Test
 {
     /**
      * Backoffice Title
@@ -33,7 +33,7 @@ abstract class AbstractConfigure16 extends MagentoTest
      */
     public function getBackOffice()
     {
-        $this->webDriver->get($this->magentoUrl19.self::BACKOFFICE_FOLDER);
+        $this->webDriver->get($this->magentoUrl.self::BACKOFFICE_FOLDER);
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::titleContains(
