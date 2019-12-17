@@ -171,4 +171,4 @@ services:
       - "magento19-test.docker:${DOCKERHOST}"
       - "magento19-dev.docker:${DOCKERHOST}"
       - "magento16-test.docker:${DOCKERHOST}"
-      - "magento16:-dev.docker:${DOCKERHOST}"
+      - "magento16-dev.docker:${DOCKERHOST}"
