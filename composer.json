@@ -36,7 +36,7 @@
     "autoload-dev": {
         "psr-4": {
             "Test\\": "test/",
-            "Test\\Common": "test/common/"
+            "Test\\Common\\": "test/common/"
         }
     },
     "minimum-stability": "stable",
