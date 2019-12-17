@@ -55,7 +55,7 @@ class BuyRegistered16Test extends AbstractBuy16
         $this->fillPaymentMethod();
 
         // get cart total price
-        $cartPrice = WebDriverBy::cssSelector('#checkout-review-table tfoot tr.last .price');
+        $cartPrice = WebDriverBy::cssSelector('#checkout-review-table-wrapper tfoot tr.last .price');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
                 $cartPrice
@@ -71,7 +71,7 @@ class BuyRegistered16Test extends AbstractBuy16
 
         // get registered purchase amount
         $checkoutPrice = WebDriverBy::cssSelector(
-            '.box-account.box-recent .data-table.orders .first .total .price'
+            '.grand_total .price'
         );
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
@@ -81,7 +81,7 @@ class BuyRegistered16Test extends AbstractBuy16
         $checkoutPrice = $this->webDriver->findElement($checkoutPrice)->getText();
         //----------------------
 
-        $this->assertTrue(($cartPrice == $checkoutPrice));
+        $this->assertContains($cartPrice, $checkoutPrice);
         $this->makeValidation();
         $this->quit();
     }
@@ -199,6 +199,7 @@ class BuyRegistered16Test extends AbstractBuy16
     {
         $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=145000008';
         $response = Request::post($notifyUrl)->expects('json')->send();
+        var_dump($notifyUrl, $response->body);
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);

@@ -27,12 +27,12 @@ abstract class AbstractBuy16 extends MagentoTest
     /**
      * Correct purchase message
      */
-    const CORRECT_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN RECEIVED.';
+    const CORRECT_PURCHASE_MESSAGE = 'Your order has been received';
 
     /**
      * Canceled purchase message
      */
-    const CANCELED_PURCHASE_MESSAGE = 'YOUR ORDER HAS BEEN CANCELED.';
+    const CANCELED_PURCHASE_MESSAGE = 'Your order has been canceled';
 
     /**
      * Shopping cart message
@@ -244,20 +244,17 @@ abstract class AbstractBuy16 extends MagentoTest
      */
     public function checkLastPurchaseStatus($statusText = 'Processing')
     {
-        $accountMenu = WebDriverBy::cssSelector('.account-cart-wrapper a.skip-link.skip-account');
+        $accountMenu = WebDriverBy::cssSelector('.main p a');
         $this->clickElement($accountMenu);
-
-        $myAccountMenu = WebDriverBy::cssSelector('#header-account .first a');
-        $this->clickElement($myAccountMenu);
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(
-                WebDriverBy::cssSelector('.box-account.box-recent')
+                WebDriverBy::cssSelector('.my-account')
             )
         );
 
-        $status = $this->findByCss('.box-account.box-recent .data-table.orders .first .status em')->getText();
-        $this->assertTrue(($status == $statusText));
+        $status = $this->findByCss('.my-account .page-title h1')->getText();
+        $this->assertContains($statusText, $status);
     }
 
     /**
