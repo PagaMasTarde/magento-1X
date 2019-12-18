@@ -4,15 +4,15 @@ namespace Test\Controllers;
 
 use Httpful\Request;
 use Httpful\Mime;
-use Test\Magento19Test;
+use Test\Magento16Test;
 
 /**
- * Class ControllerTest
+ * Class Controller61Test
  * @package Test
  *
- * @group magento-controllers
+ * @group magento-controllers-16
  */
-class ControllerTest extends Magento19Test
+class Controller16Test extends Magento16Test
 {
     /**
      * log route
@@ -46,6 +46,7 @@ class ControllerTest extends Magento19Test
     public function testLogDownload()
     {
         $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
+        var_dump($logUrl);
         $response = Request::get($logUrl)->expects('json')->send();
         $this->assertEquals(2, count($response->body));
         $this->quit();

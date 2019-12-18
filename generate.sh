@@ -90,7 +90,7 @@ then
     echo magento-cancel-buy-registered
     extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered-$version
     echo magento-cancel-buy-controllers
-    extension/lib/Pagantis/bin/phpunit --group magento-controllers
+    extension/lib/Pagantis/bin/phpunit --group magento-controllers-$version
 
     # Copy Files for test container
     if [ $test = true ];
