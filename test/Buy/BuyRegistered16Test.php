@@ -197,7 +197,7 @@ class BuyRegistered16Test extends AbstractBuy16
      */
     protected function checkAlreadyProcessed()
     {
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=145000008';
+        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=100000003';
         $response = Request::post($notifyUrl)->expects('json')->send();
         var_dump($notifyUrl, $response->body);
         $this->assertNotEmpty($response->body->result, $response);
