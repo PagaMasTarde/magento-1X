@@ -104,7 +104,7 @@ else
     echo magento-basic
     extension/lib/Pagantis/bin/phpunit --group magento-basic-$version
     echo magento-configure-backoffice
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-$version
 fi
 
 docker-compose exec ${container} ./n98-magerun.phar cache:flush
