@@ -1,12 +1,21 @@
 #!/bin/bash
 while true; do
+    read -p "Do you want to install magento 1.9.x or 1.6.x [19|16]? " version
+    case $version in
+        [19]* ) break;;
+        [16]* ) break;;
+        * ) echo "Please answer 19 or 16.";;
+    esac
+done
+while true; do
     read -p "Do you wish to run dev or test [test|dev]? " devtest
     case $devtest in
-        [dev]* ) container="magento19-dev";test=false; break;;
-        [test]* ) container="magento19-test";test=true; break;;
+        [dev]* ) container="magento$version-dev";test=false; break;;
+        [test]* ) container="magento$version-test";test=true; break;;
         * ) echo "Please answer dev or test.";;
     esac
 done
+
 while true; do
     read -p "You have chosen to start ${container}, are you sure [y/n]? " yn
     case $yn in
@@ -19,9 +28,8 @@ done
 composer install
 
 # Prepare environment and build package
-docker-compose down
-docker-compose up -d --build ${container} selenium
-
+# docker-compose down
+docker-compose up -d ${container} selenium
 sleep 10
 
 # Copy Files for test container
@@ -30,6 +38,11 @@ then
     docker cp ./extension/. ${container}:/pagantis/
 fi
 
+if [ $version = "16" ];
+then
+    echo "copying ./resources/Mysql4.php into ${container}:/var/www/html/app/code/core/Mage/Install/Model/Installer/Db/"
+    docker cp ./resources/Mysql4.php ${container}:/var/www/html/app/code/core/Mage/Install/Model/Installer/Db/
+fi
 # Install magento and sample data
 docker-compose exec ${container} install-sampledata
 docker-compose exec ${container} install-magento
@@ -56,28 +69,28 @@ done
 
 if [ $tests = "full" ];
 then
-    export MAGENTO_TEST_ENV=test
+    echo "magento $version tests start"
     # Run test
     echo magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-basic-$version
     echo magento-configure-backoffice
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-$version
     echo magento-product-page
-    extension/lib/Pagantis/bin/phpunit --group magento-product-page
-    echo magento-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
-    echo magento-cancel-buy-unregistered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-product-page-$version
     echo magento-register
-    extension/lib/Pagantis/bin/phpunit --group magento-register
+    extension/lib/Pagantis/bin/phpunit --group magento-register-$version
     echo magento-fill-data
-    extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+    extension/lib/Pagantis/bin/phpunit --group magento-fill-data-$version
+    echo magento-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered-$version
+    echo magento-cancel-buy-unregistered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered-$version
     echo magento-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-buy-registered-$version
     echo magento-cancel-buy-registered
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
+    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered-$version
     echo magento-cancel-buy-controllers
-    extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-controllers
+    extension/lib/Pagantis/bin/phpunit --group magento-controllers-$version
 
     # Copy Files for test container
     if [ $test = true ];
@@ -87,11 +100,11 @@ then
         extension/lib/Pagantis/bin/phpunit --group magento-package
     fi
 else
-    export MAGENTO_TEST_ENV=dev
+    echo "magento $version configuration start"
     echo magento-basic
-    extension/lib/Pagantis/bin/phpunit --group magento-basic
+    extension/lib/Pagantis/bin/phpunit --group magento-basic-$version
     echo magento-configure-backoffice
-    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+    extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-$version
 fi
 
 docker-compose exec ${container} ./n98-magerun.phar cache:flush

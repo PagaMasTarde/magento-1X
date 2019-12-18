@@ -1,10 +1,12 @@
 FROM alexcheng/apache2-php5:5.6.33
 
-ENV MAGENTO_VERSION 1.9.4.2
-
 RUN a2enmod rewrite
 
 ENV INSTALL_DIR /var/www/html
+ARG MAGENTO_MAYOR_VERSION
+ARG MAGENTO_VERSION
+ARG MAGENTO_SAMPLEDATA_TGZ
+ARG MAGENTO_SAMPLEDATA_INSTALLER
 
 RUN cd /tmp && \
     curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && \
@@ -24,13 +26,11 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/lib/ --with-freetype-dir=/u
 COPY ./bin/install-magento /usr/local/bin/install-magento
 RUN chmod +x /usr/local/bin/install-magento
 
-COPY ./sampledata/magento-sample-data-1.9.1.0.tgz /opt/
-COPY ./bin/install-sampledata-1.9 /usr/local/bin/install-sampledata
+COPY ./resources/sampledata/$MAGENTO_SAMPLEDATA_TGZ /opt/
+COPY ./bin/$MAGENTO_SAMPLEDATA_INSTALLER /usr/local/bin/install-sampledata
 RUN chmod +x /usr/local/bin/install-sampledata
 
 RUN bash -c 'bash < <(curl -s -L https://raw.github.com/colinmollenhour/modman/master/modman-installer)'
 RUN mv ~/bin/modman /usr/local/bin
 
 WORKDIR $INSTALL_DIR
-
-#COPY redis.conf /var/www/htdocs/app/etc/

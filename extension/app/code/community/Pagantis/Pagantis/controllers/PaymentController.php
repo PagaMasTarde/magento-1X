@@ -86,7 +86,6 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
 
         $mageCore = Mage::helper('core');
         $this->magentoOrderData = json_decode($mageCore->jsonEncode($this->magentoOrder->getData()), true);
-
         $this->okUrl = Mage::getUrl(
             'pagantis/notify',
             array('_query' => array('order' => $this->magentoOrderData['increment_id']))
@@ -220,7 +219,6 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 ->setTaxId($this->getTaxId($mgShippingAddress, $mgBillingAddress))
             ;
 
-
             $orderCollection = Mage::getModel('sales/order')->getCollection();
             $orderCollection = $orderCollection->addFieldToFilter('customer_id', $this->customer->getId());
             foreach ($orderCollection as $cOrder) {
@@ -237,14 +235,19 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             $details = new PagantisModelOrderShoppingCartDetails();
             $details->setShippingCost(floatval($this->magentoOrder->getShippingAmount())*100);
             foreach ($this->itemCollection as $item) {
-                $magentoProduct = $item->getProduct();
+                $catalogProduct = Mage::getModel('catalog/product')->load($item->getId());
+                $attributes = $catalogProduct->getAttributes();
+
                 $product = new PagantisModelOrderShoppingCartProduct();
                 $product
                     ->setAmount(floatval($item->getRowTotalInclTax())*100)
                     ->setQuantity($item->getQtyToShip())
                     ->setDescription($item->getName());
                 $details->addProduct($product);
-                $pagantisPromoted = $magentoProduct->getData("pagantis_promoted") ? 1 : 0;
+
+                $attributesobj = $attributes["pagantis_promoted"];
+                $pagantisPromoted = $attributesobj->getFrontend()->getValue($catalogProduct) == "Si" ? 1 : 0;
+
                 $productPrice = floatval($item->getRowTotalInclTax())*100;
                 if ($pagantisPromoted) {
                     $metadata[$item->getId()] =

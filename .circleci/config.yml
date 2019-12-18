@@ -1,27 +1,74 @@
-version: 2
-jobs:
-  build:
-    machine:
-      image: ubuntu-1604:201903-01
-    working_directory: ~/repo
+version: 2.1
+commands:
+  host_and_docker_compose_16:
+    description: "Add Docker Host && DockerCompose install"
     steps:
-      - checkout
       - run:
-          name: Add Docker Host
+          name: Add Docker Host && DockerCompose install
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            echo $DOCKERHOST
-            echo 127.0.0.1 magento19-test.docker | sudo tee -a /etc/hosts
+            echo 127.0.0.1 magento16-test.docker | sudo tee -a /etc/hosts
+            sudo curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+  host_and_docker_compose_19:
+    description: "Add Docker Host && DockerCompose install"
+    steps:
       - run:
-          name: Composer Install
+          name: Add Docker Host && DockerCompose install
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            echo 127.0.0.1 magento19-test.docker | sudo tee -a /etc/hosts
+            sudo curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+  install_dependencies:
+    description: "Install php7.2 && Composer Install"
+    steps:
+      - run:
+          name: Install php7.0 && Composer Install
           command: |
             sudo apt install -y software-properties-common
             sudo add-apt-repository -y ppa:ondrej/php
             sudo apt-get update
-            sudo apt install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom
+            sudo apt-get install -y php7.2-fpm php7.2-gd php7.2-curl php7.2-mysql php7.2-dev php7.2-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-zip php7.2-bcmath php7.2-dom npm
             curl -s https://getcomposer.org/installer | php
             sudo mv composer.phar /usr/local/bin/composer
             composer install --ignore-platform-reqs
+  build_and_install_magento_16:
+    description: "Build image, install magento 16and sampledata, modman and linksys"
+    steps:
+      - run:
+          name: Docker UP
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker-compose up -d --build magento16-test
+            docker-compose up -d --build selenium
+            sleep 10
+      - run:
+          name: Docker Copy Module Files
+          command: |
+            docker cp ./extension/. magento16-test:/pagantis/
+            docker cp ./resources/Mysql4.php magento16-test:/var/www/html/app/code/core/Mage/Install/Model/Installer/Db/
+            docker exec magento16-test ls -lah /pagantis
+      - run:
+          name: Install Sample Data
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            docker-compose exec magento16-test install-sampledata
+            docker-compose exec magento16-test install-magento
+      - run:
+          name: Modman, Links, N98, dev:symlinks enable
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            docker-compose exec magento16-test modman init
+            docker-compose exec magento16-test modman link /pagantis
+            docker-compose exec magento16-test curl -O https://files.magerun.net/n98-magerun.phar
+            docker-compose exec magento16-test chmod +x n98-magerun.phar
+            docker-compose exec magento16-test ./n98-magerun.phar dev:symlinks 1
+  build_and_install_magento_19:
+    description: "Build image, install magento 19 and sampledata, modman and linksys"
+    steps:
       - run:
           name: Docker UP
           command: |
@@ -51,56 +98,133 @@ jobs:
             docker-compose exec magento19-test curl -O https://files.magerun.net/n98-magerun.phar
             docker-compose exec magento19-test chmod +x n98-magerun.phar
             docker-compose exec magento19-test ./n98-magerun.phar dev:symlinks 1
+  run_tests_16:
+    description: "Run tests Magento 16"
+    steps:
       - run:
           name: magento-basic
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-basic
+            extension/lib/Pagantis/bin/phpunit --group magento-basic-16
       - run:
           name: magento-configure-backoffice
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice
+            extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-16
       - run:
           name: magento-product-page
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-product-page
-      - run:
-          name: magento-buy-unregistered
-          command: |
-            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered
-      - run:
-          name: magento-cancel-buy-unregistered
-          command: |
-            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered
+            extension/lib/Pagantis/bin/phpunit --group magento-product-page-16
       - run:
           name: magento-register
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-register
+            extension/lib/Pagantis/bin/phpunit --group magento-register-16
       - run:
           name: magento-fill-data
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-fill-data
+            extension/lib/Pagantis/bin/phpunit --group magento-fill-data-16
+      - run:
+          name: magento-buy-unregistered
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered-16
+      - run:
+          name: magento-cancel-buy-unregistered
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered-16
       - run:
           name: magento-buy-registered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-buy-registered
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-registered-16
       - run:
           name: magento-cancel-buy-registered
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered-16
       - run:
           name: magento-controllers
           command: |
             export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
-            extension/lib/Pagantis/bin/phpunit --group magento-controllers
+            extension/lib/Pagantis/bin/phpunit --group magento-controllers-16
+  run_tests_19:
+    description: "Run tests Magento 19"
+    steps:
+      - run:
+          name: magento-basic
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-basic-19
+      - run:
+          name: magento-configure-backoffice
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-configure-backoffice-19
+      - run:
+          name: magento-product-page
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-product-page-19
+      - run:
+          name: magento-register
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-register-19
+      - run:
+          name: magento-fill-data
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-fill-data-19
+      - run:
+          name: magento-buy-unregistered
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-unregistered-19
+      - run:
+          name: magento-cancel-buy-unregistered
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-unregistered-19
+      - run:
+          name: magento-buy-registered
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-buy-registered-19
+      - run:
+          name: magento-cancel-buy-registered
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-cancel-buy-registered-19
+      - run:
+          name: magento-controllers
+          command: |
+            export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+            extension/lib/Pagantis/bin/phpunit --group magento-controllers-19
+jobs:
+  runTestMagento16:
+    machine:
+      image: ubuntu-1604:201903-01
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - host_and_docker_compose_16
+      - install_dependencies
+      - build_and_install_magento_16
+      - run_tests_16
+  runTestMagento19:
+    machine:
+      image: ubuntu-1604:201903-01
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - host_and_docker_compose_19
+      - install_dependencies
+      - build_and_install_magento_19
+      - run_tests_19
   pushRelease:
     machine:
       image: ubuntu-1604:201903-01
@@ -185,10 +309,14 @@ jobs:
                 --name Pagantis_$CIRCLE_TAG.tgz \
                 --file Pagantis_$CIRCLE_TAG.tgz
 workflows:
-  version: 2
+  version: 2.1
   build:
     jobs:
-      - build:
+      - runTestMagento16:
+          filters:
+            branches:
+              only: /.*/
+      - runTestMagento19:
           filters:
             branches:
               only: /.*/
