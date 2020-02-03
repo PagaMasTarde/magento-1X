@@ -92,7 +92,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
       - MAGENTO_LOCALE=es_ES
-      - MAGENTO_TIMEZONE=Europe/Madrid
+      - MAGENTO_TIMEZONE=Euroºe/Madrid
       - MAGENTO_DEFAULT_CURRENCY=EUR
       - MAGENTO_URL=magento19-dev.docker:8080
     volumes:
