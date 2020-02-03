@@ -51,7 +51,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
             var positionSelector = '<?php echo $pagantisCSSSelector;?>';
 
             if (positionSelector === 'default') {
-                positionSelector = '.PagantisSimulator';
+                positionSelector = '.ratings';
             }
 
             return positionSelector;
@@ -102,7 +102,7 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
                 sdk.product_simulator.numInstalments = '<?php echo $pagantisQuotesStart;?>';
                 sdk.product_simulator.type = <?php echo $pagantisSimulatorType;?>;
                 sdk.product_simulator.skin = <?php echo $pagantisSimulatorSkin;?>;
-                sdk.product_simulator.position = <?php echo $pagantisSimulatorPosition;?>;
+                //sdk.product_simulator.position = <?php echo $pagantisSimulatorPosition;?>;
                 sdk.product_simulator.amountParserConfig =  {
                     thousandSeparator: '<?php echo $pagantisSimulatorThousandSeparator;?>',
                     decimalSeparator: '<?php echo $pagantisSimulatorDecimalSeparator;?>'

@@ -11,19 +11,8 @@
             </block>
         </reference>
     </default>
-    <default>
-        <reference name="head">
-            <block type="core/text" name="pmt.js">
-                <action method="setText" ifconfig="payment/pagantis/active">
-                    <text>
-<![CDATA[<script type="text/javascript" src="https://cdn.pagamastarde.com/js/pmt-v2/sdk.js"></script>]]>
-                    </text>
-                </action>
-            </block>
-        </reference>
-    </default>
     <catalog_product_view>
-        <reference name="product.info.price">
+        <reference name="product.info.addtocart">
             <block type="pagantis/product_simulator"
                    as="pagantis_simulator"
                    name="product_simulator"
