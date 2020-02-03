@@ -30,11 +30,6 @@
             function loadSimulator()
             {
                 var sdk = pgSDK;
-
-                if ('<?php echo $locale;?>' == 'ES' || '<?php echo $locale;?>' == '') {
-                    sdk = pmtSDK;
-                }
-
                 var positionSelector = getPositionSelector();
                 var pgDiv = document.querySelectorAll(positionSelector);
                 if(typeof pgDiv!='undefined' && typeof pgDiv[0]!='undefined' && typeof window.MGSimulatorId!='undefined') {

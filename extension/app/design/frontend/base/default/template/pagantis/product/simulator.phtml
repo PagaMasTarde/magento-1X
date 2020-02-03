@@ -60,10 +60,6 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
         function loadSimulator()
         {
             var sdk = pgSDK;
-            if ('<?php echo $locale;?>' == 'ES') {
-                sdk = pmtSDK;
-            }
-
             var positionSelector = getPositionSelector();
             var pgDiv = document.querySelectorAll(positionSelector);
 
