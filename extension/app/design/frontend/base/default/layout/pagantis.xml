@@ -23,7 +23,7 @@
         </reference>
     </default>
     <catalog_product_view>
-        <reference name="product.info.addtocart">
+        <reference name="product.info.price">
             <block type="pagantis/product_simulator"
                    as="pagantis_simulator"
                    name="product_simulator"

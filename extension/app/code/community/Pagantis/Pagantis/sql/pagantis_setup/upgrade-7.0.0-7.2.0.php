@@ -17,7 +17,7 @@ $installer->run("INSERT INTO `pagantis_config`
     (`config`, `value`)
     VALUES
     ('PAGANTIS_TITLE', 'Instant Financing'),
-    ('PAGANTIS_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.SIMPLE'),
+    ('PAGANTIS_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.SELECTABLE_TEXT_CUSTOM'),
     ('PAGANTIS_SIMULATOR_DISPLAY_SKIN', 'pgSDK.simulator.skins.BLUE'),
     ('PAGANTIS_SIMULATOR_DISPLAY_POSITION', 'hookDisplayProductButtons'),
     ('PAGANTIS_SIMULATOR_START_INSTALLMENTS', '3'),
