@@ -98,7 +98,9 @@ abstract class AbstractBuy19 extends Magento19Test
         $addToCartButtonElement = $this->webDriver->findElement($addToCartButtonSearch);
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($addToCartButtonElement));
         $addToCartButtonElement->click();
+        sleep(5);
         $cartTotalsSearch = WebDriverBy::className('cart-totals');
+        $this->webDriver->findElement($cartTotalsSearch);
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementTextContains(
                 $cartTotalsSearch,

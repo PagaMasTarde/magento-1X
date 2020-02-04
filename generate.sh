@@ -36,6 +36,8 @@ sleep 10
 if [ $test = true ];
 then
     docker cp ./extension/. ${container}:/pagantis/
+else
+    export MAGENTO_TEST_ENV=dev
 fi
 
 if [ $version = "16" ];
