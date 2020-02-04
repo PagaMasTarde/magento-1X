@@ -52,6 +52,9 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
 
             if (positionSelector === 'default') {
                 positionSelector = '.PagantisSimulator';
+                if ('<?php echo $pagantisSimulatorType;?>' === 'pgSDK.simulator.types.SELECTABLE_TEXT_CUSTOM') {
+                    positionSelector = '.product-shop .price-info';
+                }
             }
 
             return positionSelector;
@@ -60,10 +63,6 @@ if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '
         function loadSimulator()
         {
             var sdk = pgSDK;
-            if ('<?php echo $locale;?>' == 'ES') {
-                sdk = pmtSDK;
-            }
-
             var positionSelector = getPositionSelector();
             var pgDiv = document.querySelectorAll(positionSelector);
 

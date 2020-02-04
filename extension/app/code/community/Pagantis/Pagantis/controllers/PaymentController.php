@@ -281,11 +281,21 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 ->setType(PagantisModelOrderChannel::ONLINE)
             ;
 
+            $extraConfig = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+            $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
+            $langCountry = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
+            $shippingCountry = $mgShippingAddress['country_id'];
+            $billingCountry = $mgBillingAddress['country_id'];
+            $purchaseCountry =
+                in_array($langCountry,$allowedCountries) ? $langCountry :
+                in_array($shippingCountry,$allowedCountries) ? $shippingCountry :
+                in_array($billingCountry,$allowedCountries) ? $billingCountry : null;
+
             $orderConfiguration = new PagantisModelOrderConfiguration();
             $orderConfiguration
                 ->setChannel($orderChannel)
                 ->setUrls($orderConfigurationUrls)
-                ->setPurchaseCountry(substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2))
+                ->setPurchaseCountry($purchaseCountry)
             ;
 
             $metadataOrder = new PagantisModelOrderMetadata();

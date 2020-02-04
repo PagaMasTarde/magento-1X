@@ -18,12 +18,10 @@ app/design/adminhtml/default/default/layout/pagantis.xml            app/design/a
 # lib
 lib/Pagantis/            lib/Pagantis/
 # skin
-skin/frontend/base/default/images/pagantis/logopagantis.png            skin/frontend/base/default/images/pagantis/logopagantis.png
-skin/frontend/base/default/images/pagantis/logosimple.png            skin/frontend/base/default/images/pagantis/logosimple.png
-skin/frontend/base/default/images/pagantis/logopagamastarde.png            skin/frontend/base/default/images/pagantis/logopagamastarde.png
-skin/adminhtml/default/default/images/pagantis/logopagantis.png            skin/adminhtml/default/default/images/pagantis/logopagantis.png
-skin/adminhtml/default/default/images/pagantis/logosimple.png            skin/adminhtml/default/default/images/pagantis/logosimple.png
-skin/adminhtml/default/default/images/pagantis/logopagamastarde.png            skin/adminhtml/default/default/images/pagantis/logopagamastarde.png
+skin/frontend/base/default/images/pagantis/logo.svg            skin/frontend/base/default/images/pagantis/logo.svg
+skin/frontend/base/default/images/pagantis/favicon.svg            skin/frontend/base/default/images/pagantis/favicon.svg
+skin/adminhtml/default/default/images/pagantis/logo.svg            skin/adminhtml/default/default/images/pagantis/logo.svg
+skin/adminhtml/default/default/images/pagantis/favicon.svg            skin/adminhtml/default/default/images/pagantis/favicon.svg
 skin/adminhtml/base/default/admin_pagantis.css            skin/adminhtml/base/default/admin_pagantis.css
 # var
 var/connect            var/connect
