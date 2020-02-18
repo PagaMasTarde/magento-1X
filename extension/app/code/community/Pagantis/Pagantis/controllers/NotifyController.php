@@ -28,7 +28,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     const CONCURRENCY_TABLENAME = 'pagantis_cart_concurrency';
 
     /** Seconds to expire a locked request */
-    const CONCURRENCY_TIMEOUT = 10;
+    const CONCURRENCY_TIMEOUT = 6;
 
     /**
      * @var string $merchantOrderId
@@ -100,7 +100,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         try {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // prevent collision between POST and GET requests
-                sleep(15);
+                sleep(10);
             }
             $origin = Mage::app()->getRequest()->getParam('origin');
             if ($origin == 'notification' && $_SERVER['REQUEST_METHOD'] == 'GET') {
