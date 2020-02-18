@@ -99,6 +99,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         $jsonResponse = array();
         try {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                // prevent collision between POST and GET requests
                 sleep(15);
             }
             $origin = Mage::app()->getRequest()->getParam('origin');
