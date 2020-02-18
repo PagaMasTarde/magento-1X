@@ -98,6 +98,13 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     {
         $jsonResponse = array();
         try {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                sleep(15);
+            }
+            $origin = Mage::app()->getRequest()->getParam('origin');
+            if ($origin == 'notification' && $_SERVER['REQUEST_METHOD'] == 'GET') {
+                return $this->cancelProcess();
+            }
             $this->checkConcurrency();
             $this->getMerchantOrder();
             $this->getPagantisOrderId();

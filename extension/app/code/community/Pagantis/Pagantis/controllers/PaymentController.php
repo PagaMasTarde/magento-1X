@@ -74,6 +74,21 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
     protected $addressData;
 
     /**
+     * @var string $redirectOkUrl
+     */
+    protected $redirectOkUrl;
+
+    /**
+     * @var string $notificationOkUrl
+     */
+    protected $notificationOkUrl;
+
+    /**
+     * @var string $cancelUrl
+     */
+    protected $cancelUrl;
+
+    /**
      * Find and init variables needed to process payment
      */
     public function prepareVariables()
@@ -86,9 +101,13 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
 
         $mageCore = Mage::helper('core');
         $this->magentoOrderData = json_decode($mageCore->jsonEncode($this->magentoOrder->getData()), true);
-        $this->okUrl = Mage::getUrl(
+        $this->redirectOkUrl = Mage::getUrl(
             'pagantis/notify',
-            array('_query' => array('order' => $this->magentoOrderData['increment_id']))
+            array('_query' => array('origin' => 'redirect', 'order' => $this->magentoOrderData['increment_id']))
+        );
+        $this->notificationOkUrl = Mage::getUrl(
+            'pagantis/notify',
+            array('_query' => array('origin' => 'notification', 'order' => $this->magentoOrderData['increment_id']))
         );
         $this->cancelUrl = Mage::getUrl(
             'pagantis/notify/cancel',
@@ -116,7 +135,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
     {
         $this->prepareVariables();
         if ($this->magentoOrder->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            return $this->_redirectUrl($this->okUrl);
+            return $this->_redirectUrl($this->redirectOkUrl);
         }
 
         $node = Mage::getConfig()->getNode();
@@ -269,11 +288,11 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
 
             $orderConfigurationUrls = new PagantisModelOrderUrls();
             $orderConfigurationUrls
-                ->setOk($this->okUrl)
+                ->setOk($this->redirectOkUrl)
                 ->setCancel($this->cancelUrl)
-                ->setKo($this->okUrl)
-                ->setAuthorizedNotificationCallback($this->okUrl)
-                ->setRejectedNotificationCallback($this->okUrl);
+                ->setKo($this->redirectOkUrl)
+                ->setAuthorizedNotificationCallback($this->notificationOkUrl)
+                ->setRejectedNotificationCallback(null);
 
             $orderChannel = new PagantisModelOrderChannel();
             $orderChannel
