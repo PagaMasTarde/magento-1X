@@ -21,19 +21,24 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $amount         = Mage::app()->getStore()->convertPrice($this->getProduct()->getFinalPrice());
         $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
         $pagantisPromoted = $this->getProduct()->getData("pagantis_promoted") ? 1 : 0;
+        $pagantisMinAmount = $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'];
+        $pagantisMaxAmount = $extraConfig['PAGANTIS_DISPLAY_MAX_AMOUNT'];
 
-        if (in_array(strtolower($locale), $allowedCountries)) {
+        if (in_array(strtolower($locale), $allowedCountries) &&
+            $amount >= $pagantisMinAmount &&
+            ($amount <= $pagantisMaxAmount || $pagantisMaxAmount == '0')) {
             $this->assign(
                 array(
                     'locale'                     => $locale,
-                    'country'                     => $locale,
+                    'country'                    => $locale,
                     'amount'                     => $amount,
                     'promoted'                   => $pagantisPromoted,
                     'pagantisPromotedMessage'    => $extraConfig['PAGANTIS_PROMOTION_MESSAGE'],
                     'pagantisIsEnabled'          => $config['active'],
                     'pagantisPublicKey'          => $config['pagantis_public_key'],
                     'pagantisSimulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
-                    'pagantisMinAmount'          => $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'],
+                    'pagantisMinAmount'          => $pagantisMinAmount,
+                    'pagantisMaxAmount'          => $pagantisMaxAmount,
                     'pagantisCSSSelector'        => $extraConfig['PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR'],
                     'pagantisPriceSelector'      => $extraConfig['PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR'],
                     'pagantisQuotesStart'        => $extraConfig['PAGANTIS_SIMULATOR_START_INSTALLMENTS'],

@@ -28,7 +28,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     const CONCURRENCY_TABLENAME = 'pagantis_cart_concurrency';
 
     /** Seconds to expire a locked request */
-    const CONCURRENCY_TIMEOUT = 10;
+    const CONCURRENCY_TIMEOUT = 6;
 
     /**
      * @var string $merchantOrderId
@@ -98,6 +98,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     {
         $jsonResponse = array();
         try {
+            $origin = Mage::app()->getRequest()->getParam('origin');
+            if ($origin == 'notification' && $_SERVER['REQUEST_METHOD'] == 'GET') {
+                $exception = new \Exception("GET notification is not allowed");
+                return $this->cancelProcess($exception);
+            }
             $this->checkConcurrency();
             $this->getMerchantOrder();
             $this->getPagantisOrderId();

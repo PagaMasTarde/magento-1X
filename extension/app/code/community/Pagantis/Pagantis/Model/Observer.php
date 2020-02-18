@@ -56,10 +56,13 @@ class Pagantis_Pagantis_Model_Observer
             $locale           = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
             $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
             $minAmount        = $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'];
+            $maxAmount        = $extraConfig['PAGANTIS_DISPLAY_MAX_AMOUNT'];
             $checkoutSession  = Mage::getModel('checkout/session');
             $quote = $checkoutSession->getQuote();
             $amount = $quote->getGrandTotal();
-            if (!in_array(strtolower($locale), $allowedCountries) || (int)$amount < (int)$minAmount) {
+            if (!in_array(strtolower($locale), $allowedCountries) ||
+                (int)$amount < (int)$minAmount ||
+                ((int)$amount > (int)$maxAmount && (int)$maxAmount !== 0)) {
                 $result = $observer->getResult();
                 $result->isAvailable = false;
             }

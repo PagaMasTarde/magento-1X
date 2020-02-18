@@ -89,9 +89,15 @@ class Pagantis_Pagantis_Model_Pagantis extends Mage_Payment_Model_Method_Abstrac
             return false;
         }
 
-        $min = $this->getConfigData('MIN_AMOUNT');
+        $extraConfig    = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+        $minAmount        = $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'];
+        $maxAmount        = $extraConfig['PAGANTIS_DISPLAY_MAX_AMOUNT'];
 
-        if ($quote && $quote->getBaseGrandTotal() < $min) {
+        if ($quote && floor($quote->getBaseGrandTotal()) < $minAmount) {
+            return false;
+        }
+
+        if ($quote && floor($quote->getBaseGrandTotal()) > $maxAmount && $maxAmount != '0') {
             return false;
         }
 
