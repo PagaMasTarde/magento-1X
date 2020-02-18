@@ -98,13 +98,10 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     {
         $jsonResponse = array();
         try {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                // prevent collision between POST and GET requests
-                sleep(10);
-            }
             $origin = Mage::app()->getRequest()->getParam('origin');
             if ($origin == 'notification' && $_SERVER['REQUEST_METHOD'] == 'GET') {
-                return $this->cancelProcess();
+                $exception = new \Exception("GET notification is not allowed");
+                return $this->cancelProcess($exception);
             }
             $this->checkConcurrency();
             $this->getMerchantOrder();
