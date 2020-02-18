@@ -36,6 +36,7 @@ class Controller19Test extends Magento19Test
         "PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR",
         "PAGANTIS_FORM_DISPLAY_TYPE",
         "PAGANTIS_DISPLAY_MIN_AMOUNT",
+        "PAGANTIS_DISPLAY_MAX_AMOUNT",
         "PAGANTIS_URL_OK",
         "PAGANTIS_URL_KO",
     );

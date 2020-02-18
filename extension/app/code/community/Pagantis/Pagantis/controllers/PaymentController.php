@@ -287,9 +287,9 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             $shippingCountry = $mgShippingAddress['country_id'];
             $billingCountry = $mgBillingAddress['country_id'];
             $purchaseCountry =
-                in_array($langCountry,$allowedCountries) ? $langCountry :
-                in_array($shippingCountry,$allowedCountries) ? $shippingCountry :
-                in_array($billingCountry,$allowedCountries) ? $billingCountry : null;
+                in_array(strtolower($langCountry), $allowedCountries) ? $langCountry :
+                in_array(strtolower($shippingCountry), $allowedCountries) ? $shippingCountry :
+                in_array(strtolower($billingCountry), $allowedCountries) ? $billingCountry : null;
 
             $orderConfiguration = new PagantisModelOrderConfiguration();
             $orderConfiguration
