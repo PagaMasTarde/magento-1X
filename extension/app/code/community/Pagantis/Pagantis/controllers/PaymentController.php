@@ -140,8 +140,10 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
 
         $node = Mage::getConfig()->getNode();
         $metadata = array(
-            'magento' => Mage::getVersion(),
-            'pagantis' => (string)$node->modules->Pagantis_Pagantis->version,
+            'pg_module' => 'magento1x',
+            'pg_version' => (string)$node->modules->Pagantis_Pagantis->version,
+            'ec_module' => 'magento',
+            'ec_version' => Mage::getVersion(),
             'php' => phpversion(),
             'member_since' => $this->customer->getCreatedAt(),
         );
