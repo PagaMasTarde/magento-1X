@@ -26,7 +26,7 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
 
         if (in_array(strtolower($locale), $allowedCountries) &&
             $amount >= $pagantisMinAmount &&
-            ($amount <= $pagantisMaxAmount || $pagantisMaxAmount == '0')) {
+            ($amount <= $pagantisMaxAmount || $pagantisMaxAmount == '0') && $config['active'] === '1') {
             $this->assign(
                 array(
                     'locale'                     => $locale,

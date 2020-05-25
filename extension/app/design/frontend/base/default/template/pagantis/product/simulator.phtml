@@ -4,7 +4,9 @@
  * @var bool $enabled
  * @var string $publicKey
  */
-if ($pagantisIsEnabled && $pagantisSimulatorIsEnabled && $pagantisPublicKey != '') {
+if (isset($pagantisIsEnabled) && $pagantisIsEnabled === '1' &&
+    isset($pagantisSimulatorIsEnabled) && $pagantisSimulatorIsEnabled &&
+    isset($pagantisPublicKey) && $pagantisPublicKey != '') {
     if ($promoted) {
         echo "<style>
         .pagantis-promotion {
