@@ -45,22 +45,30 @@
                 }
 
                 if (sdk != 'undefined') {
-                    window.MGSimulatorId = sdk.simulator.init({
-                        numInstalments : '<?php echo $pagantisQuotesStart;?>',
-                        type : <?php echo $pagantisSimulatorType;?>,
-                        skin : <?php echo $pagantisSimulatorSkin;?>,
-                        locale: '<?php echo strtolower($locale);?>',
-                        country: '<?php echo strtolower($country);?>',
-                        position : <?php echo $pagantisSimulatorPosition;?>,
-                        publicKey: '<?php echo $publicKey; ?>',
-                        selector: positionSelector,
-                        totalAmount: <?php echo $amount; ?>,
-                        totalPromotedAmount:  <?php echo $promotedAmount; ?>,
-                        amountParserConfig :  {
-                            thousandSeparator: '<?php echo $thousandSeparator;?>',
-                            decimalSeparator: '<?php echo $decimalSeparator;?>'
-                        }
-                    });
+                    var priceSelector = '<?php echo $pagantisPriceSelector;?>';
+                    sdk.product_simulator = {};
+                    sdk.product_simulator.locale = '<?php echo strtolower($locale);?>',
+                    sdk.product_simulator.country = '<?php echo strtolower($country);?>',
+                    sdk.product_simulator.id = 'checkout-simulator';
+                    sdk.product_simulator.publicKey = '<?php echo $publicKey;?>';
+                    sdk.product_simulator.selector = positionSelector;
+                    sdk.product_simulator.numInstalments = '<?php echo $pagantisQuotesStart;?>';
+                    sdk.product_simulator.type = <?php echo $pagantisSimulatorType;?>;
+                    sdk.product_simulator.skin = <?php echo $pagantisSimulatorSkin;?>;
+                    sdk.product_simulator.position = <?php echo $pagantisSimulatorPosition;?>;
+                    sdk.product_simulator.amountParserConfig =  {
+                        thousandSeparator: '<?php echo $thousandSeparator;?>',
+                        decimalSeparator: '<?php echo $decimalSeparator;?>'
+                    };
+
+                    if (priceSelector !== 'default') {
+                        sdk.product_simulator.itemAmountSelector = priceSelector;
+                    } else {
+                        sdk.product_simulator.totalAmount = <?php echo $amount; ?>;
+                    }
+                    sdk.product_simulator.totalPromotedAmount = <?php echo $promotedAmount; ?>;
+
+                    window.MGSimulatorId = sdk.simulator.init(sdk.product_simulator);
                     return false;
                 }
                 return true;
