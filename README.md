@@ -9,22 +9,17 @@ CircleCI: [![CircleCI](https://circleci.com/gh/pagantis/magento-1X/tree/master.s
 * Composer
 
 ## :floppy_disk: Installation
-To install the module of Pagantis in your Magento shop you have to download the 
-latest version of the module in GitHub and install it.
+To install the Pagantis module in your Magento shop you have to download the latest version of the module from GitHub and install it.
 
-```
-    https://github.com/pagantis/magento-1X/releases/latest
-```
+> https://github.com/pagantis/magento-1X/releases/latest
 
-For more information about how to install the module package see our [install section](/Documentation/install.md).
+For more detailed information on how to install the plugin, see our [installation section](/Documentation/install.md).
 
 ## :gear: Configuration
-Configure the module in Magento admin panel using the information found in your [Pagantis profile](https://bo.pagantis.com/shop). 
+Configure the module in Magento admin panel using the information found in your [Pagantis profile](https://bo.pagantis.com/shop) and our [configuration section](/Documentation/configuration.md).
 
-For more information about how to config the module, see our [configuration section](/Documentation/configuration.md).
+## :arrow_forward: Usage
+To use in a real environment your Pagantis account should be enabled accordingly.
 
-## :arrow_forward: Use
-To use in a real environment you should enable your Pagantis account.
-
-For more information about how to use the module, see our [use section](/Documentation/use.md).
+For more information about how to use the module, see our [usage section](/Documentation/usage.md).
 
