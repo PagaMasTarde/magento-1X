@@ -22,4 +22,3 @@ Configure the module in Magento admin panel using the information found in your 
 To use in a real environment your Pagantis account should be enabled accordingly.
 
 For more information about how to use the module, see our [usage section](/Documentation/usage.md).
-

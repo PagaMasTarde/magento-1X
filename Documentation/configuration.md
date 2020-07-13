@@ -39,7 +39,7 @@ You have to ways to edit your settings:
 | Field | Description<br/><br/>
 | :------------- |:-------------| 
 | PAGANTIS_TITLE                           | Payment title to show in checkout page. By default:"Instant financing".
-| PAGANTIS_SIMULATOR_DISPLAY_TYPE          | Installments simulator on the product page. Static value: 'pgSDK.simulator.types.PRODUCT_PAGE'.
+| PAGANTIS_SIMULATOR_DISPLAY_TYPE          | Installments simulator on the product page. **Static value**: 'pgSDK.simulator.types.PRODUCT_PAGE'.
 | PAGANTIS_SIMULATOR_DISPLAY_SKIN          | Skin of the product page simulator. Recommended value: 'pgSDK.simulator.skins.BLUE'.
 | PAGANTIS_SIMULATOR_START_INSTALLMENTS    | Default number of installments to use in the simulator.
 | PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION  | The position where the simulator widget will be placed. Recommended value: 'pgSDK.simulator.positions.INNER'.
@@ -72,7 +72,7 @@ You have to ways to edit your settings:
 5. Launch the following query to edit the value:
   * Query: 
         ```
-        UPDATE pagantis_config set value='New title' WHERE config='PAGANTIS_TITLE';
+        UPDATE pagantis_config SET value='New title' WHERE config='PAGANTIS_TITLE';
         ```  
         
     ![Step 5](./sql_step5.png?raw=true "Step 5")
@@ -87,7 +87,7 @@ You have to ways to edit your settings:
     ![Step 6](./sql_step6.png?raw=true "Step 6")
 
 7. Finally you can see the result on checkout page  
- ![Step 7](./sql_step7_.png?raw=true "Step 7")
+ ![Step 7](./sql_step7.png?raw=true "Step 7")
 
 
 ##### Edit your settings using Postman

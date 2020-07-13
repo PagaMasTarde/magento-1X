@@ -1,13 +1,9 @@
-# Use
+# Usage
 
 ## :eyes: Checkout
 
-If the module is enabled and configured rightly, you can see Pagantis like new payment method in checkout.
+If the module has been enabled and configured correctly, Pagantis will be visible in the checkout as a payment method.
 
-![Step 1](./use-step1.png?raw=true "Step 1")
+For more information about how to customize the module, see our [configuration section](./configuration.md).
 
-The module have an installments simulator, this simulator can be watched on screen when you see a product.
-
-In Pagantis admin panel we can can configure options to show or not the simulator and the skin of it.
-
-![Step 2](./use-step2.png?raw=true "Step 2")
+After pressing the "Place order" button, the user will be redirected to Pagantis payment process, he will be redirected to your store afterwards.
