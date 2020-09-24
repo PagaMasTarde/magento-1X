@@ -167,9 +167,11 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                         ->setCountryCode($mgShippingAddress['country_id'])
                         ->setCity($mgShippingAddress['city'])
                         ->setAddress($mgShippingAddress['street'])
+                        ->setFixPhone($telephone)
                         ->setMobilePhone($telephone)
                         ->setNationalId($this->getNationalId($mgShippingAddress, null))
                         ->setTaxId($this->getTaxId($mgShippingAddress, null))
+                        ->setDni($this->getDni($mgShippingAddress))
                     ;
                     $orderShippingAddress = new PagantisModelOrderAddress();
                     $orderShippingAddress
@@ -178,7 +180,11 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                         ->setCountryCode($mgShippingAddress['country_id'])
                         ->setCity($mgShippingAddress['city'])
                         ->setAddress($mgShippingAddress['street'])
+                        ->setFixPhone($telephone)
                         ->setMobilePhone($telephone)
+                        ->setNationalId($this->getNationalId($mgShippingAddress, null))
+                        ->setTaxId($this->getTaxId($mgShippingAddress, null))
+                        ->setDni($this->getDni($mgShippingAddress))
                     ;
                 }
                 if (isset($this->addressData[$i]) && array_search('billing', $this->addressData[$i])) {
@@ -194,6 +200,10 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                         ->setCity($mgBillingAddress['city'])
                         ->setAddress($mgBillingAddress['street'])
                         ->setMobilePhone($mgBillingAddress['telephone'])
+                        ->setFixPhone($mgBillingAddress['telephone'])
+                        ->setNationalId($this->getNationalId(null, $mgBillingAddress))
+                        ->setTaxId($this->getTaxId(null, $mgBillingAddress))
+                        ->setDni($this->getDni($mgShippingAddress))
                     ;
                 }
             }
@@ -238,6 +248,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
                 ->setBillingAddress($orderBillingAddress)
                 ->setNationalId($this->getNationalId($mgShippingAddress, $mgBillingAddress))
                 ->setTaxId($this->getTaxId($mgShippingAddress, $mgBillingAddress))
+                ->setDni($this->getDni($mgShippingAddress))
             ;
 
             $orderCollection = Mage::getModel('sales/order')->getCollection();
@@ -396,7 +407,6 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
      */
     private function insertOrderControl($magentoOrderId, $pagantisOrderId)
     {
-        $this->createTableIfNotExists('pagantis/order');
         $model = Mage::getModel('pagantis/order');
         $model->setData(array(
             'pagantis_order_id' => $pagantisOrderId,
@@ -440,6 +450,23 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             return $shippingAddress['tax_id'];
         } else {
             return null;
+        }
+    }
+
+    /**
+     * @param null $shippingAddress
+     * @return mixed|null
+     */
+    private function getDni($shippingAddress = null)
+    {
+        if (isset($this->customer->dni)) {
+            return $this->customer->dni;
+        } elseif (isset($this->customer->nif)) {
+            return $this->customer->nif;
+        } elseif ($shippingAddress !== null and isset($shippingAddress['dni'])) {
+            return $shippingAddress['dni'];
+        } else {
+            return $this->getNationalId($shippingAddress);
         }
     }
 }

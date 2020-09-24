@@ -32,10 +32,11 @@ class Pagantis_Pagantis_LogController extends AbstractController
         if (is_numeric($from) && is_numeric($to)) {
             $sqlPart = ' and DATE_FORMAT(createdAt, \'%Y%m%d\') between ' . $from . ' and ' . $to;
         }
-        $sql   = 'select log, createdAt from pagantis_log where 1=1 ' . $sqlPart . ' order by id desc limit '
-            . (($limit && is_numeric($limit)) ? $limit : 200);
 
         $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $tableName = Mage::getSingleton('core/resource')->getTableName("pagantis_config");
+        $sql   = 'select log, createdAt from ' . $tableName . ' where 1=1 ' . $sqlPart . ' order by id desc limit '
+            . (($limit && is_numeric($limit)) ? $limit : 200);
         $result = $conn->fetchAll($sql);
 
         $output = array();

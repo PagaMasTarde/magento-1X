@@ -7,48 +7,9 @@ use Pagantis\ModuleUtils\Model\Log\LogEntry;
 abstract class AbstractController extends Mage_Core_Controller_Front_Action
 {
     /**
-     * Concurrency Tablename
-     */
-    const PAGANTIS_CONCURRENCY_TABLE = 'CREATE TABLE `pagantis_cart_concurrency` (
-  `id` varchar(50) NOT NULL,
-  `timestamp` INT NOT NULL,
-  PRIMARY KEY (`id`)
-  )';
-
-    /**
-     * Pagantis Orders Tablename
-     */
-    const PAGANTIS_ORDERS_TABLE = 'CREATE TABLE `pagantis_order` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `mg_order_id` varchar(50) NOT NULL, 
-  `pagantis_order_id` varchar(50), 
-  PRIMARY KEY (`id`),
-  UNIQUE KEY (`mg_order_id`)
-  )';
-
-    /**
-     * Pagantis Orders Tablename
-     */
-    const PAGANTIS_LOGS_TABLE = 'CREATE TABLE `pagantis_log` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `log` TEXT,
-  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-  )';
-
-    /**
      * PAGANTIS_CODE
      */
     const PAGANTIS_CODE = 'pagantis';
-
-    /**
-     * @var array
-     */
-    public $modelTable = array(
-        'pagantis/concurrency' => 'PAGANTIS_CONCURRENCY_TABLE',
-        'pagantis/order' => 'PAGANTIS_ORDERS_TABLE',
-        'pagantis/log' => 'PAGANTIS_LOGS_TABLE',
-    );
 
     /**
      * @var integer $statusCode
@@ -162,7 +123,6 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     public function saveLog(Exception $exception)
     {
         try {
-            $this->createTableIfNotExists('pagantis/log');
             $logEntry= new LogEntry();
             $logEntryJson = $logEntry->error($exception)->toJson();
 
@@ -173,32 +133,6 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
             $model->save();
         } catch (Exception $exception) {
             // Do nothing
-        }
-    }
-
-    /**
-     * Create pagantis_table if not exists
-     *
-     * @param null $model
-     */
-    public function createTableIfNotExists($model = null)
-    {
-        if (!is_null($model)) {
-            try {
-                $exists = Mage::getSingleton('core/resource')
-                    ->getConnection('core_write')
-                    ->isTableExists(Mage::getModel($model)->getResourceCollection()->getTable($model));
-
-                $name = $this->modelTable[$model];
-                $sql = constant("AbstractController::$name");
-                if (!$exists) {
-                    $resource = Mage::getSingleton('core/resource');
-                    $writeConnection = $resource->getConnection('core_write');
-                    $writeConnection->query($sql);
-                }
-            } catch (Exception $exception) {
-                // Do nothing
-            }
         }
     }
 }

@@ -48,10 +48,11 @@ class Pagantis_Pagantis_ConfigController extends AbstractController
         $output = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
         if (count($_POST)) {
             $post = $_POST;
+            $tableName = Mage::getSingleton('core/resource')->getTableName("pagantis_config");
+            $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
             foreach ($output as $key => $value) {
                 if (array_key_exists($key, $post)) {
-                    $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-                    $sql = 'update pagantis_config set value = \''. $post[$key] .'\' 
+                    $sql = 'update ' . $tableName . ' set value = \''. $post[$key] .'\' 
                             where config = \'' . $key . '\'';
                     $conn->query($sql);
                     $value = $post[$key];

@@ -5,26 +5,64 @@ $installer = $this;
 
 $installer->startSetup();
 
+// create pagantis_cart_concurrency table
 $installer->run('DROP TABLE IF EXISTS pagantis_cart_concurrency');
-$installer->run('CREATE TABLE `pagantis_cart_concurrency` (
+$name = $this->modelTable['pagantis/concurrency'];
+$sql = 'CREATE TABLE `pagantis_cart_concurrency` (
   `id` varchar(50) NOT NULL,
   `timestamp` INT NOT NULL,
   PRIMARY KEY (`id`)
-  )');
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
 
+// Create pagantis_config table
 $installer->run('DROP TABLE IF EXISTS `pagantis_config`');
-$installer->run('CREATE TABLE `pagantis_config` (
+$name = $this->modelTable['pagantis/config'];
+$sql = 'CREATE TABLE `pagantis_config` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `config` VARCHAR(60) NOT NULL,
   `value` VARCHAR(1000) NOT NULL,
   PRIMARY KEY (`id`)
-  )');
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
 
+// Create pagantis_order table
+$installer->run('DROP TABLE IF EXISTS `pagantis_order`');
+$name = $this->modelTable['pagantis/order'];
+$sql = 'CREATE TABLE `pagantis_order` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `mg_order_id` varchar(50) NOT NULL, 
+  `pagantis_order_id` varchar(50), 
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`mg_order_id`)
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
+
+// Create pagantis_log table
+$installer->run('DROP TABLE IF EXISTS `pagantis_log`');
+$name = $this->modelTable['pagantis/log'];
+$sql ='CREATE TABLE `pagantis_log` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `log` TEXT,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
+
+//Populate config table
 $installer->run("INSERT INTO `pagantis_config` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_TITLE', 'Instant Financing'),
-    ('PAGANTIS_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.SIMPLE'),
+    ('PAGANTIS_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.PRODUCT_PAGE'),
     ('PAGANTIS_SIMULATOR_DISPLAY_SKIN', 'pgSDK.simulator.skins.BLUE'),
     ('PAGANTIS_SIMULATOR_DISPLAY_POSITION', 'hookDisplayProductButtons'),
     ('PAGANTIS_SIMULATOR_START_INSTALLMENTS', '3'),
@@ -34,7 +72,7 @@ $installer->run("INSERT INTO `pagantis_config`
     ('PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR', 'default'),
     ('PAGANTIS_FORM_DISPLAY_TYPE', '0'),
     ('PAGANTIS_DISPLAY_MIN_AMOUNT', '1'),
-    ('PAGANTIS_DISPLAY_MAX_AMOUNT', '0'),
+    ('PAGANTIS_DISPLAY_MAX_AMOUNT', '1500'),
     ('PAGANTIS_URL_OK', 'checkout/onepage/success/'),
     ('PAGANTIS_ALLOWED_COUNTRIES', 'a:3:{i:0;s:2:\"es\";i:1;s:2:\"it\";i:2;s:2:\"fr\";}'),
     ('PAGANTIS_URL_KO', 'checkout/cart/'),
