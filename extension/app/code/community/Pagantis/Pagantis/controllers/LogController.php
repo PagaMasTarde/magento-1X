@@ -34,7 +34,8 @@ class Pagantis_Pagantis_LogController extends AbstractController
         }
 
         $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
-        $tableName = Mage::getSingleton('core/resource')->getTableName("pagantis_config");
+        $tableName = Mage::getSingleton('core/resource')->getTableName("pagantis_log");
+
         $sql   = 'select log, createdAt from ' . $tableName . ' where 1=1 ' . $sqlPart . ' order by id desc limit '
             . (($limit && is_numeric($limit)) ? $limit : 200);
         $result = $conn->fetchAll($sql);
