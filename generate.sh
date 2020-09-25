@@ -58,6 +58,7 @@ docker-compose exec ${container} curl -O https://files.magerun.net/n98-magerun.p
 docker-compose exec ${container} chmod +x n98-magerun.phar
 docker-compose exec ${container} ./n98-magerun.phar dev:symlinks 1
 
+sleep 20
 set -e
 
 while true; do

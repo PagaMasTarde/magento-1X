@@ -6,7 +6,8 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("INSERT INTO `pagantis_config` 
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
+$installer->run("INSERT INTO `' . $this->tableName . '` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR', '.'),

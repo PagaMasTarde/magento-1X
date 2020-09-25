@@ -5,21 +5,34 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run('DROP TABLE IF EXISTS `pagantis_order`');
-$installer->run('CREATE TABLE `pagantis_order` (
+// Create pagantis_order table
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_order');
+$installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
+$name = $this->modelTable['pagantis/concurrency'];
+$sql = 'CREATE TABLE `' . $this->tableName . '` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `mg_order_id` varchar(50) NOT NULL, 
+  `mg_order_id` varchar(50) NOT NULL,
+  `token` varchar(32) NOT NULL,
   `pagantis_order_id` varchar(50), 
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`mg_order_id`)
-  )');
+  UNIQUE KEY (`mg_order_id`, `token`)
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
 
-$installer->run('DROP TABLE IF EXISTS `pagantis_log`');
-$installer->run('CREATE TABLE `pagantis_log` (
+// Create pagantis_log table
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_log');
+$installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
+$name = $this->modelTable['pagantis/concurrency'];
+$sql = 'CREATE TABLE `' . $this->tableName . '` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `log` TEXT,
   `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-  )');
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
 
 $installer->endSetup();

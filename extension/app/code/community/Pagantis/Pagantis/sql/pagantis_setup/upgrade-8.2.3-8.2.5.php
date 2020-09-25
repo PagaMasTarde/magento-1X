@@ -6,7 +6,8 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("UPDATE `pagantis_config` 
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
+$installer->run("UPDATE `' . $this->tableName . '` 
     SET `value` = 'a:3:{i:0;s:2:\"es\";i:1;s:2:\"it\";i:2;s:2:\"fr\";}'
     WHERE `config` = 'PAGANTIS_ALLOWED_COUNTRIES'");
 
