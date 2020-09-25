@@ -13,7 +13,7 @@ $sql = 'CREATE TABLE `' . $this->tableName . '` (
   `mg_order_id` varchar(50) NOT NULL,
   `pagantis_order_id` varchar(50), 
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`mg_order_id`, `token`)
+  UNIQUE KEY (`mg_order_id`)
   )';
 $resource = Mage::getSingleton('core/resource');
 $writeConnection = $resource->getConnection('core_write');
