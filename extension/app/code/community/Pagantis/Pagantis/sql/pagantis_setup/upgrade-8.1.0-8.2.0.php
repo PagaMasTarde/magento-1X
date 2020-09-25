@@ -34,7 +34,7 @@ $setup->addAttribute('catalog_product', $code, array(
 ));
 
 $this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
-$installer->run("INSERT INTO `' . $this->tableName . '` 
+$installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_PROMOTION_MESSAGE', 'Finance this product <span class=\"pmt-no-interest\">without interest!</span>')");

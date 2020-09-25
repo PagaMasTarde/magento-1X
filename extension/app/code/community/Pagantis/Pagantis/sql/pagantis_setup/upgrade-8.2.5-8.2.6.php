@@ -8,7 +8,6 @@ $installer->startSetup();
 // create pagantis_cart_concurrency table
 $this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_cart_concurrency');
 $installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
-$name = $this->modelTable['pagantis/concurrency'];
 $sql = 'CREATE TABLE `' . $this->tableName . '` (
   `id` VARCHAR(50) NOT NULL,
   `timestamp` INT NOT NULL,

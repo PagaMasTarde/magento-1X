@@ -8,7 +8,6 @@ $installer->startSetup();
 // Create pagantis_config table
 $this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
 $installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
-$name = $this->modelTable['pagantis/concurrency'];
 $sql = 'CREATE TABLE `' . $this->tableName . '` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `config` VARCHAR(60) NOT NULL,
@@ -20,7 +19,7 @@ $writeConnection = $resource->getConnection('core_write');
 $writeConnection->query($sql);
 
 //Populate config table
-$installer->run("INSERT INTO `' . $this->tableName . '` 
+$installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_TITLE', 'Instant Financing'),
