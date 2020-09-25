@@ -193,6 +193,7 @@ abstract class AbstractConfigure19 extends Magento19Test
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
+        var_dump("key setted" . $this->configuration['publicKey']);
         $this->findById('payment_pagantis_pagantis_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
@@ -207,5 +208,6 @@ abstract class AbstractConfigure19 extends Magento19Test
         $this->assertTrue(
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
         );
+        var_dump("all is setted!");
     }
 }
