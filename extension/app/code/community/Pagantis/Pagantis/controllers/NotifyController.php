@@ -66,6 +66,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     protected $origin;
 
     /**
+     * @var string $token
+     */
+    protected $token;
+
+    /**
      * Cancel order
      *
      * @var bool
@@ -163,8 +168,13 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     public function prepareVariables()
     {
         $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
+        $this->token = Mage::app()->getRequest()->getParam('token');
         if ($this->merchantOrderId == '') {
             throw new QuoteNotFoundException();
+        }
+
+        if ($this->token == '') {
+            throw new UnknownException('Unable to find token parameter on return url');
         }
 
         $this->origin = ($_SERVER['REQUEST_METHOD'] == 'POST') ? 'Notification' : 'Order';
@@ -219,7 +229,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     {
         try {
             $model = Mage::getModel('pagantis/order');
-            $model->load($this->merchantOrderId, 'mg_order_id');
+            $model->load($this->token, 'token');
 
             $this->pagantisOrderId = $model->getPagantisOrderId();
             if (is_null($this->pagantisOrderId)) {

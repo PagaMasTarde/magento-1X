@@ -89,6 +89,11 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
     protected $cancelUrl;
 
     /**
+     * @var string $urlToken
+     */
+    protected $urlToken;
+
+    /**
      * Find and init variables needed to process payment
      */
     public function prepareVariables()
@@ -101,13 +106,14 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
 
         $mageCore = Mage::helper('core');
         $this->magentoOrderData = json_decode($mageCore->jsonEncode($this->magentoOrder->getData()), true);
+        $this->urlToken = strtoupper(md5(uniqid(rand(), true)));
         $this->redirectOkUrl = Mage::getUrl(
             'pagantis/notify',
-            array('_query' => array('origin' => 'redirect', 'order' => $this->magentoOrderData['increment_id']))
+            array('_query' => array('token' => $this->urlToken, 'origin' => 'redirect', 'order' => $this->magentoOrderData['increment_id']))
         );
         $this->notificationOkUrl = Mage::getUrl(
             'pagantis/notify',
-            array('_query' => array('origin' => 'notification', 'order' => $this->magentoOrderData['increment_id']))
+            array('_query' => array('token' => $this->urlToken, 'origin' => 'notification', 'order' => $this->magentoOrderData['increment_id']))
         );
         $this->cancelUrl = Mage::getUrl(
             'pagantis/notify/cancel',
@@ -355,7 +361,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
             $order = $orderClient->createOrder($order);
             if ($order instanceof PagantisModelOrder) {
                 $url = $order->getActionUrls()->getForm();
-                $this->insertOrderControl($this->magentoOrderId, $order->getId());
+                $this->insertOrderControl($this->magentoOrderId, $order->getId(), $this->urlToken);
             } else {
                 throw new OrderNotFoundException();
             }
@@ -400,17 +406,19 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
     /**
      * Create a record in AbstractController::PAGANTIS_ORDERS_TABLE to match the merchant order with the pagantis order
      *
-     * @param $magentoOrderId
-     * @param $pagantisOrderId
+     * @param string $magentoOrderId
+     * @param string $pagantisOrderId
+     * @param string $token
      *
      * @throws Exception
      */
-    private function insertOrderControl($magentoOrderId, $pagantisOrderId)
+    private function insertOrderControl($magentoOrderId, $pagantisOrderId, $token)
     {
         $model = Mage::getModel('pagantis/order');
         $model->setData(array(
             'pagantis_order_id' => $pagantisOrderId,
             'mg_order_id' => $magentoOrderId,
+            'token' => $token,
         ));
         $model->save();
     }
