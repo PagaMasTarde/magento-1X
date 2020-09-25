@@ -12,7 +12,17 @@ $resource = Mage::getSingleton('core/resource');
 $writeConnection = $resource->getConnection('core_write');
 $writeConnection->query($sql);
 
+$sql = 'ALTER TABLE `' . $this->tableName . '`  modify column id int(11) not null';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
+
 $sql = 'ALTER TABLE `' . $this->tableName . '` DROP PRIMARY KEY, ADD PRIMARY KEY(`mg_order_id`, `token`);';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
+
+$sql = 'ALTER TABLE `' . $this->tableName . '` drop column id';
 $resource = Mage::getSingleton('core/resource');
 $writeConnection = $resource->getConnection('core_write');
 $writeConnection->query($sql);
