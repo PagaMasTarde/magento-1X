@@ -129,7 +129,6 @@ abstract class AbstractConfigure19 extends Magento19Test
      */
     public function goToPaymentMethodsAndSeePagantis()
     {
-        var_dump("llega a goToPaymentMethodsAndSeePagantis");
         $paymentMethodsLinkElement = $this->findByLinkText('Payment Methods');
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($paymentMethodsLinkElement));
         $paymentMethodsLinkElement->click();
@@ -144,7 +143,6 @@ abstract class AbstractConfigure19 extends Magento19Test
         $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
             $pagantisHeaderSearch
         ));
-        var_dump("sale de goToPaymentMethodsAndSeePagantis");
     }
 
     /**
@@ -189,24 +187,19 @@ abstract class AbstractConfigure19 extends Magento19Test
      */
     public function configureAndSave()
     {
-        var_dump("llega a configureAndSave");
         //Fill configuration for Pagantis
         $this->findById('payment_pagantis_active1')->click();
-        var_dump("Cliiiiiiiik");
         $this->findById('payment_pagantis_pagantis_public_key')
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
-        var_dump("public key setted" . $this->configuration['publicKey']);
         $this->findById('payment_pagantis_pagantis_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
         ;
-        var_dump("private key setted" . $this->configuration['secretKey']);
         //Confirm and validate
         $this->webDriver->executeScript('configForm.submit()');
 
-        var_dump("submit pressed");
         //Verify
         $successMessageSearch = WebDriverBy::className('success-msg');
         $this->webDriver->wait()->until(
@@ -215,6 +208,5 @@ abstract class AbstractConfigure19 extends Magento19Test
         $this->assertTrue(
             (bool) WebDriverExpectedCondition::visibilityOfElementLocated($successMessageSearch)
         );
-        var_dump("all is setted!");
     }
 }

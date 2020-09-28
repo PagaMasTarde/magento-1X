@@ -200,7 +200,6 @@ class BuyRegistered16Test extends AbstractBuy16
     {
         $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=100000003';
         $response = Request::post($notifyUrl)->expects('json')->send();
-        var_dump($notifyUrl, $response->body);
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
         $this->assertNotEmpty($response->body->timestamp, $response);
