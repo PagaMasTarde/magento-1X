@@ -173,7 +173,7 @@ class BuyRegistered19Test extends AbstractBuy19
     protected function checkPagantisOrderId()
     {
         $orderId=0;
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order='.$orderId;
+        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?token=x&order='.$orderId;
         $this->assertNotEmpty($notifyUrl, $notifyUrl);
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
@@ -198,7 +198,7 @@ class BuyRegistered19Test extends AbstractBuy19
      */
     protected function checkAlreadyProcessed()
     {
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?order=145000008';
+        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?token=x&order=145000008';
         $response = Request::post($notifyUrl)->expects('json')->send();
         $this->assertNotEmpty($response->body->result, $response);
         $this->assertNotEmpty($response->body->status_code, $response);
