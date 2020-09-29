@@ -117,7 +117,7 @@ class Pagantis_Pagantis_PaymentController extends AbstractController
         );
         $this->cancelUrl = Mage::getUrl(
             'pagantis/notify/cancel',
-            array('_query' => array('order' => $this->magentoOrderData['increment_id']))
+            array('_query' => array('token' => $this->urlToken, 'order' => $this->magentoOrderData['increment_id']))
         );
 
         $this->itemCollection = $this->magentoOrder->getAllVisibleItems();
