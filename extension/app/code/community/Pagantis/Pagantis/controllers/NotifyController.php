@@ -66,6 +66,11 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     protected $origin;
 
     /**
+     * @var string $token
+     */
+    protected $token;
+
+    /**
      * Cancel order
      *
      * @var bool
@@ -163,8 +168,13 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     public function prepareVariables()
     {
         $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
+        $this->token = Mage::app()->getRequest()->getParam('token');
         if ($this->merchantOrderId == '') {
             throw new QuoteNotFoundException();
+        }
+
+        if ($this->token == '') {
+            throw new UnknownException('Unable to find token parameter on return url');
         }
 
         $this->origin = ($_SERVER['REQUEST_METHOD'] == 'POST') ? 'Notification' : 'Order';
@@ -218,9 +228,8 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
     private function getPagantisOrderId()
     {
         try {
-            $this->createTableIfNotExists('pagantis/order');
             $model = Mage::getModel('pagantis/order');
-            $model->load($this->merchantOrderId, 'mg_order_id');
+            $model->load($this->token, 'token');
 
             $this->pagantisOrderId = $model->getPagantisOrderId();
             if (is_null($this->pagantisOrderId)) {
@@ -456,22 +465,23 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
      */
     protected function blockConcurrency($orderId)
     {
-        $sql = "INSERT INTO  " . self::CONCURRENCY_TABLENAME . "  VALUE (" . $orderId. "," . time() . ")";
-
         try {
             $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $tableName = Mage::getSingleton('core/resource')->getTableName(self::CONCURRENCY_TABLENAME);
+            $sql = "INSERT INTO  " . $tableName . "  VALUE (" . $orderId. "," . time() . ")";
             $conn->query($sql);
         } catch (Exception $e) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 throw new ConcurrencyException();
             } else {
+                $dbObject = Mage::getSingleton('core/resource')->getConnection('core_write');
+                $tableName = Mage::getSingleton('core/resource')->getTableName(self::CONCURRENCY_TABLENAME);
                 $query = sprintf(
                     "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, FROM_UNIXTIME(timestamp)) as rest FROM %s WHERE %s",
                     self::CONCURRENCY_TIMEOUT,
-                    self::CONCURRENCY_TABLENAME,
+                    $tableName,
                     "id=$orderId"
                 );
-                $dbObject = Mage::getSingleton('core/resource')->getConnection('core_write');
                 $resultSeconds = $dbObject->fetchOne($query);
                 $restSeconds = isset($resultSeconds) ? ($resultSeconds) : 0;
                 $secondsToExpire = ($restSeconds>self::CONCURRENCY_TIMEOUT) ? self::CONCURRENCY_TIMEOUT : $restSeconds;
@@ -503,14 +513,16 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
      */
     protected function unblockConcurrency($orderId = null)
     {
-        if ($orderId == null) {
-            $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE timestamp <" .
-                (time() - self::CONCURRENCY_TIMEOUT);
-        } else {
-            $sql = "DELETE FROM " . self::CONCURRENCY_TABLENAME . " WHERE id  = " . $orderId;
-        }
+
         try {
             $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $tableName = Mage::getSingleton('core/resource')->getTableName(self::CONCURRENCY_TABLENAME);
+            if ($orderId == null) {
+                $sql = "DELETE FROM " . $tableName . " WHERE timestamp <" .
+                    (time() - self::CONCURRENCY_TIMEOUT);
+            } else {
+                $sql = "DELETE FROM " . $tableName . " WHERE id  = " . $orderId;
+            }
             $conn->query($sql);
         } catch (Exception $e) {
             throw new ConcurrencyException();

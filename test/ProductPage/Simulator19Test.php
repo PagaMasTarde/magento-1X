@@ -27,6 +27,8 @@ class Simulator19Test extends Magento19Test
     {
         $this->goToProductPage();
 
+        sleep(5);
+        
         $pagantisSimulator = WebDriverBy::className('PagantisSimulator');
 
         $this->webDriver->wait()->until(

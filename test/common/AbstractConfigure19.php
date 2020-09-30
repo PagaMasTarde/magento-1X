@@ -196,7 +196,8 @@ abstract class AbstractConfigure19 extends Magento19Test
         $this->findById('payment_pagantis_pagantis_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
-        ;        //Confirm and validate
+        ;
+        //Confirm and validate
         $this->webDriver->executeScript('configForm.submit()');
 
         //Verify

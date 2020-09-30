@@ -5,19 +5,25 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run('DROP TABLE IF EXISTS `pagantis_config`');
-$installer->run('CREATE TABLE `pagantis_config` (
+// Create pagantis_config table
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
+$installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
+$sql = 'CREATE TABLE `' . $this->tableName . '` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `config` VARCHAR(60) NOT NULL,
   `value` VARCHAR(1000) NOT NULL,
   PRIMARY KEY (`id`)
-  )');
+  )';
+$resource = Mage::getSingleton('core/resource');
+$writeConnection = $resource->getConnection('core_write');
+$writeConnection->query($sql);
 
-$installer->run("INSERT INTO `pagantis_config` 
+//Populate config table
+$installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_TITLE', 'Instant Financing'),
-    ('PAGANTIS_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.SELECTABLE_TEXT_CUSTOM'),
+    ('PAGANTIS_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.PRODUCT_PAGE'),
     ('PAGANTIS_SIMULATOR_DISPLAY_SKIN', 'pgSDK.simulator.skins.BLUE'),
     ('PAGANTIS_SIMULATOR_DISPLAY_POSITION', 'hookDisplayProductButtons'),
     ('PAGANTIS_SIMULATOR_START_INSTALLMENTS', '3'),
@@ -28,7 +34,6 @@ $installer->run("INSERT INTO `pagantis_config`
     ('PAGANTIS_FORM_DISPLAY_TYPE', '0'),
     ('PAGANTIS_DISPLAY_MIN_AMOUNT', '1'),
     ('PAGANTIS_URL_OK', 'checkout/onepage/success/'),
-    ('PAGANTIS_ALLOWED_COUNTRIES', 'a:2:{i:0;s:2:\"es\";i:1;s:2:\"it\";}'),
     ('PAGANTIS_URL_KO', 'checkout/cart/')");
 
 $installer->endSetup();

@@ -6,12 +6,13 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("INSERT INTO `pagantis_config` 
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
+$installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_SIMULATOR_DISPLAY_TYPE_CHECKOUT', 'pgSDK.simulator.types.CHECKOUT_PAGE')");
 
-$installer->run("UPDATE `pagantis_config` 
+$installer->run("UPDATE `$this->tableName` 
     SET `value` = 'pgSDK.simulator.types.PRODUCT_PAGE'
     WHERE `config` = 'PAGANTIS_SIMULATOR_DISPLAY_TYPE'");
 

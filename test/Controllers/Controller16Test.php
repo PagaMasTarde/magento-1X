@@ -47,7 +47,6 @@ class Controller16Test extends Magento16Test
     public function testLogDownload()
     {
         $logUrl = $this->magentoUrl.self::LOG_FOLDER.'?secret='.$this->configuration['secretKey'];
-        var_dump($logUrl);
         $response = Request::get($logUrl)->expects('json')->send();
         $this->assertEquals(2, count($response->body));
         $this->quit();

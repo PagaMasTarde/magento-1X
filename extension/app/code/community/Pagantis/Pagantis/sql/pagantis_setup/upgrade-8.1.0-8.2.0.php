@@ -10,7 +10,6 @@ $label = 'Pagantis Promoted';
 
 /** @var $installer Mage_Core_Model_Resource_Setup */
 $installer = $this;
-/* @var $installer Mage_Core_Model_Resource_Setup */
 
 $installer->startSetup();
 $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
@@ -34,7 +33,8 @@ $setup->addAttribute('catalog_product', $code, array(
     'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
 ));
 
-$installer->run("INSERT INTO `pagantis_config` 
+$this->tableName = Mage::getSingleton('core/resource')->getTableName('pagantis_config');
+$installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
     ('PAGANTIS_PROMOTION_MESSAGE', 'Finance this product <span class=\"pmt-no-interest\">without interest!</span>')");
