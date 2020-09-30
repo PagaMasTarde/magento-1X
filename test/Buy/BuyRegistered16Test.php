@@ -143,7 +143,6 @@ class BuyRegistered16Test extends AbstractBuy16
     {
         $this->checkQuoteNotFound();
         $this->checkPagantisOrderId();
-        $this->checkAlreadyProcessed();
         $this->checkExtraConfig();
     }
 
@@ -188,27 +187,6 @@ class BuyRegistered16Test extends AbstractBuy16
             NoIdentificationException::ERROR_MESSAGE,
             $response->body->result,
             "PR58=>".$response->body->result
-        );
-    }
-
-    /**
-     * Check if re-launching the notification we can get a AlreadyProcessedException
-     *
-     * @throws \Httpful\Exception\ConnectionErrorException
-     */
-    protected function checkAlreadyProcessed()
-    {
-        $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?token=x&order=100000003';
-        $response = Request::post($notifyUrl)->expects('json')->send();
-        $this->assertNotEmpty($response->body->result, $response);
-        $this->assertNotEmpty($response->body->status_code, $response);
-        $this->assertNotEmpty($response->body->timestamp, $response);
-        $this->assertNotEmpty($response->body->merchant_order_id, $response);
-        $this->assertNotEmpty($response->body->pagantis_order_id, $response);
-        $this->assertContains(
-            JsonSuccessResponse::RESULT,
-            $response->body->result,
-            "PR51=>".$response->body->result
         );
     }
 
