@@ -468,7 +468,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
         try {
             $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
             $tableName = Mage::getSingleton('core/resource')->getTableName(self::CONCURRENCY_TABLENAME);
-            $sql = "INSERT INTO  " . $tableName . "  VALUE (" . $orderId. "," . time() . ")";
+            $sql = "INSERT INTO  " . $tableName . "  VALUE ('" . $orderId. "'," . time() . ")";
             $conn->query($sql);
         } catch (Exception $e) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -480,7 +480,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                     "SELECT TIMESTAMPDIFF(SECOND,NOW()-INTERVAL %s SECOND, FROM_UNIXTIME(timestamp)) as rest FROM %s WHERE %s",
                     self::CONCURRENCY_TIMEOUT,
                     $tableName,
-                    "id=$orderId"
+                    "id='$orderId'"
                 );
                 $resultSeconds = $dbObject->fetchOne($query);
                 $restSeconds = isset($resultSeconds) ? ($resultSeconds) : 0;
@@ -521,7 +521,7 @@ class Pagantis_Pagantis_NotifyController extends AbstractController
                 $sql = "DELETE FROM " . $tableName . " WHERE timestamp <" .
                     (time() - self::CONCURRENCY_TIMEOUT);
             } else {
-                $sql = "DELETE FROM " . $tableName . " WHERE id  = " . $orderId;
+                $sql = "DELETE FROM " . $tableName . " WHERE id  ='" . $orderId."'";
             }
             $conn->query($sql);
         } catch (Exception $e) {
