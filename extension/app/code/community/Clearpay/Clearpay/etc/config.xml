@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <config>
-
     <modules>
         <Clearpay_Clearpay>
-            <version>8.3.10</version>
+            <version>1.0.0</version>
         </Clearpay_Clearpay>
     </modules>
 
@@ -46,19 +45,22 @@
             </clearpay>
 
             <clearpay_resource>
-            <class>Clearpay_Clearpay_Model_Resource</class>
-            <entities>
-                <log>
-                    <table>clearpay_log</table>
-                </log>
-                <order>
-                    <table>clearpay_order</table>
-                </order>
-                <concurrency>
-                    <table>clearpay_cart_concurrency</table>
-                </concurrency>
-            </entities>
-        </clearpay_resource>
+                <class>Clearpay_Clearpay_Model_Resource</class>
+                <entities>
+                    <log>
+                        <table>clearpay_log</table>
+                    </log>
+                    <order>
+                        <table>clearpay_order</table>
+                    </order>
+                    <concurrency>
+                        <table>clearpay_cart_concurrency</table>
+                    </concurrency>
+                    <config>
+                        <table>clearpay_config</table>
+                    </config>
+                </entities>
+            </clearpay_resource>
         </models>
 
         <resources>
@@ -124,7 +126,7 @@
     <default>
         <payment>
             <clearpay translate="title" module="clearpay">
-                <active>1</active>
+                <active>0</active>
                 <title>Clearpay</title>
                 <model>clearpay/clearpay</model>
                 <order_status>pending_payment</order_status>

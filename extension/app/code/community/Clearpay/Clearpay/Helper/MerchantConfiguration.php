@@ -15,7 +15,7 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
     /**
      * DEFAULT MAX AMOUNT
      */
-    const DEF_MAX_AMOUNT = 1.00;
+    const DEF_MAX_AMOUNT = 0.00;
 
     /**
      * @var mixed|null $merchantConfig
@@ -90,7 +90,7 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
      */
     public function getMinAmount()
     {
-        if ($this->merchantConfig!=null) {
+        if ($this->merchantConfig!=null && isset($this->merchantConfig->minimumAmount)) {
             return $this->merchantConfig->minimumAmount->amount;
         }
 
@@ -107,7 +107,7 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
      */
     public function getMaxAmount()
     {
-        if ($this->merchantConfig!=null) {
+        if ($this->merchantConfig!=null && isset($this->merchantConfig->maximumAmount)) {
             return $this->merchantConfig->maximumAmount->amount;
         }
 

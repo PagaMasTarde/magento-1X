@@ -16,7 +16,7 @@
             <block type="clearpay/product_simulator"
                    as="clearpay_simulator"
                    name="product_simulator"
-                   template="clearpay/product/ clearpay.phtm"/>
+                   template="clearpay/product/clearpay.phtm"/>
         </reference>
     </catalog_product_view>
 </layout>

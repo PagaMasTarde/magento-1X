@@ -1,5 +1,5 @@
 <?php
-
+die("llega al install");
 /** @var $installer Mage_Core_Model_Resource_Setup */
 $installer = $this;
 
@@ -60,25 +60,9 @@ $writeConnection->query($sql);
 $installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
-    ('CLEARPAY_TITLE', 'Instant Financing'),
-    ('CLEARPAY_SIMULATOR_DISPLAY_TYPE', 'pgSDK.simulator.types.PRODUCT_PAGE'),
-    ('CLEARPAY_SIMULATOR_DISPLAY_SKIN', 'pgSDK.simulator.skins.BLUE'),
-    ('CLEARPAY_SIMULATOR_DISPLAY_POSITION', 'hookDisplayProductButtons'),
-    ('CLEARPAY_SIMULATOR_START_INSTALLMENTS', '3'),
-    ('CLEARPAY_SIMULATOR_CSS_POSITION_SELECTOR', 'default'),
-    ('CLEARPAY_SIMULATOR_DISPLAY_CSS_POSITION', 'pgSDK.simulator.positions.INNER'),
-    ('CLEARPAY_SIMULATOR_CSS_PRICE_SELECTOR', 'default'),
-    ('CLEARPAY_SIMULATOR_CSS_QUANTITY_SELECTOR', 'default'),
-    ('CLEARPAY_FORM_DISPLAY_TYPE', '0'),
-    ('CLEARPAY_DISPLAY_MIN_AMOUNT', '1'),
     ('CLEARPAY_URL_OK', 'checkout/onepage/success/'),
     ('CLEARPAY_URL_KO', 'checkout/cart/'),
-    ('CLEARPAY_SIMULATOR_THOUSANDS_SEPARATOR', '.'),
-    ('CLEARPAY_SIMULATOR_DECIMAL_SEPARATOR', ','),
     ('CLEARPAY_ALLOWED_COUNTRIES', '[\"es\",\"fr\",\"it\"]'),
-    ('CLEARPAY_DISPLAY_MAX_AMOUNT', '1500'),
-    ('CLEARPAY_SIMULATOR_DISPLAY_TYPE_CHECKOUT', 'pgSDK.simulator.types.CHECKOUT_PAGE'),
-    ('CLEARPAY_SIMULATOR_CSS_POSITION_SELECTOR_CHECKOUT', 'default'),
-    ('CLEARPAY_SIMULATOR_CSS_PRICE_SELECTOR_CHECKOUT', 'default')");
+    ('CLEARPAY_SIMULATOR_CSS_SELECTOR', 'default')");
 
 $installer->endSetup();
