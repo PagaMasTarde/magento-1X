@@ -29,15 +29,15 @@ class Simulator19Test extends Magento19Test
 
         sleep(5);
         
-        $pagantisSimulator = WebDriverBy::className('PagantisSimulator');
+        $clearpaySimulator = WebDriverBy::className('ClearpaySimulator');
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                $pagantisSimulator
+                $clearpaySimulator
             )
         );
         $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
-            $pagantisSimulator
+            $clearpaySimulator
         ));
 
         $this->quit();

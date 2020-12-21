@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * Class Clearpay_Clearpay_Block_Product_Simulator
+ */
+class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Product_View
+{
+    /**
+     * JS CDN URL
+     */
+    const CLEARPAY_JS_CDN_URL = 'https://js.sandbox.afterpay.com/afterpay-1.x.js';
+
+    /**
+     * @var Mage_Catalog_Model_Product $_product
+     */
+    protected $_product;
+
+    /**
+     * Form constructor
+     */
+    protected function _construct()
+    {
+        $config = Mage::getStoreConfig('payment/clearpay');
+        $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
+        $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
+        $localeISOCode = Mage::app()->getLocale()->getLocaleCode();
+        $allowedCountries = json_decode($extraConfig['CLEARPAY_ALLOWED_COUNTRIES']);
+        $currency = "EUR";
+        if ($config['clearpay_api_region'] === 'GB') {
+            $allowedCountries = array('gb');
+            $currency = "GB";
+        }
+
+        if (in_array(strtolower($locale), $allowedCountries) && $config['active'] === '1') {
+            $this->assign(
+                array(
+                    'SDK_URL' => self::CLEARPAY_JS_CDN_URL,
+                    'ISO_COUNTRY_CODE' => $localeISOCode,
+                    'CURRENCY' => $currency,
+                    'CLEARPAY_MIN_AMOUNT' => $config['clearpay_min_amount'],
+                    'CLEARPAY_MAX_AMOUNT' => $config['clearpay_max_amount']
+                )
+            );
+
+            // check symlinks
+            $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+            $simulatorTemplate = new $classCoreTemplate;
+            $simulator = $simulatorTemplate->setTemplate('clearpay/product/clearpay.phtml')->toHtml();
+
+            if ($simulator == '') {
+                $this->_allowSymlinks = true;
+            }
+        }
+        parent::_construct();
+    }
+
+    /**
+     * Devuelve el current product cuando estamos en ficha de producto
+     *
+     * @return Mage_Catalog_Model_Product|mixed
+     */
+    public function getProduct()
+    {
+        if (!$this->_product) {
+            $this->_product = Mage::registry('current_product');
+        }
+
+        return $this->_product;
+    }
+}

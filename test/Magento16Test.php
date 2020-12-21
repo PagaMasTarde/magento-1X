@@ -62,8 +62,8 @@ abstract class Magento16Test extends TestCase
         'birthdate'          => '05/05/2005',
         'firstname'          => 'Péte®',
         'lastname'           => 'Köonsç Martínez',
-        'email'              => 'john_mg@pagantis.com',
-        'company'            => 'Pagantis SA',
+        'email'              => 'john_mg@clearpay.com',
+        'company'            => 'Clearpay SA',
         'zip'                => '08023',
         'country'            => 'España',
         'city'               => 'Barcelona',
@@ -97,7 +97,7 @@ abstract class Magento16Test extends TestCase
         $this->configuration['zip'] = $faker->postcode;
         $this->configuration['street'] = $faker->streetAddress;
         $this->configuration['phone'] = '6' . $faker->randomNumber(8);
-        $this->configuration['email'] = date('ymd') . '@pagantis.com';
+        $this->configuration['email'] = date('ymd') . '@clearpay.com';
 
         parent::__construct($name, $data, $dataName);
     }
@@ -136,7 +136,7 @@ abstract class Magento16Test extends TestCase
      */
     protected function setUp()
     {
-        $this->webDriver = PagantisWebDriver::create(
+        $this->webDriver = ClearpayWebDriver::create(
             'http://magento16-test.docker:4444/wd/hub',
             DesiredCapabilities::chrome(),
             120000,

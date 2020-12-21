@@ -1,0 +1,84 @@
+<?php
+/**
+ * @var Mage_Payment_Block_Form $this
+ * @var $publicKey string
+ * @var $amount string decimal
+ * @var $simulatorType int
+ */
+?>
+<style>
+    #logo {height:25px; margin-right: 10px;}
+    #dd_method_clearpay fieldset.form-list {
+        padding-left: 0px;
+    }
+    select.pg-sim-custom-selector-control {
+        width: 40px;
+    }
+</style>
+<fieldset class="form-list">
+    <?php if($simulatorIsEnabled && $clearpayIsEnabled && $publicKey!='') { ?>
+        <div class="ClearpaySimulator"></div>
+        <script type="text/javascript">
+
+            function getPositionSelector() {
+                var positionSelector = '<?php echo $clearpayCSSSelector;?>';
+
+                if (positionSelector === 'default') {
+                    positionSelector = '.ClearpaySimulator';
+                }
+
+                return positionSelector;
+            }
+
+            function loadSimulator()
+            {
+                var sdk = pgSDK;
+                var positionSelector = getPositionSelector();
+                var pgDiv = document.querySelectorAll(positionSelector);
+                if(typeof pgDiv!='undefined' && typeof pgDiv[0]!='undefined' && typeof window.MGSimulatorId!='undefined') {
+                    var pgElement = pgDiv[0];
+                    if (pgElement.innerHTML != '')
+                    {
+                        clearInterval(window.MGSimulatorId);
+                        return true;
+                    }
+                }
+
+                if (sdk != 'undefined') {
+                    var priceSelector = '<?php echo $clearpayPriceSelector;?>';
+                    sdk.product_simulator = {};
+                    sdk.product_simulator.locale = '<?php echo strtolower($locale);?>',
+                    sdk.product_simulator.country = '<?php echo strtolower($country);?>',
+                    sdk.product_simulator.id = 'checkout-simulator';
+                    sdk.product_simulator.publicKey = '<?php echo $publicKey;?>';
+                    sdk.product_simulator.selector = positionSelector;
+                    sdk.product_simulator.numInstalments = '<?php echo $clearpayQuotesStart;?>';
+                    sdk.product_simulator.type = <?php echo $clearpaySimulatorType;?>;
+                    sdk.product_simulator.skin = <?php echo $clearpaySimulatorSkin;?>;
+                    sdk.product_simulator.position = <?php echo $clearpaySimulatorPosition;?>;
+                    sdk.product_simulator.amountParserConfig =  {
+                        thousandSeparator: '<?php echo $thousandSeparator;?>',
+                        decimalSeparator: '<?php echo $decimalSeparator;?>'
+                    };
+
+                    if (priceSelector !== 'default') {
+                        sdk.product_simulator.itemAmountSelector = priceSelector;
+                    } else {
+                        sdk.product_simulator.totalAmount = <?php echo $amount; ?>;
+                    }
+                    sdk.product_simulator.totalPromotedAmount = <?php echo $promotedAmount; ?>;
+
+                    window.MGSimulatorId = sdk.simulator.init(sdk.product_simulator);
+                    return false;
+                }
+                return true;
+            }
+            if (!loadSimulator()) {
+                window.loadingSimulator = setInterval(function () {
+                    loadSimulator();
+                }, 2000);
+            }
+
+        </script>
+    <?php } ?>
+</fieldset>

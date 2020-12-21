@@ -17,12 +17,12 @@ class Controller16Test extends Magento16Test
     /**
      * log route
      */
-    const LOG_FOLDER = '/pagantis/log/download';
+    const LOG_FOLDER = '/clearpay/log/download';
 
     /**
      * config route
      */
-    const CONFIG_FOLDER = '/pagantis/config/';
+    const CONFIG_FOLDER = '/clearpay/config/';
 
     protected $configs = array(
         "PAGANTIS_TITLE",

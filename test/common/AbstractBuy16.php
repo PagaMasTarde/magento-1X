@@ -4,7 +4,7 @@ namespace Test\Common;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Pagantis\SeleniumFormUtils\SeleniumHelper;
+use Clearpay\SeleniumFormUtils\SeleniumHelper;
 use Test\Magento16Test;
 
 /**
@@ -45,24 +45,24 @@ abstract class AbstractBuy16 extends Magento16Test
     const EMPTY_SHOPPING_CART = 'Shopping Cart is empty';
 
     /**
-     * Pagantis Order Title
+     * Clearpay Order Title
      */
-    const PAGANTIS_TITLE = 'Pagantis';
+    const PAGANTIS_TITLE = 'Clearpay';
 
     /**
      * Notification route
      */
-    const NOTIFICATION_FOLDER = '/pagantis/notify';
+    const NOTIFICATION_FOLDER = '/clearpay/notify';
 
     /**
      * Log route
      */
-    const LOG_FOLDER = '/pagantis/log/download';
+    const LOG_FOLDER = '/clearpay/log/download';
 
     /**
      * ExtraConfig route
      */
-    const CONFIG_FOLDER = '/pagantis/config/';
+    const CONFIG_FOLDER = '/clearpay/config/';
 
     /**
      * Buy unregistered
@@ -136,13 +136,13 @@ abstract class AbstractBuy16 extends Magento16Test
     {
         sleep(5);
 
-        $reviewStepSearch = WebDriverBy::id('p_method_pagantis');
+        $reviewStepSearch = WebDriverBy::id('p_method_clearpay');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable($reviewStepSearch)
         );
-        $this->findById('p_method_pagantis')->click();
+        $this->findById('p_method_clearpay')->click();
 
-        $pgSimulator = WebDriverBy::className('PagantisSimulator');
+        $pgSimulator = WebDriverBy::className('ClearpaySimulator');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
                 $pgSimulator
@@ -183,12 +183,12 @@ abstract class AbstractBuy16 extends Magento16Test
 
 
     /**
-     * Complete order and open Pagantis (redirect or iframe methods)
+     * Complete order and open Clearpay (redirect or iframe methods)
      *
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function goToPagantis()
+    public function goToClearpay()
     {
         sleep(5);
 
@@ -196,12 +196,12 @@ abstract class AbstractBuy16 extends Magento16Test
     }
 
     /**
-     * Close previous pagantis session if an user is logged in
+     * Close previous clearpay session if an user is logged in
      *
      * @throws \Facebook\WebDriver\Exception\NoSuchElementException
      * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function logoutFromPagantis()
+    public function logoutFromClearpay()
     {
         // Wait the page to render (check the simulator is rendered)
         $this->webDriver->wait()->until(
@@ -209,7 +209,7 @@ abstract class AbstractBuy16 extends Magento16Test
                 WebDriverBy::name('minusButton')
             )
         );
-        // Check if user is logged in in Pagantis
+        // Check if user is logged in in Clearpay
         $closeSession = $this->webDriver->findElements(WebDriverBy::name('one_click_return_to_normal'));
         if (count($closeSession) !== 0) {
             //Logged out
@@ -295,11 +295,11 @@ abstract class AbstractBuy16 extends Magento16Test
     }
 
     /**
-     * Verify Pagantis
+     * Verify Clearpay
      *
      * @throws \Exception
      */
-    public function verifyPagantis()
+    public function verifyClearpay()
     {
         $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
         $this->webDriver->wait()->until($condition, $this->webDriver->getCurrentURL());

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <block type="core/text" name="clearpay.js">
+                <action method="setText" ifconfig="payment/clearpay/active">
+                    <text>
+ <![CDATA[<script type="text/javascript" src="https://cdn.clearpay.com/js/pg-v2/sdk.js"></script>]]>
+                    </text>
+                </action>
+            </block>
+        </reference>
+    </default>
+    <catalog_product_view>
+        <reference name="product.info.addtocart">
+            <block type="clearpay/product_simulator"
+                   as="clearpay_simulator"
+                   name="product_simulator"
+                   template="clearpay/product/ clearpay.phtm"/>
+        </reference>
+    </catalog_product_view>
+</layout>

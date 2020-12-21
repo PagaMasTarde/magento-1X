@@ -4,9 +4,9 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Pagantis\ModuleUtils\Model\Response\JsonSuccessResponse;
-use Pagantis\ModuleUtils\Exception\NoIdentificationException;
-use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
+use Clearpay\ModuleUtils\Model\Response\JsonSuccessResponse;
+use Clearpay\ModuleUtils\Exception\NoIdentificationException;
+use Clearpay\ModuleUtils\Exception\QuoteNotFoundException;
 use Httpful\Request;
 use Httpful\Mime;
 use Test\Common\AbstractBuy16;
@@ -64,8 +64,8 @@ class BuyRegistered16Test extends AbstractBuy16
         );
         $cartPrice = $this->webDriver->findElement($cartPrice)->getText();
         // --------------------
-        $this->goToPagantis();
-        $this->verifyPagantis();
+        $this->goToClearpay();
+        $this->verifyClearpay();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->checkLastPurchaseStatus('Processing');
@@ -142,7 +142,7 @@ class BuyRegistered16Test extends AbstractBuy16
     public function makeValidation()
     {
         $this->checkQuoteNotFound();
-        $this->checkPagantisOrderId();
+        $this->checkClearpayOrderId();
         $this->checkExtraConfig();
     }
 
@@ -169,7 +169,7 @@ class BuyRegistered16Test extends AbstractBuy16
      * Check if with a parameter called order-received set to a invalid identification,
      * we can get a NoIdentificationException
      */
-    protected function checkPagantisOrderId()
+    protected function checkClearpayOrderId()
     {
         $orderId=0;
         $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?token=x&order='.$orderId;

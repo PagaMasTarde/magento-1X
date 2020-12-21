@@ -125,23 +125,23 @@ abstract class AbstractConfigure19 extends Magento19Test
 
 
     /**
-     * goToPaymentMethodsAndSeePagantis
+     * goToPaymentMethodsAndSeeClearpay
      */
-    public function goToPaymentMethodsAndSeePagantis()
+    public function goToPaymentMethodsAndSeeClearpay()
     {
         $paymentMethodsLinkElement = $this->findByLinkText('Payment Methods');
         $this->webDriver->executeScript("arguments[0].scrollIntoView(true);", array($paymentMethodsLinkElement));
         $paymentMethodsLinkElement->click();
 
-        $pagantisHeaderSearch = WebDriverBy::id('payment_pagantis-head');
+        $clearpayHeaderSearch = WebDriverBy::id('payment_clearpay-head');
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::visibilityOfElementLocated(
-                $pagantisHeaderSearch
+                $clearpayHeaderSearch
             )
         );
 
         $this->assertTrue((bool) WebDriverExpectedCondition::visibilityOfElementLocated(
-            $pagantisHeaderSearch
+            $clearpayHeaderSearch
         ));
     }
 
@@ -187,13 +187,13 @@ abstract class AbstractConfigure19 extends Magento19Test
      */
     public function configureAndSave()
     {
-        //Fill configuration for Pagantis
-        $this->findById('payment_pagantis_active1')->click();
-        $this->findById('payment_pagantis_pagantis_public_key')
+        //Fill configuration for Clearpay
+        $this->findById('payment_clearpay_active1')->click();
+        $this->findById('payment_clearpay_clearpay_public_key')
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
-        $this->findById('payment_pagantis_pagantis_private_key')
+        $this->findById('payment_clearpay_clearpay_private_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
         ;

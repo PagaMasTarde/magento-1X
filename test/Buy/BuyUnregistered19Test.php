@@ -30,8 +30,8 @@ class BuyUnregistered19Test extends AbstractBuy19
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPagantis();
-        $this->verifyPagantis();
+        $this->goToClearpay();
+        $this->verifyClearpay();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->quit();

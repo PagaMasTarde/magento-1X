@@ -27,15 +27,15 @@ class Simulator16Test extends Magento16Test
     {
         $this->goToProductPage();
 
-        $pagantisSimulator = WebDriverBy::className('PagantisSimulator');
+        $clearpaySimulator = WebDriverBy::className('ClearpaySimulator');
 
         $this->webDriver->wait()->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                $pagantisSimulator
+                $clearpaySimulator
             )
         );
         $this->assertTrue((bool) WebDriverExpectedCondition::presenceOfElementLocated(
-            $pagantisSimulator
+            $clearpaySimulator
         ));
 
         $this->quit();
