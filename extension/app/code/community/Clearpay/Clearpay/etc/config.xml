@@ -42,9 +42,6 @@
             <clearpay_resource>
                 <class>Clearpay_Clearpay_Model_Resource</class>
                 <entities>
-                    <log>
-                        <table>clearpay_log</table>
-                    </log>
                     <order>
                         <table>clearpay_order</table>
                     </order>

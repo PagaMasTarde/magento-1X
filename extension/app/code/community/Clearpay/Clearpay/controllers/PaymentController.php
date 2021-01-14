@@ -1,10 +1,11 @@
-<?php
+dfsffsdf<?php
 
 require_once(__DIR__.'/../../../../../../lib/Clearpay/autoload.php');
 require_once(__DIR__.'/AbstractController.php');
 
 use Afterpay\SDK\HTTP\Request\CreateCheckout;
 use Afterpay\SDK\MerchantAccount as ClearpayMerchantAccount;
+
 /**
  * Class Clearpay_Clearpay_PaymentController
  */
@@ -299,56 +300,35 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
                     if (isset($createCheckoutRequest->getResponse()->getParsedBody()->message)) {
                         $errorMessage = $createCheckoutRequest->getResponse()->getParsedBody()->message;
                     }
-                    $errorMessage .= $this->l('. Status code: ')
-                        . $createCheckoutRequest->getResponse()->getHttpStatusCode();
-                    $this->saveLog(
-                        $this->l('Error received when trying to create a order: ') .
-                        $errorMessage,
-                        2
-                    );
+                    $errorMessage .= '. Status code: ' . $createCheckoutRequest->getResponse()->getHttpStatusCode();
+                    $this->saveLog('Error received when trying to create a order: ' . $errorMessage);
                 } else {
                     try {
                         $url = $createCheckoutRequest->getResponse()->getParsedBody()->redirectCheckoutUrl;
-                        $this->insertOrderControl($this->magentoOrderId, $order->getId(), $this->urlToken);
+                        $this->insertOrderControl(
+                            $this->magentoOrderId,
+                            $createCheckoutRequest->getResponse()->getParsedBody()->token,
+                            $this->urlToken
+                        );
                     } catch (\Exception $exception) {
-                        $this->saveLog($exception->getMessage(), 3);
+                        $this->saveLog($exception->getMessage());
                         $url = $cancelUrl;
                     }
                 }
             } else {
-                $this->saveLog($createCheckoutRequest->getValidationErrors(), null, 2);
+                $this->saveLog(json_encode($createCheckoutRequest->getValidationErrors()));
             }
         } catch (Exception $exception) {
-            $this->saveLog($exception);
-            return $this->_redirectUrl($this->cancelUrl);
-        }
-
-        try {
-            $orderClient = new ClearpayClient(
-                $this->publicKey,
-                $this->privateKey
-            );
-            $order = $orderClient->createOrder($order);
-            if ($order instanceof ClearpayModelOrder) {
-                $url = $order->getActionUrls()->getForm();
-                $this->insertOrderControl($this->magentoOrderId, $order->getId(), $this->urlToken);
-            } else {
-                throw new OrderNotFoundException();
-            }
-        } catch (Exception $exception) {
-            $this->order = $order;
-            $this->saveLog($exception);
+            $this->saveLog($exception->getMessage());
             return $this->_redirectUrl($this->cancelUrl);
         }
 
         try {
             return $this->_redirectUrl($url);
         } catch (Exception $exception) {
-            $this->saveLog($exception);
+            $this->saveLog($exception->getMessage());
             return $this->_redirectUrl($this->cancelUrl);
         }
-
-        return $this->renderLayout();
     }
 
     /**
@@ -369,61 +349,6 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
             'token' => $token,
         ));
         $model->save();
-    }
-
-    /**
-     * @param null $shippingAddress
-     * @param null $billigAddress
-     * @return mixed|null
-     */
-    private function getNationalId($shippingAddress = null, $billigAddress = null)
-    {
-        if (isset($this->customer->national_id)) {
-            return $this->customer->national_id;
-        } elseif ($billigAddress !== null and isset($billigAddress['national_id'])) {
-            return $billigAddress['national_id'];
-        } elseif ($shippingAddress !== null and isset($shippingAddress['national_id'])) {
-            return $shippingAddress['national_id'];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param null $shippingAddress
-     * @param null $billigAddress
-     * @return mixed|null
-     */
-    private function getTaxId($shippingAddress = null, $billigAddress = null)
-    {
-        if (isset($this->customer->tax_id)) {
-            return $this->customer->tax_id;
-        } elseif (isset($this->customer->privatecompany_fiscalcode)) {
-            return $this->customer->privatecompany_fiscalcode;
-        } elseif ($billigAddress !== null and isset($billigAddress['tax_id'])) {
-            return $billigAddress['tax_id'];
-        } elseif ($shippingAddress !== null and isset($shippingAddress['tax_id'])) {
-            return $shippingAddress['tax_id'];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param null $shippingAddress
-     * @return mixed|null
-     */
-    private function getDni($shippingAddress = null)
-    {
-        if (isset($this->customer->dni)) {
-            return $this->customer->dni;
-        } elseif (isset($this->customer->nif)) {
-            return $this->customer->nif;
-        } elseif ($shippingAddress !== null and isset($shippingAddress['dni'])) {
-            return $shippingAddress['dni'];
-        } else {
-            return $this->getNationalId($shippingAddress);
-        }
     }
 
     /**

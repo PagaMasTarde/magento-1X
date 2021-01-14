@@ -1,5 +1,4 @@
 <?php
-
 /** @var $installer Mage_Core_Model_Resource_Setup */
 $installer = $this;
 
@@ -55,3 +54,4 @@ $installer->run("INSERT INTO `$this->tableName`
     ('PRICE_SELECTOR_CONTAINER', '.price-info')");
 
 $installer->endSetup();
+

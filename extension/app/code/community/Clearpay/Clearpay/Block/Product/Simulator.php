@@ -27,7 +27,7 @@ class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
         $currency = Mage::app()->getStore()->getCurrentCurrencyCode();
 
-        if (in_array(strtolower($locale), $allowedCountries) && $config['active'] === '1') {
+        if (in_array(strtoupper($locale), $allowedCountries) && $config['active'] === '1') {
             $this->assign(
                 array(
                     'SDK_URL' => self::CLEARPAY_JS_CDN_URL,

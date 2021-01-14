@@ -47,7 +47,7 @@
                 if (sdk != 'undefined') {
                     var priceSelector = '<?php echo $clearpayPriceSelector;?>';
                     sdk.product_simulator = {};
-                    sdk.product_simulator.locale = '<?php echo strtolower($locale);?>',
+                    sdk.product_simulator.locale = '<?php echo strtoupper($locale);?>',
                     sdk.product_simulator.country = '<?php echo strtolower($country);?>',
                     sdk.product_simulator.id = 'checkout-simulator';
                     sdk.product_simulator.publicKey = '<?php echo $publicKey;?>';

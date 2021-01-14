@@ -117,12 +117,12 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Save log in SQL database
      *
-     * @param $exception
+     * @param string $message
      */
-    public function saveLog(Exception $exception)
+    public function saveLog($message)
     {
         try {
-            Mage::log($exception->getMessage(), null, 'clearpay.log', true);
+            Mage::log($message, null, 'clearpay.log', true);
         } catch (Exception $exception) {
             // Do nothing
         }
