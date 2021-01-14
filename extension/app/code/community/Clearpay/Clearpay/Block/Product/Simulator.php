@@ -24,12 +24,8 @@ class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
         $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
         $localeISOCode = Mage::app()->getLocale()->getLocaleCode();
-        $allowedCountries = json_decode($extraConfig['CLEARPAY_ALLOWED_COUNTRIES']);
-        $currency = "EUR";
-        if ($config['clearpay_api_region'] === 'GB') {
-            $allowedCountries = array('gb');
-            $currency = "GB";
-        }
+        $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
+        $currency = Mage::app()->getStore()->getCurrentCurrencyCode();
 
         if (in_array(strtolower($locale), $allowedCountries) && $config['active'] === '1') {
             $this->assign(
@@ -38,7 +34,9 @@ class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Produ
                     'ISO_COUNTRY_CODE' => $localeISOCode,
                     'CURRENCY' => $currency,
                     'CLEARPAY_MIN_AMOUNT' => $config['clearpay_min_amount'],
-                    'CLEARPAY_MAX_AMOUNT' => $config['clearpay_max_amount']
+                    'CLEARPAY_MAX_AMOUNT' => $config['clearpay_max_amount'],
+                    'PRICE_SELECTOR' => $extraConfig['PRICE_SELECTOR'],
+                    'PRICE_SELECTOR_CONTAINER' => $extraConfig['PRICE_SELECTOR_CONTAINER']
                 )
             );
 
@@ -46,7 +44,6 @@ class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Produ
             $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
             $simulatorTemplate = new $classCoreTemplate;
             $simulator = $simulatorTemplate->setTemplate('clearpay/product/clearpay.phtml')->toHtml();
-
             if ($simulator == '') {
                 $this->_allowSymlinks = true;
             }

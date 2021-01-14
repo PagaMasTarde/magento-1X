@@ -1,14 +1,27 @@
-Pepepe
-<!-- Afterpay.js  -->
-<script
+<div class="ClearpaySimulator">
+    <script
         src="<?php echo $SDK_URL;?>"
-        data-min="<?php echo $CLEARPAY_MIN_AMOUNT;?>$SDK_URL"
+        data-min="<?php echo $CLEARPAY_MIN_AMOUNT;?>"
         data-max="<?php echo $CLEARPAY_MAX_AMOUNT;?>"
         async>
-</script>
-<!-- Afterpay.js -->
-<div class="ClearpaySimulator">
+    </script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(event) {
+            var div1 = document.querySelectorAll("<?php echo $PRICE_SELECTOR_CONTAINER;?>");
+            var div2 = document.getElementsByClassName("ClearpaySimulator");
+
+            if (div1.length > 0 && div1.length > 0) {
+                div1 = div1[0];
+                div2 = div2[0];
+                div1.after(div2);
+            }
+        })
+    </script>
     <style>
+        .ClearpaySimulator {
+            display: block;
+            clear: both;
+        }
         afterpay-placement {
             white-space: break-spaces;
         }

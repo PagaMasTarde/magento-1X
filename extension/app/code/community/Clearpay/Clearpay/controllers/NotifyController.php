@@ -183,8 +183,8 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $config = Mage::getStoreConfig('payment/clearpay');
             $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
             $this->config = array(
-                'urlOK' => $extraConfig['CLEARPAY_URL_OK'],
-                'urlKO' => $extraConfig['CLEARPAY_URL_KO'],
+                'urlOK' => $extraConfig['URL_OK'],
+                'urlKO' => $extraConfig['URL_KO'],
                 'publicKey' => $config['clearpay_merchant_id'],
                 'privateKey' => $config['clearpay_secret_key'],
             );
@@ -311,7 +311,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         // Check current state
         $status = $this->merchantOrder->getStatus();
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
-            $this->merchantOrder->getPayment()->getMethodInstance()->getCode() != self::Clearpay_CODE
+            $this->merchantOrder->getPayment()->getMethodInstance()->getCode() != self::CLEARPAY_CODE
         ) {
             throw new WrongStatusException($status);
         }

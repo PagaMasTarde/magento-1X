@@ -35,7 +35,7 @@ sleep 10
 # Copy Files for test container
 if [ $test = true ];
 then
-    docker-compose up -d slenium
+    docker-compose up -d selenium
     docker cp ./extension/. ${container}:/clearpay/
 else
     export MAGENTO_TEST_ENV=dev

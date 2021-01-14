@@ -28,6 +28,18 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
     protected $moduleConfig;
 
     /**
+     * Default available countries for the different operational regions
+     *
+     * @var array
+     */
+    protected $defaultCountriesPerRegion = array(
+        'ES' => '["ES", "FR", "IT"]',
+        'GB' => '["GB"]',
+        'US' => '["US"]'
+    );
+
+
+    /**
      * MerchantConfiguration constructor.
      */
     public function __construct()
@@ -67,6 +79,22 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
                 $getConfigurationRequest->setMerchantAccount($merchantAccount);
                 $getConfigurationRequest->send();
                 $configurationResponse = $getConfigurationRequest->getResponse()->getParsedBody();
+            }
+        }
+
+        // Update the allowed countries each time the config is required
+        if (isset($configurationResponse[0]->activeCountries)) {
+            Mage::helper('clearpay/ExtraConfig')->setExtraConfig(
+                'ALLOWED_COUNTRIES',
+                json_encode($configurationResponse[0]->activeCountries)
+            );
+        } else {
+            $region = $this->moduleConfig['clearpay_api_region'];
+            if (!empty($region) and is_string($region) && $region) {
+                Mage::helper('clearpay/ExtraConfig')->setExtraConfig(
+                    'ALLOWED_COUNTRIES',
+                    $this->getCountriesPerRegion($region)
+                );
             }
         }
 
@@ -117,5 +145,17 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
             return $this->moduleConfig['clearpay_max_amount'];
         }
         return self::DEF_MAX_AMOUNT;
+    }
+
+    /**
+     * @param string $region
+     * @return string
+     */
+    public function getCountriesPerRegion($region = '')
+    {
+        if (isset($this->defaultCountriesPerRegion[$region])) {
+            return $this->defaultCountriesPerRegion[$region];
+        }
+        return json_encode(array());
     }
 }

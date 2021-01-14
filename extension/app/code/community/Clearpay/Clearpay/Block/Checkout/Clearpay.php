@@ -17,10 +17,7 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
         $checkoutSession = Mage::getModel('checkout/session');
         $quote = $checkoutSession->getQuote();
         $amount = $quote->getGrandTotal();
-        $allowedCountries = json_decode($extraConfig['CLEARPAY_ALLOWED_COUNTRIES']);
-        if ($config['clearpay_api_region'] === 'GB') {
-            $allowedCountries = array('gb');
-        }
+        $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
         $promotedAmount =  0;
         $cart = Mage::getModel('checkout/cart')->getQuote();
         foreach ($cart->getAllVisibleItems() as $item) {
@@ -32,7 +29,7 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
             }
         }
 
-        if (in_array(strtolower($locale), $allowedCountries)) {
+        if (in_array(strtoupper($locale), $allowedCountries)) {
             $title = $this->__($extraConfig['CLEARPAY_TITLE']);
             $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
 

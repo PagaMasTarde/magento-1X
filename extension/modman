@@ -10,7 +10,7 @@ app/locale/es_ES/Clearpay_Clearpay.csv            app/locale/es_ES/Clearpay_Clea
 app/locale/fr_FR/Clearpay_Clearpay.csv            app/locale/fr_FR/Clearpay_Clearpay.csv
 # app/design
 app/design/frontend/base/default/layout/clearpay.xml            app/design/frontend/base/default/layout/clearpay.xml
-app/design/frontend/base/default/template/clearpay/product/clearpay.phtm            app/design/frontend/base/default/template/clearpay/product/clearpay.phtml
+app/design/frontend/base/default/template/clearpay/product/clearpay.phtml            app/design/frontend/base/default/template/clearpay/product/clearpay.phtml
 app/design/frontend/base/default/template/clearpay/checkout/logo.phtml            app/design/frontend/base/default/template/clearpay/checkout/logo.phtml
 app/design/frontend/base/default/template/clearpay/checkout/clearpay.phtml            app/design/frontend/base/default/template/clearpay/checkout/clearpay.phtml
 app/design/adminhtml/default/default/layout/clearpay.xml            app/design/adminhtml/default/default/layout/clearpay.xml

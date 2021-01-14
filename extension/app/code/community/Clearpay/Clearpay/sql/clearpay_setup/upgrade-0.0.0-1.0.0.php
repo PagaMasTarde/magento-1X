@@ -1,5 +1,5 @@
 <?php
-die("llega al install");
+
 /** @var $installer Mage_Core_Model_Resource_Setup */
 $installer = $this;
 
@@ -24,20 +24,7 @@ $sql = 'CREATE TABLE `' . $this->tableName . '` (
   `mg_order_id` varchar(50) NOT NULL,
   `token` varchar(32) NOT NULL,
   `clearpay_order_id` varchar(50), 
-  PRIMARY KEY (`mg_order_id`, `token`),
-  )';
-$resource = Mage::getSingleton('core/resource');
-$writeConnection = $resource->getConnection('core_write');
-$writeConnection->query($sql);
-
-// Create clearpay_log table
-$this->tableName = Mage::getSingleton('core/resource')->getTableName('clearpay_log');
-$installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
-$sql = 'CREATE TABLE `' . $this->tableName . '` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `log` TEXT,
-  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`mg_order_id`, `token`)
   )';
 $resource = Mage::getSingleton('core/resource');
 $writeConnection = $resource->getConnection('core_write');
@@ -60,9 +47,11 @@ $writeConnection->query($sql);
 $installer->run("INSERT INTO `$this->tableName` 
     (`config`, `value`)
     VALUES
-    ('CLEARPAY_URL_OK', 'checkout/onepage/success/'),
-    ('CLEARPAY_URL_KO', 'checkout/cart/'),
-    ('CLEARPAY_ALLOWED_COUNTRIES', '[\"es\",\"fr\",\"it\"]'),
-    ('CLEARPAY_SIMULATOR_CSS_SELECTOR', 'default')");
+    ('URL_OK', 'checkout/onepage/success/'),
+    ('URL_KO', 'checkout/cart/'),
+    ('ALLOWED_COUNTRIES', '[\"ES\",\"FR\",\"IT\",\"GB\"]'),
+    ('SIMULATOR_IS_ENABLED', true),
+    ('PRICE_SELECTOR', '[id^=\'product-price\']'),
+    ('PRICE_SELECTOR_CONTAINER', '.price-info')");
 
 $installer->endSetup();

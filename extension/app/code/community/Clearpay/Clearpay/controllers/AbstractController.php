@@ -1,5 +1,4 @@
 <?php
-use Clearpay\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class AbstractController
@@ -7,9 +6,9 @@ use Clearpay\ModuleUtils\Model\Log\LogEntry;
 abstract class AbstractController extends Mage_Core_Controller_Front_Action
 {
     /**
-     * Clearpay_CODE
+     * CLEARPAY_CODE
      */
-    const Clearpay_CODE = 'clearpay';
+    const CLEARPAY_CODE = 'clearpay';
 
     /**
      * @var integer $statusCode
@@ -123,14 +122,7 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     public function saveLog(Exception $exception)
     {
         try {
-            $logEntry= new LogEntry();
-            $logEntryJson = $logEntry->error($exception)->toJson();
-
-            $model = Mage::getModel('clearpay/log');
-            $model->setData(array(
-                'log' => $logEntryJson,
-            ));
-            $model->save();
+            Mage::log($exception->getMessage(), null, 'clearpay.log', true);
         } catch (Exception $exception) {
             // Do nothing
         }

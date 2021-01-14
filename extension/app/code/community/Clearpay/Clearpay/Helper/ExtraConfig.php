@@ -44,4 +44,22 @@ class Clearpay_Clearpay_Helper_ExtraConfig extends Mage_Core_Helper_Abstract
         }
         return $data;
     }
+
+    /**
+     * @param string $config
+     * @param string $value
+     * @return string
+     */
+    public function setExtraConfig($config = '', $value = '')
+    {
+        if (is_null($config)) {
+            return $value;
+        }
+
+        $conn = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $tableName = Mage::getSingleton('core/resource')->getTableName($this->tableName);
+        $sql = "UPDATE " . $tableName . " SET `value` = '" . $value. "' WHERE `config` = '" . $config . "'";
+        $conn->query($sql);
+        return $value;
+    }
 }
