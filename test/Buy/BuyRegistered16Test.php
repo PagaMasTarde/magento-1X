@@ -4,9 +4,9 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Pagantis\ModuleUtils\Model\Response\JsonSuccessResponse;
-use Pagantis\ModuleUtils\Exception\NoIdentificationException;
-use Pagantis\ModuleUtils\Exception\QuoteNotFoundException;
+use Clearpay\ModuleUtils\Model\Response\JsonSuccessResponse;
+use Clearpay\ModuleUtils\Exception\NoIdentificationException;
+use Clearpay\ModuleUtils\Exception\QuoteNotFoundException;
 use Httpful\Request;
 use Httpful\Mime;
 use Test\Common\AbstractBuy16;
@@ -28,20 +28,20 @@ class BuyRegistered16Test extends AbstractBuy16
      * @var array $configs
      */
     protected $configs = array(
-        "PAGANTIS_TITLE",
-        "PAGANTIS_SIMULATOR_DISPLAY_TYPE",
-        "PAGANTIS_SIMULATOR_DISPLAY_SKIN",
-        "PAGANTIS_SIMULATOR_DISPLAY_POSITION",
-        "PAGANTIS_SIMULATOR_START_INSTALLMENTS",
-        "PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR",
-        "PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION",
-        "PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR",
-        "PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR",
-        "PAGANTIS_FORM_DISPLAY_TYPE",
-        "PAGANTIS_DISPLAY_MIN_AMOUNT",
-        "PAGANTIS_DISPLAY_MAX_AMOUNT",
-        "PAGANTIS_URL_OK",
-        "PAGANTIS_URL_KO",
+        "CLEARPAY_TITLE",
+        "CLEARPAY_SIMULATOR_DISPLAY_TYPE",
+        "CLEARPAY_SIMULATOR_DISPLAY_SKIN",
+        "CLEARPAY_SIMULATOR_DISPLAY_POSITION",
+        "CLEARPAY_SIMULATOR_START_INSTALLMENTS",
+        "CLEARPAY_SIMULATOR_CSS_POSITION_SELECTOR",
+        "CLEARPAY_SIMULATOR_DISPLAY_CSS_POSITION",
+        "CLEARPAY_SIMULATOR_CSS_PRICE_SELECTOR",
+        "CLEARPAY_SIMULATOR_CSS_QUANTITY_SELECTOR",
+        "CLEARPAY_FORM_DISPLAY_TYPE",
+        "CLEARPAY_DISPLAY_MIN_AMOUNT",
+        "CLEARPAY_DISPLAY_MAX_AMOUNT",
+        "CLEARPAY_URL_OK",
+        "CLEARPAY_URL_KO",
     );
 
     /**
@@ -64,8 +64,8 @@ class BuyRegistered16Test extends AbstractBuy16
         );
         $cartPrice = $this->webDriver->findElement($cartPrice)->getText();
         // --------------------
-        $this->goToPagantis();
-        $this->verifyPagantis();
+        $this->goToClearpay();
+        $this->verifyClearpay();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->checkLastPurchaseStatus('Processing');
@@ -142,7 +142,7 @@ class BuyRegistered16Test extends AbstractBuy16
     public function makeValidation()
     {
         $this->checkQuoteNotFound();
-        $this->checkPagantisOrderId();
+        $this->checkClearpayOrderId();
         $this->checkExtraConfig();
     }
 
@@ -169,7 +169,7 @@ class BuyRegistered16Test extends AbstractBuy16
      * Check if with a parameter called order-received set to a invalid identification,
      * we can get a NoIdentificationException
      */
-    protected function checkPagantisOrderId()
+    protected function checkClearpayOrderId()
     {
         $orderId=0;
         $notifyUrl = $this->magentoUrl.self::NOTIFICATION_FOLDER.'?token=x&order='.$orderId;
@@ -205,21 +205,21 @@ class BuyRegistered16Test extends AbstractBuy16
 
         $configUrl = $this->magentoUrl.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
         $requestTitle = 'changed';
-        $body = array('PAGANTIS_TITLE' => $requestTitle);
+        $body = array('CLEARPAY_TITLE' => $requestTitle);
         $response = Request::post($configUrl)
                            ->body($body, Mime::FORM)
                            ->expectsJSON()
                            ->send();
-        $title = $response->body->PAGANTIS_TITLE;
+        $title = $response->body->CLEARPAY_TITLE;
         $this->assertEquals($requestTitle, $title, "PR62=>".$configUrl." => ".$requestTitle ."!=".$title);
 
         $requestTitle = 'Instant Financing';
-        $body = array('PAGANTIS_TITLE' => $requestTitle);
+        $body = array('CLEARPAY_TITLE' => $requestTitle);
         $response = Request::post($configUrl)
                            ->body($body, Mime::FORM)
                            ->expectsJSON()
                            ->send();
-        $title = $response->body->PAGANTIS_TITLE;
+        $title = $response->body->CLEARPAY_TITLE;
         $this->assertEquals($requestTitle, $title, "PR62b=>".$configUrl." => ".$requestTitle ."!=".$title);
     }
 }

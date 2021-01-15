@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06e95cf989ef82134c71291b29c9a06f",
+    "content-hash": "0d654618ada6078703cef6990f8fe07d",
     "packages": [
         {
             "name": "afterpay-global/afterpay-sdk-php",

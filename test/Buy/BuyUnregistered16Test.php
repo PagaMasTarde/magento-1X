@@ -27,8 +27,8 @@ class BuyUnregistered16Test extends AbstractBuy16
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPagantis();
-        $this->verifyPagantis();
+        $this->goToClearpay();
+        $this->verifyClearpay();
         $this->commitPurchase();
         $this->checkPurchaseReturn(self::CORRECT_PURCHASE_MESSAGE);
         $this->quit();

@@ -17,28 +17,28 @@ class Controller19Test extends Magento19Test
     /**
      * log route
      */
-    const LOG_FOLDER = '/pagantis/log/download';
+    const LOG_FOLDER = '/clearpay/log/download';
 
     /**
      * config route
      */
-    const CONFIG_FOLDER = '/pagantis/config/';
+    const CONFIG_FOLDER = '/clearpay/config/';
 
     protected $configs = array(
-        "PAGANTIS_TITLE",
-        "PAGANTIS_SIMULATOR_DISPLAY_TYPE",
-        "PAGANTIS_SIMULATOR_DISPLAY_SKIN",
-        "PAGANTIS_SIMULATOR_DISPLAY_POSITION",
-        "PAGANTIS_SIMULATOR_START_INSTALLMENTS",
-        "PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR",
-        "PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION",
-        "PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR",
-        "PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR",
-        "PAGANTIS_FORM_DISPLAY_TYPE",
-        "PAGANTIS_DISPLAY_MIN_AMOUNT",
-        "PAGANTIS_DISPLAY_MAX_AMOUNT",
-        "PAGANTIS_URL_OK",
-        "PAGANTIS_URL_KO",
+        "CLEARPAY_TITLE",
+        "CLEARPAY_SIMULATOR_DISPLAY_TYPE",
+        "CLEARPAY_SIMULATOR_DISPLAY_SKIN",
+        "CLEARPAY_SIMULATOR_DISPLAY_POSITION",
+        "CLEARPAY_SIMULATOR_START_INSTALLMENTS",
+        "CLEARPAY_SIMULATOR_CSS_POSITION_SELECTOR",
+        "CLEARPAY_SIMULATOR_DISPLAY_CSS_POSITION",
+        "CLEARPAY_SIMULATOR_CSS_PRICE_SELECTOR",
+        "CLEARPAY_SIMULATOR_CSS_QUANTITY_SELECTOR",
+        "CLEARPAY_FORM_DISPLAY_TYPE",
+        "CLEARPAY_DISPLAY_MIN_AMOUNT",
+        "CLEARPAY_DISPLAY_MAX_AMOUNT",
+        "CLEARPAY_URL_OK",
+        "CLEARPAY_URL_KO",
     );
 
     /**
@@ -58,12 +58,12 @@ class Controller19Test extends Magento19Test
     public function testSetConfig()
     {
         $notifyUrl = $this->magentoUrl.self::CONFIG_FOLDER.'post?secret='.$this->configuration['secretKey'];
-        $body = array('PAGANTIS_TITLE' => 'changed');
+        $body = array('CLEARPAY_TITLE' => 'changed');
         $response = Request::post($notifyUrl)
             ->body($body, Mime::FORM)
             ->expectsJSON()
             ->send();
-        $this->assertEquals('changed', $response->body->PAGANTIS_TITLE);
+        $this->assertEquals('changed', $response->body->CLEARPAY_TITLE);
         $this->quit();
     }
 

@@ -43,7 +43,7 @@ class PackageTest extends Magento19Test
     /**
      * Vendor Folder
      */
-    const VENDOR_FOLDER = 'lib/Pagantis';
+    const VENDOR_FOLDER = 'lib/Clearpay';
 
     /**
      * @var release-version
@@ -73,9 +73,9 @@ class PackageTest extends Magento19Test
         exec(
             'docker cp ' .
             self::DOCKER_CONTAINER .
-            ':/pagantis/var/connect/Pagantis_Pagantis-'
+            ':/clearpay/var/connect/Clearpay_Clearpay-'
             . $this->release .
-            '.tgz Pagantis_v' . $this->release . '.tgz'
+            '.tgz Clearpay_v' . $this->release . '.tgz'
         );
     }
 
@@ -106,16 +106,16 @@ class PackageTest extends Magento19Test
             JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES
         ));
 
-        exec('docker exec -it '. self::DOCKER_CONTAINER .' rm -rf /pagantis/' . self::VENDOR_FOLDER);
+        exec('docker exec -it '. self::DOCKER_CONTAINER .' rm -rf /clearpay/' . self::VENDOR_FOLDER);
         exec(
             'docker cp ' .
             'extension/' . self::VENDOR_FOLDER .
             'Prod ' .
             self::DOCKER_CONTAINER .
-            ':/pagantis/' .
+            ':/clearpay/' .
             self::VENDOR_FOLDER
         );
-        exec('docker exec -it '. self::DOCKER_CONTAINER .' chown -R www-data /pagantis/');
+        exec('docker exec -it '. self::DOCKER_CONTAINER .' chown -R www-data /clearpay/');
         exec('rm -rf extension/' . self::VENDOR_FOLDER . 'Prod');
     }
 

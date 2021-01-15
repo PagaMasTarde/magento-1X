@@ -1,6 +1,6 @@
 {
-    "name": "pagantis/magento-1x",
-    "description": "Pagantis Magento 1x module",
+    "name": "clearpay/magento-1x",
+    "description": "Clearpay Magento 1x module",
     "type": "module",
     "keywords": [
         "api",
@@ -11,17 +11,17 @@
         "payment",
         "checkout",
         "credit",
-        "pagantis",
+        "clearpay",
         "financiar",
         "financiera",
         "financiación"
     ],
-    "homepage": "https://pagantis.com/",
+    "homepage": "https://clearpay.com/",
     "license": "proprietary",
     "authors": [
         {
-            "name": "Pagantis",
-            "email": "integrations@pagantis.com"
+            "name": "Clearpay",
+            "email": "integrations@clearpay.com"
         }
     ],
     "require": {
@@ -42,6 +42,6 @@
     },
     "minimum-stability": "stable",
     "config": {
-        "vendor-dir": "extension/lib/Pagantis"
+        "vendor-dir": "extension/lib/Clearpay"
     }
 }

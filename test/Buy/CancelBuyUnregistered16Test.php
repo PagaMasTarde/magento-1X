@@ -4,7 +4,7 @@ namespace Test\Buy;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
-use Pagantis\SeleniumFormUtils\SeleniumHelper;
+use Clearpay\SeleniumFormUtils\SeleniumHelper;
 use Test\Common\AbstractBuy16;
 
 /**
@@ -26,7 +26,7 @@ class CancelBuyUAbstractBuy16Test extends AbstractBuy16
         $this->fillBillingInformation();
         $this->fillShippingMethod();
         $this->fillPaymentMethod();
-        $this->goToPagantis();
+        $this->goToClearpay();
         $this->cancelPurchase();
         $this->checkPurchaseReturn(self::SHOPPING_CART_MESSAGE);
         $this->quit();
@@ -94,7 +94,7 @@ class CancelBuyUAbstractBuy16Test extends AbstractBuy16
      */
     public function cancelPurchase()
     {
-        $condition = WebDriverExpectedCondition::titleContains(self::PAGANTIS_TITLE);
+        $condition = WebDriverExpectedCondition::titleContains(self::CLEARPAY_TITLE);
         $this->webDriver->wait()->until($condition, $this->webDriver->getCurrentURL());
         $this->assertTrue((bool)$condition, "PR32");
 

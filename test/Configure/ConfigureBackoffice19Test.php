@@ -24,7 +24,7 @@ class ConfigureBackoffice19Test extends AbstractConfigure19
         $this->goToShippingMethodsAndSeeFedEx();
         $this->disableFedEx();
         $this->goToSystemConfig();
-        $this->goToPaymentMethodsAndSeePagantis();
+        $this->goToPaymentMethodsAndSeeClearpay();
         $this->configureAndSave();
         $this->webDriver->quit();
     }
