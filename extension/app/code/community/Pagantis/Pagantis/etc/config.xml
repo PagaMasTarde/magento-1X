@@ -3,7 +3,7 @@
 
     <modules>
         <Pagantis_Pagantis>
-            <version>8.3.10</version>
+            <version>1.0.0</version>
         </Pagantis_Pagantis>
     </modules>
 
@@ -131,7 +131,8 @@
                 <allowspecific>0</allowspecific>
                 <payment_action>sale</payment_action>
                 <sort_order>1</sort_order>
-                <pagantis_simulator_is_enabled>1</pagantis_simulator_is_enabled>
+                <clearpay_environment>sandbox</clearpay_environment>
+                <clearpay_api_region>ES</clearpay_api_region>
             </pagantis>
         </payment>
     </default>

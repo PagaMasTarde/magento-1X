@@ -25,6 +25,7 @@
         }
     ],
     "require": {
+        "afterpay-global/afterpay-sdk-php": "dev-downgrade-to-api-v1",
         "pagantis/orders-api-client": "^2.1",
         "pagantis/module-utils": "^2.0"
     },

@@ -6,6 +6,11 @@
 class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Product_View
 {
     /**
+     * JS CDN URL
+     */
+    const PAGANTIS_JS_CDN_URL = 'https://js.sandbox.afterpay.com/afterpay-1.x.js';
+
+    /**
      * @var Mage_Catalog_Model_Product $_product
      */
     protected $_product;
@@ -15,40 +20,22 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
      */
     protected function _construct()
     {
-        $config         = Mage::getStoreConfig('payment/pagantis');
-        $extraConfig    = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
-        $locale         = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
-        $amount         = Mage::app()->getStore()->convertPrice($this->getProduct()->getFinalPrice());
-        $allowedCountries = unserialize($extraConfig['PAGANTIS_ALLOWED_COUNTRIES']);
-        $pagantisPromoted = $this->getProduct()->getData("pagantis_promoted") ? 1 : 0;
-        $pagantisMinAmount = $extraConfig['PAGANTIS_DISPLAY_MIN_AMOUNT'];
-        $pagantisMaxAmount = $extraConfig['PAGANTIS_DISPLAY_MAX_AMOUNT'];
-
-        if (in_array(strtolower($locale), $allowedCountries) &&
-            $amount >= $pagantisMinAmount &&
-            ($amount <= $pagantisMaxAmount || $pagantisMaxAmount == '0') && $config['active'] === '1') {
+        $config = Mage::getStoreConfig('payment/pagantis');
+        $extraConfig = Mage::helper('pagantis/ExtraConfig')->getExtraConfig();
+        $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
+        $localeISOCode = Mage::app()->getLocale()->getLocaleCode();
+        $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
+        $currency = Mage::app()->getStore()->getCurrentCurrencyCode();
+        if (in_array(strtoupper($locale), $allowedCountries) && $config['active'] === '1') {
             $this->assign(
                 array(
-                    'locale'                     => $locale,
-                    'country'                    => $locale,
-                    'amount'                     => $amount,
-                    'promoted'                   => $pagantisPromoted,
-                    'pagantisPromotedMessage'    => $extraConfig['PAGANTIS_PROMOTION_MESSAGE'],
-                    'pagantisIsEnabled'          => $config['active'],
-                    'pagantisPublicKey'          => $config['pagantis_public_key'],
-                    'pagantisSimulatorIsEnabled' => $config['pagantis_simulator_is_enabled'],
-                    'pagantisMinAmount'          => $pagantisMinAmount,
-                    'pagantisMaxAmount'          => $pagantisMaxAmount,
-                    'pagantisCSSSelector'        => $extraConfig['PAGANTIS_SIMULATOR_CSS_POSITION_SELECTOR'],
-                    'pagantisPriceSelector'      => $extraConfig['PAGANTIS_SIMULATOR_CSS_PRICE_SELECTOR'],
-                    'pagantisQuotesStart'        => $extraConfig['PAGANTIS_SIMULATOR_START_INSTALLMENTS'],
-                    'pagantisSimulatorType'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_TYPE'],
-                    'pagantisSimulatorSkin'      => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_SKIN'],
-                    'pagantisSimulatorPosition'  => $extraConfig['PAGANTIS_SIMULATOR_DISPLAY_CSS_POSITION'],
-                    'pagantisQuantitySelector'   => $extraConfig['PAGANTIS_SIMULATOR_CSS_QUANTITY_SELECTOR'],
-                    'pagantisTitle'              => $this->__($extraConfig['PAGANTIS_TITLE']),
-                    'pagantisSimulatorThousandSeparator' => $extraConfig['PAGANTIS_SIMULATOR_THOUSANDS_SEPARATOR'],
-                    'pagantisSimulatorDecimalSeparator' => $extraConfig['PAGANTIS_SIMULATOR_DECIMAL_SEPARATOR']
+                    'SDK_URL' => self::PAGANTIS_JS_CDN_URL,
+                    'ISO_COUNTRY_CODE' => $localeISOCode,
+                    'CURRENCY' => $currency,
+                    'PAGANTIS_MIN_AMOUNT' => $config['pagantis_min_amount'],
+                    'PAGANTIS_MAX_AMOUNT' => $config['pagantis_max_amount'],
+                    'PRICE_SELECTOR' => $extraConfig['PRICE_SELECTOR'],
+                    'PRICE_SELECTOR_CONTAINER' => $extraConfig['PRICE_SELECTOR_CONTAINER']
                 )
             );
 
@@ -56,7 +43,6 @@ class Pagantis_Pagantis_Block_Product_Simulator extends Mage_Catalog_Block_Produ
             $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
             $simulatorTemplate = new $classCoreTemplate;
             $simulator = $simulatorTemplate->setTemplate('pagantis/product/simulator.phtml')->toHtml();
-
             if ($simulator == '') {
                 $this->_allowSymlinks = true;
             }
