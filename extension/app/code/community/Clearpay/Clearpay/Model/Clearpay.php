@@ -18,7 +18,7 @@ class Clearpay_Clearpay_Model_Clearpay extends Mage_Payment_Model_Method_Abstrac
     /**
      * @var bool
      */
-    protected $_isInitializeNeeded      = true;
+    protected $_isInitializeNeeded = true;
 
     /**
      * Get checkout session namespace
@@ -89,9 +89,9 @@ class Clearpay_Clearpay_Model_Clearpay extends Mage_Payment_Model_Method_Abstrac
             return false;
         }
 
-        $extraConfig    = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
-        $minAmount        = $extraConfig['CLEARPAY_DISPLAY_MIN_AMOUNT'];
-        $maxAmount        = $extraConfig['CLEARPAY_DISPLAY_MAX_AMOUNT'];
+        $config = Mage::getStoreConfig('payment/clearpay');
+        $minAmount = $config['clearpay_min_amount'];
+        $maxAmount = $config['clearpay_max_amount'];
 
         if ($quote && floor($quote->getBaseGrandTotal()) < $minAmount) {
             return false;
@@ -101,8 +101,8 @@ class Clearpay_Clearpay_Model_Clearpay extends Mage_Payment_Model_Method_Abstrac
             return false;
         }
 
-        $publicKey = $this->getConfigData('clearpay_public_key');
-        $privateKey = $this->getConfigData('clearpay_public_key');
+        $publicKey = $this->getConfigData('clearpay_merchant_id');
+        $privateKey = $this->getConfigData('clearpay_secret_key');
 
         if (!$publicKey || !$privateKey) {
             return false;

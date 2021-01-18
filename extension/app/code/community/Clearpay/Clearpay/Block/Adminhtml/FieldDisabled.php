@@ -3,7 +3,7 @@
 require_once(__DIR__.'/../../../../../../../lib/Clearpay/autoload.php');
 
 /**
- * Class Clearpay_Clearpay_Adminhtml_Block_FieldDisabled
+ * Class Clearpay_Clearpay_Block_Adminhtml_FieldDisabled
  */
 class Clearpay_Clearpay_Block_Adminhtml_FieldDisabled extends Mage_Adminhtml_Block_System_Config_Form_Field
 {

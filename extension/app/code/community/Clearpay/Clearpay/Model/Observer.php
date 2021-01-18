@@ -52,15 +52,16 @@ class Clearpay_Clearpay_Model_Observer
     {
         $method = $observer->getMethodInstance();
         if ($method->getCode() == 'clearpay') {
-            $extraConfig      = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
-            $locale           = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
-            $allowedCountries = unserialize($extraConfig['CLEARPAY_ALLOWED_COUNTRIES']);
-            $minAmount        = $extraConfig['CLEARPAY_DISPLAY_MIN_AMOUNT'];
-            $maxAmount        = $extraConfig['CLEARPAY_DISPLAY_MAX_AMOUNT'];
-            $checkoutSession  = Mage::getModel('checkout/session');
+            $config = Mage::getStoreConfig('payment/clearpay');
+            $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
+            $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
+            $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
+            $minAmount = $config['clearpay_min_amount'];
+            $maxAmount = $config['clearpay_max_amount'];
+            $checkoutSession = Mage::getModel('checkout/session');
             $quote = $checkoutSession->getQuote();
             $amount = $quote->getGrandTotal();
-            if (!in_array(strtolower($locale), $allowedCountries) ||
+            if (!in_array(strtoupper($locale), $allowedCountries) ||
                 (int)$amount < (int)$minAmount ||
                 ((int)$amount > (int)$maxAmount && (int)$maxAmount !== 0)) {
                 $result = $observer->getResult();

@@ -10,12 +10,12 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
     /**
      * DEFAULT MIN AMOUNT
      */
-    const DEF_MIN_AMOUNT = 0.00;
+    const DEF_MIN_AMOUNT = 1.00;
 
     /**
      * DEFAULT MAX AMOUNT
      */
-    const DEF_MAX_AMOUNT = 0.00;
+    const DEF_MAX_AMOUNT = 1.00;
 
     /**
      * @var mixed|null $merchantConfig
@@ -83,7 +83,7 @@ class Clearpay_Clearpay_Helper_MerchantConfiguration extends Mage_Core_Helper_Ab
         }
 
         // Update the allowed countries each time the config is required
-        if (isset($configurationResponse[0]->activeCountries)) {
+        if (is_array($configurationResponse) && isset($configurationResponse[0]->activeCountries)) {
             Mage::helper('clearpay/ExtraConfig')->setExtraConfig(
                 'ALLOWED_COUNTRIES',
                 json_encode($configurationResponse[0]->activeCountries)

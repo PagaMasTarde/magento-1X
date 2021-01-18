@@ -320,7 +320,7 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
             ;
 
             $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
-            $allowedCountries = unserialize($extraConfig['CLEARPAY_ALLOWED_COUNTRIES']);
+            $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
             $langCountry = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
             $shippingCountry = $mgShippingAddress['country_id'];
             $billingCountry = $mgBillingAddress['country_id'];

@@ -6,6 +6,11 @@
 class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
 {
     /**
+     * JS CDN URL
+     */
+    const CLEARPAY_JS_CDN_URL = 'https://js.sandbox.afterpay.com/afterpay-1.x.js';
+
+    /**
      * Form constructor
      */
     protected function _construct()
@@ -14,10 +19,11 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
         $config = Mage::getStoreConfig('payment/clearpay');
         $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
         $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
+        $localeISOCode = Mage::app()->getLocale()->getLocaleCode();
         $checkoutSession = Mage::getModel('checkout/session');
         $quote = $checkoutSession->getQuote();
         $amount = $quote->getGrandTotal();
-        $allowedCountries = unserialize($extraConfig['CLEARPAY_ALLOWED_COUNTRIES']);
+        $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
         $promotedAmount =  0;
         $cart = Mage::getModel('checkout/cart')->getQuote();
         foreach ($cart->getAllVisibleItems() as $item) {
@@ -29,15 +35,42 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
             }
         }
 
-        if (in_array(strtolower($locale), $allowedCountries)) {
+        if (in_array(strtoupper($locale), $allowedCountries)) {
             $title = $this->__($extraConfig['CLEARPAY_TITLE']);
             $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+            $localConfigs = array(
+                'ES' => array(
+                  'currency' => 'EUR',
+                  'symbol' => '€'
+                ),
+                'GB' => array(
+                  'currency' => 'GBP',
+                  'symbol' => '£'
+                ),
+                'US' => array(
+                  'currency' => 'USD',
+                  'symbol' => '$'
+                ),
+            );
+            $currency = 'EUR';
+            $currencySymbol = "€";
+            if (isset($localConfigs[$config['clearpay_api_region']])) {
+                $currency = $localConfigs[$config['clearpay_api_region']]['currency'];
+                $currencySymbol = $localConfigs[$config['clearpay_api_region']]['symbol'];
+            }
+
+            $amountWithCurrency = $this->parseAmount($amount/4) . $currencySymbol;
+            if ($currency === 'GBP') {
+                $amountWithCurrency = $currencySymbol. $this->parseAmount($amount/4);
+            }
+            $checkoutText = $this->__('Or 4 interest-free payments of') . ' ' . $amountWithCurrency . ' ';
+            $checkoutText .= $this->__('with');
 
             $logoHtml = '';
             if ($config['active']) {
                 $logoTemplate = new $classCoreTemplate;
                 $logoTemplate->assign(array(
-                    'locale'             => $locale,
+                    'TITLE' => (string) $checkoutText,
                 ));
                 $logoHtml = $logoTemplate->setTemplate('clearpay/checkout/logo.phtml')->toHtml();
 
@@ -49,25 +82,18 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
 
             $template = $this->setTemplate('clearpay/checkout/clearpay.phtml');
             $template->assign(array(
-                'publicKey'          => $config['clearpay_public_key'],
-                'amount'             => $amount,
-                'promotedAmount'     => $promotedAmount,
-                'locale'             => $locale,
-                'country'            => $locale,
-                'clearpayIsEnabled'  => $config['active'],
-                'simulatorIsEnabled' => $config['clearpay_simulator_is_enabled'],
-                'thousandSeparator'  => $extraConfig['CLEARPAY_SIMULATOR_THOUSANDS_SEPARATOR'],
-                'decimalSeparator'   => $extraConfig['CLEARPAY_SIMULATOR_DECIMAL_SEPARATOR'],
-                'minAmount'          => $extraConfig['CLEARPAY_DISPLAY_MIN_AMOUNT'],
-                'maxAmount'          => $extraConfig['CLEARPAY_DISPLAY_MAX_AMOUNT'],
-                'clearpayCSSSelector'        => $extraConfig['CLEARPAY_SIMULATOR_CSS_POSITION_SELECTOR_CHECKOUT'],
-                'clearpayPriceSelector'      => $extraConfig['CLEARPAY_SIMULATOR_CSS_PRICE_SELECTOR_CHECKOUT'],
-                'clearpayQuotesStart'        => $extraConfig['CLEARPAY_SIMULATOR_START_INSTALLMENTS'],
-                'clearpaySimulatorType'      => $extraConfig['CLEARPAY_SIMULATOR_DISPLAY_TYPE_CHECKOUT'],
-                'clearpaySimulatorSkin'      => $extraConfig['CLEARPAY_SIMULATOR_DISPLAY_SKIN'],
-                'clearpaySimulatorPosition'  => $extraConfig['CLEARPAY_SIMULATOR_DISPLAY_CSS_POSITION'],
-                'clearpayQuantitySelector'   => $extraConfig['CLEARPAY_SIMULATOR_CSS_QUANTITY_SELECTOR'],
-                'clearpayTitle'              => $this->__($extraConfig['CLEARPAY_TITLE'])
+                'SDK_URL' => self::CLEARPAY_JS_CDN_URL,
+                'MOREINFO_HEADER' => $this->__('Instant approval decision - 4 interest-free payments of')
+                    . ' ' . $amountWithCurrency,
+                'MOREINFO_ONE' => $this->__('You will be redirected to Clearpay website to fill out your payment information.')
+                    . ' ' .$this->__('You will be redirected to our site to complete your order. Please note: ')
+                    . ' ' . $this->__('Clearpay can only be used as a payment method for orders with a shipping')
+                    . ' ' . $this->__('and billing address within the UK.'),
+                'TOTAL_AMOUNT' => $this->parseAmount($amount),
+                'ISO_COUNTRY_CODE' => $localeISOCode,
+                'CURRENCY' => $currency,
+                'TERMS_AND_CONDITIONS' => $this->__('Terms and conditions'),
+                'TERMS_AND_CONDITIONS_LINK' => $this->__('https://www.clearpay.co.uk/en-GB/terms-of-service')
             ));
 
             if ($template->toHtml() == '') {
@@ -76,5 +102,19 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
             $template->setMethodTitle($title)->setMethodLabelAfterHtml($logoHtml);
         }
         parent::_construct();
+    }
+
+    /**
+     * @param null $amount
+     * @return string
+     */
+    public function parseAmount($amount = null)
+    {
+        return number_format(
+            round($amount, 2, PHP_ROUND_HALF_UP),
+            2,
+            '.',
+            ''
+        );
     }
 }
