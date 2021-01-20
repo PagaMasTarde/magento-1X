@@ -1,5 +1,4 @@
 <?php
-use Clearpay\ModuleUtils\Model\Log\LogEntry;
 
 /**
  * Class AbstractController
@@ -75,14 +74,18 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Configure redirection
      *
-     * @param bool $error
-     *
-     * @return Mage_Core_Controller_Varien_Action
+     * @param bool   $error
+     * @param null   $url
+     * @param string $error_message
+     * @return AbstractController
      */
-    public function redirect($error = true)
+    public function redirect($error = true, $url = null, $error_message = '')
     {
+        if (!is_null($url)) {
+            return $this->_redirectUrl($url);
+        }
         if ($error) {
-            return $this->_redirectUrl(Mage::getUrl($this->config['urlKO']));
+            return $this->_redirectUrl(Mage::getUrl($this->config['urlKO']) . "?error_message=" . $error_message);
         }
         return $this->_redirectUrl(Mage::getUrl($this->config['urlOK']));
     }
@@ -118,19 +121,12 @@ abstract class AbstractController extends Mage_Core_Controller_Front_Action
     /**
      * Save log in SQL database
      *
-     * @param $exception
+     * @param string $message
      */
-    public function saveLog(Exception $exception)
+    public function saveLog($message)
     {
         try {
-            $logEntry= new LogEntry();
-            $logEntryJson = $logEntry->error($exception)->toJson();
-
-            $model = Mage::getModel('clearpay/log');
-            $model->setData(array(
-                'log' => $logEntryJson,
-            ));
-            $model->save();
+            Mage::log($message, null, 'clearpay.log', true);
         } catch (Exception $exception) {
             // Do nothing
         }

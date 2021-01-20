@@ -47,7 +47,7 @@ $installer->run("INSERT INTO `$this->tableName`
     (`config`, `value`)
     VALUES
     ('URL_OK', 'checkout/onepage/success/'),
-    ('URL_KO', 'checkout/cart/'),
+    ('URL_KO', 'checkout/onepage/'),
     ('ALLOWED_COUNTRIES', '[\"ES\",\"FR\",\"IT\",\"GB\"]'),
     ('SIMULATOR_IS_ENABLED', true),
     ('PRICE_SELECTOR', '[id^=\'product-price\']'),

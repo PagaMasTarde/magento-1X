@@ -3,19 +3,6 @@
 require_once(__DIR__.'/../../../../../../lib/Clearpay/autoload.php');
 require_once(__DIR__.'/AbstractController.php');
 
-use Clearpay\OrdersApiClient\Client as ClearpayClient;
-use Clearpay\OrdersApiClient\Model\Order as ClearpayModelOrder;
-use Clearpay\ModuleUtils\Exception\AmountMismatchException;
-use Clearpay\ModuleUtils\Exception\ConcurrencyException;
-use Clearpay\ModuleUtils\Exception\MerchantOrderNotFoundException;
-use Clearpay\ModuleUtils\Exception\NoIdentificationException;
-use Clearpay\ModuleUtils\Exception\OrderNotFoundException;
-use Clearpay\ModuleUtils\Exception\QuoteNotFoundException;
-use Clearpay\ModuleUtils\Exception\UnknownException;
-use Clearpay\ModuleUtils\Exception\WrongStatusException;
-use Clearpay\ModuleUtils\Model\Response\JsonSuccessResponse;
-use Clearpay\ModuleUtils\Model\Response\JsonExceptionResponse;
-
 /**
  * Class Clearpay_Clearpay_NotifyController
  *
@@ -87,7 +74,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $this->prepareVariables();
             $this->getMerchantOrder();
             $this->restoreCart();
-            return $this->redirect(true);
+            return $this->redirect(true, null, $this->getRequest()->getParam('error_message'));
         } catch (Exception $exception) {
             return $this->redirect(true);
         }
@@ -121,29 +108,16 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $this->validateAmount();
             $this->processMerchantOrder();
         } catch (Exception $exception) {
-            $jsonResponse = new JsonExceptionResponse();
-            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-            $jsonResponse->setClearpayOrderId($this->clearpayOrderId);
-            $jsonResponse->setException($exception);
-            $response = $jsonResponse->toJson();
-            $this->cancelProcess($exception);
+            $this->cancelProcess($exception->getMessage());
         }
 
         try {
             if (!isset($response)) {
                 $this->confirmClearpayOrder();
-                $jsonResponse = new JsonSuccessResponse();
-                $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-                $jsonResponse->setClearpayOrderId($this->clearpayOrderId);
             }
         } catch (Exception $exception) {
             $this->rollbackMerchantOrder();
-            $jsonResponse = new JsonExceptionResponse();
-            $jsonResponse->setMerchantOrderId($this->merchantOrderId);
-            $jsonResponse->setClearpayOrderId($this->clearpayOrderId);
-            $jsonResponse->setException($exception);
-            $jsonResponse->toJson();
-            $this->cancelProcess($exception);
+            $this->cancelProcess($exception->getMessage());
         }
 
         try {
@@ -152,12 +126,8 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             // Do nothing
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            return $jsonResponse->printResponse();
-        } else {
-            $error = (!isset($response)) ? false : true;
-            return $this->redirect($error);
-        }
+        $error = (!isset($response)) ? false : true;
+        return $this->redirect($error);
     }
 
     /**
@@ -170,11 +140,11 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
         $this->token = Mage::app()->getRequest()->getParam('token');
         if ($this->merchantOrderId == '') {
-            throw new QuoteNotFoundException();
+            throw new \Exception('No quote found');
         }
 
         if ($this->token == '') {
-            throw new UnknownException('Unable to find token parameter on return url');
+            throw new \Exception('Unable to find token parameter on return url');
         }
 
         $this->origin = ($_SERVER['REQUEST_METHOD'] == 'POST') ? 'Notification' : 'Order';
@@ -183,13 +153,13 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $config = Mage::getStoreConfig('payment/clearpay');
             $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
             $this->config = array(
-                'urlOK' => $extraConfig['CLEARPAY_URL_OK'],
-                'urlKO' => $extraConfig['CLEARPAY_URL_KO'],
-                'publicKey' => $config['clearpay_public_key'],
-                'privateKey' => $config['clearpay_private_key'],
+                'urlOK' => $extraConfig['URL_OK'],
+                'urlKO' => $extraConfig['URL_KO'],
+                'publicKey' => $config['clearpay_merchant_id'],
+                'privateKey' => $config['clearpay_secret_key'],
             );
         } catch (Exception $exception) {
-            throw new UnknownException('Unable to load module configuration');
+            throw new \Exception('Unable to load module configuration');
         }
     }
 
@@ -216,7 +186,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             /** @var Mage_Sales_Model_Order $order */
             $this->merchantOrder = Mage::getModel('sales/order')->loadByIncrementId($this->merchantOrderId);
         } catch (Exception $exception) {
-            throw new MerchantOrderNotFoundException();
+            throw new \Exception('Merchant order not found');
         }
     }
 
@@ -233,10 +203,14 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
 
             $this->clearpayOrderId = $model->getClearpayOrderId();
             if (is_null($this->clearpayOrderId)) {
-                throw new NoIdentificationException();
+                throw new \Exception(
+                    'Clearpay Order not found on database table clearpay_order with token'. $this->token
+                );
             }
         } catch (Exception $exception) {
-            throw new NoIdentificationException();
+            throw new \Exception(
+                'Clearpay Order not found on database table clearpay_order with token'. $this->token
+            );
         }
     }
 
@@ -250,7 +224,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         $this->orderClient = new ClearpayClient($this->config['publicKey'], $this->config['privateKey']);
         $this->clearpayOrder = $this->orderClient->getOrder($this->clearpayOrderId);
         if (!($this->clearpayOrder instanceof ClearpayModelOrder)) {
-            throw new OrderNotFoundException();
+            throw new \Exception('Can`t retrieve clearpay order '. $this->clearpayOrderId);
         }
     }
 
@@ -276,7 +250,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             if ($this->clearpayOrder instanceof ClearpayModelOrder) {
                 $status = $this->clearpayOrder->getStatus();
             }
-            throw new WrongStatusException($status);
+            throw new \Exception('Wrong status ' . $status);
         }
     }
 
@@ -291,7 +265,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         $statusHistory = $this->merchantOrder->getAllStatusHistory();
         if (!(is_array($statusHistory) &&  is_object($statusHistory[0]) &&
             $statusHistory[0]->getStatus() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT)) {
-            throw new WrongStatusException('magento order status: '. $statusHistory[0]->getStatus());
+            throw new \Exception('Wrong status on magento order status: '. $statusHistory[0]->getStatus());
         }
 
         // Order has been processed at least once in the past.
@@ -304,7 +278,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
                 )
             )
             ) {
-                throw new WrongStatusException('magento order history status: '. $oStatus->getStatus());
+                throw new \Exception('Wrong status on magento order history status: '. $oStatus->getStatus());
             }
         }
 
@@ -313,7 +287,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         if ($status == Mage_Sales_Model_Order::STATE_PROCESSING ||
             $this->merchantOrder->getPayment()->getMethodInstance()->getCode() != self::CLEARPAY_CODE
         ) {
-            throw new WrongStatusException($status);
+            throw new \Exception('Wrong status: ' . $status);
         }
     }
 
@@ -327,7 +301,9 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         $clearpayAmount = $this->clearpayOrder->getShoppingCart()->getTotalAmount();
         $merchantAmount = (string) floor(100 * $this->merchantOrder->getGrandTotal());
         if ($clearpayAmount != $merchantAmount) {
-            throw new AmountMismatchException($clearpayAmount, $merchantAmount);
+            throw new \Exception(
+                'Mismatch amouunt Clearpay: ' . $clearpayAmount . ' Magento: ' . $merchantAmount
+            );
         }
     }
 
@@ -370,7 +346,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
                 // Do nothing
             }
         } catch (Exception $exception) {
-            throw new UnknownException($exception->getMessage());
+            throw new \Exception($exception->getMessage());
         }
     }
 
@@ -381,23 +357,23 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
      */
     private function confirmClearpayOrder()
     {
-        try {
-            $this->orderClient->confirmOrder($this->clearpayOrderId);
-        } catch (Exception $exception) {
-            $this->clearpayOrder = $this->orderClient->getOrder($this->clearpayOrderId);
-            if ($this->clearpayOrder->getStatus() !== \Clearpay\OrdersApiClient\Model\Order::STATUS_CONFIRMED) {
-                $this->saveLog($exception);
-                throw new UnknownException($exception->getMessage());
-            } else {
-                $logEntry= new \Clearpay\ModuleUtils\Model\Log\LogEntry();
-                $logEntry->info(
-                    'Concurrency issue: Order_id '.$this->clearpayOrderId.' was confirmed by other process'
-                );
-                $model = Mage::getModel('clearpay/log');
-                $model->setData(array('log' => $logEntry->toJson()));
-                $model->save();
-            }
-        }
+//        try {
+//            $this->orderClient->confirmOrder($this->clearpayOrderId);
+//        } catch (Exception $exception) {
+//            $this->clearpayOrder = $this->orderClient->getOrder($this->clearpayOrderId);
+//            if ($this->clearpayOrder->getStatus() !== \Clearpay\OrdersApiClient\Model\Order::STATUS_CONFIRMED) {
+//                $this->saveLog($exception);
+//                throw new \Exception($exception->getMessage());
+//            } else {
+//                $logEntry= new \Clearpay\ModuleUtils\Model\Log\LogEntry();
+//                $logEntry->info(
+//                    'Concurrency issue: Order_id '.$this->clearpayOrderId.' was confirmed by other process'
+//                );
+//                $model = Mage::getModel('clearpay/log');
+//                $model->setData(array('log' => $logEntry->toJson()));
+//                $model->save();
+//            }
+//        }
     }
 
     /**
@@ -472,7 +448,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $conn->query($sql);
         } catch (Exception $e) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                throw new ConcurrencyException();
+                throw new \Exception('Concurrency Exception');
             } else {
                 $dbObject = Mage::getSingleton('core/resource')->getConnection('core_write');
                 $tableName = Mage::getSingleton('core/resource')->getTableName(self::CONCURRENCY_TABLENAME);
@@ -525,7 +501,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             }
             $conn->query($sql);
         } catch (Exception $e) {
-            throw new ConcurrencyException();
+            throw new \Exception('Concurrency exception');
         }
         return true;
     }

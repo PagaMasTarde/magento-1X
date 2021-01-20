@@ -189,11 +189,11 @@ abstract class AbstractConfigure16 extends Magento16Test
     {
         //Fill configuration for Clearpay
         $this->findById('payment_clearpay_active1')->click();
-        $this->findById('payment_clearpay_clearpay_public_key')
+        $this->findById('payment_clearpay_clearpay_merchant_id')
             ->clear()
             ->sendKeys($this->configuration['publicKey'])
         ;
-        $this->findById('payment_clearpay_clearpay_private_key')
+        $this->findById('payment_clearpay_clearpay_secret_key')
             ->clear()
             ->sendKeys($this->configuration['secretKey'])
         ;        //Confirm and validate

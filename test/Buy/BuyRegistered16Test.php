@@ -40,8 +40,8 @@ class BuyRegistered16Test extends AbstractBuy16
         "CLEARPAY_FORM_DISPLAY_TYPE",
         "CLEARPAY_DISPLAY_MIN_AMOUNT",
         "CLEARPAY_DISPLAY_MAX_AMOUNT",
-        "CLEARPAY_URL_OK",
-        "CLEARPAY_URL_KO",
+        "URL_OK",
+        "URL_KO",
     );
 
     /**

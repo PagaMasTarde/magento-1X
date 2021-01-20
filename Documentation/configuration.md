@@ -49,8 +49,8 @@ You have to ways to edit your settings:
 | CLEARPAY_FORM_DISPLAY_TYPE               | Allows you to select the way the Clearpay payment form is displayed site
 | CLEARPAY_DISPLAY_MIN_AMOUNT              | Minimum amount to use the module and show the payment method in the checkout page and in product page.
 | CLEARPAY_DISPLAY_MAX_AMOUNT              | Maximum amount to use the module and show the payment method in the checkout page and in product page.
-| CLEARPAY_URL_OK                          | Location where user will be redirected after a successful payment. This string will be concatenated to the base url to build the full url
-| CLEARPAY_URL_KO                          | Location where user will be redirected after a wrong payment. This string will be concatenated to the base url to build the full url  
+| URL_OK                          | Location where user will be redirected after a successful payment. This string will be concatenated to the base url to build the full url
+| URL_KO                          | Location where user will be redirected after a wrong payment. This string will be concatenated to the base url to build the full url  
 | CLEARPAY_ALLOWED_COUNTRIES               | Array of country codes where Clearpay will be used as a payment method. 
 
 

@@ -14,6 +14,7 @@ app/design/frontend/base/default/template/clearpay/payment/iframe.phtml         
 app/design/frontend/base/default/template/clearpay/product/simulator.phtml            app/design/frontend/base/default/template/clearpay/product/simulator.phtml
 app/design/frontend/base/default/template/clearpay/checkout/logo.phtml            app/design/frontend/base/default/template/clearpay/checkout/logo.phtml
 app/design/frontend/base/default/template/clearpay/checkout/clearpay.phtml            app/design/frontend/base/default/template/clearpay/checkout/clearpay.phtml
+app/design/frontend/base/default/template/clearpay/checkout/error.phtml            app/design/frontend/base/default/template/clearpay/checkout/error.phtml
 app/design/adminhtml/default/default/layout/clearpay.xml            app/design/adminhtml/default/default/layout/clearpay.xml
 # lib
 lib/Clearpay/            lib/Clearpay/

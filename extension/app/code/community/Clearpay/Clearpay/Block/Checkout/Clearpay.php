@@ -15,6 +15,33 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
      */
     protected function _construct()
     {
+        $errorMessage = $this->getRequest()->getParam('error_message');
+        if (!empty($errorMessage)) {
+            $errorHtml = '';
+            $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+            $errorTemplate = new $classCoreTemplate;
+            $errorTemplate->assign(array(
+                'ERROR_MESSAGE' => (string) $errorMessage,
+                'MODAL_TITLE' => $this->__('An error has occurred'),
+                'ERROR_TITLE' => $this->__(
+                    'We are sorry to inform you that an error has occurred when trying to pay with Clearpay:'
+                ),
+                'MORE_INFO_MESSAGE' => $this->__(
+                    'For more information, please contact the Clearpay Customer Service Team:'
+                ),
+                'MORE_INFO_LINK' => $this->__(
+                    'https://developers.clearpay.co.uk/clearpay-online/docs/customer-support'
+                ),
+            ));
+            $errorHtml = $errorTemplate->setTemplate('clearpay/checkout/error.phtml')->toHtml();
+
+            if ($errorHtml == '') {
+                $errorTemplate->_allowSymlinks = true;
+                $errorHtml = $errorTemplate->setTemplate('clearpay/checkout/error.phtml')->toHtml();
+            }
+
+            echo($errorHtml);
+        }
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $config = Mage::getStoreConfig('payment/clearpay');
         $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
