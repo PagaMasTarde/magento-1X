@@ -21,15 +21,18 @@ class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Produ
     protected function _construct()
     {
         $config = Mage::getStoreConfig('payment/clearpay');
+
         $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
         $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
         $localeISOCode = Mage::app()->getLocale()->getLocaleCode();
         $allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
         $currency = Mage::app()->getStore()->getCurrentCurrencyCode();
+        $categoryRestriction = $this->isProductRestricted($config['clearpay_exclude_category']);
         if (in_array(strtoupper($locale), $allowedCountries) &&
             $config['active'] === '1' &&
             !empty($config['clearpay_merchant_id']) &&
-            !empty($config['clearpay_secret_key'])
+            !empty($config['clearpay_secret_key']) &&
+            !$categoryRestriction
         ) {
             $this->assign(
                 array(
@@ -66,5 +69,20 @@ class Clearpay_Clearpay_Block_Product_Simulator extends Mage_Catalog_Block_Produ
         }
 
         return $this->_product;
+    }
+
+    /**
+     * @param string $clearpayRestrictedCategories
+     * @return bool
+     */
+    private function isProductRestricted($clearpayRestrictedCategories = '')
+    {
+        $product = $this->getProduct();
+        $productCategories = $product->getCategoryIds();
+        if (empty($clearpayRestrictedCategories)) {
+            return false;
+        }
+        $clearpayRestrictedCategories = explode(",", $clearpayRestrictedCategories);
+        return (bool) count(array_intersect($productCategories, $clearpayRestrictedCategories));
     }
 }

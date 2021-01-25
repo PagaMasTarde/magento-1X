@@ -61,9 +61,26 @@ class Clearpay_Clearpay_Model_Observer
             $checkoutSession = Mage::getModel('checkout/session');
             $quote = $checkoutSession->getQuote();
             $amount = $quote->getGrandTotal();
+
+
+
+            $categoryRestriction = true;
+            $productCategories = array();
+            $cart = Mage::getModel('checkout/cart')->getQuote();
+            foreach ($cart->getAllVisibleItems() as $item) {
+                $magentoProduct = $item->getProduct();
+                $productCategories = array_merge($productCategories, $magentoProduct->getCategoryIds());
+            }
+            $clearpayRestrictedCategories = $config['clearpay_exclude_category'];
+            if (!empty($clearpayRestrictedCategories)) {
+                $clearpayRestrictedCategories = explode(",", $clearpayRestrictedCategories);
+                $categoryRestriction = (bool) count(array_intersect($productCategories, $clearpayRestrictedCategories));
+            }
+
             if (!in_array(strtoupper($locale), $allowedCountries) ||
                 (int)$amount < (int)$minAmount ||
-                ((int)$amount > (int)$maxAmount && (int)$maxAmount !== 0)) {
+                ((int)$amount > (int)$maxAmount && (int)$maxAmount !== 0) ||
+                $categoryRestriction) {
                 $result = $observer->getResult();
                 $result->isAvailable = false;
             }
