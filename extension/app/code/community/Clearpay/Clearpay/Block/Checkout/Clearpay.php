@@ -17,30 +17,40 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
     {
         $errorMessage = $this->getRequest()->getParam('error_message');
         if (!empty($errorMessage)) {
-            $errorHtml = '';
-            $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
-            $errorTemplate = new $classCoreTemplate;
-            $errorTemplate->assign(array(
-                'ERROR_MESSAGE' => (string) $errorMessage,
-                'MODAL_TITLE' => $this->__('An error has occurred'),
+            $variables = array(
+                'MODAL_TITLE' => $this->__('AN ERROR HAS OCCURRED'),
                 'ERROR_TITLE' => $this->__(
                     'We are sorry to inform you that an error has occurred when trying to pay with Clearpay:'
                 ),
-                'MORE_INFO_MESSAGE' => $this->__(
-                    'For more information, please contact the Clearpay Customer Service Team:'
+                'ERROR_MESSAGE' => (string) $errorMessage,
+            );
+            $this->loadTemplate($variables);
+        }
+        $mismatchError = $this->getRequest()->getParam('clearpay_mismatch');
+        if ($mismatchError === 'true') {
+            $variables = array(
+                'MODAL_TITLE' => $this->__('PAYMENT ERROR'),
+                'ERROR_TITLE' => $this->__(
+                    'We are sorry to inform you that an error occurred while processing your payment.'
                 ),
-                'MORE_INFO_LINK' => $this->__(
-                    'https://developers.clearpay.co.uk/clearpay-online/docs/customer-support'
+                'ERROR_MESSAGE' => $this->__(
+                    'Thanks for confirming your payment, however as your cart has changed we need a new confirmation.
+                     Please proceed to Clearpay and retry again in a few minutes.'
                 ),
-            ));
-            $errorHtml = $errorTemplate->setTemplate('clearpay/checkout/error.phtml')->toHtml();
-
-            if ($errorHtml == '') {
-                $errorTemplate->_allowSymlinks = true;
-                $errorHtml = $errorTemplate->setTemplate('clearpay/checkout/error.phtml')->toHtml();
-            }
-
-            echo($errorHtml);
+            );
+            $this->loadTemplate($variables);
+        }
+        $paymentDeclined = $this->getRequest()->getParam('clearpay_declined');
+        if ($paymentDeclined === 'true') {
+            $variables = array(
+                'MODAL_TITLE' => $this->__('PAYMENT DECLINED'),
+                'ERROR_TITLE' => $this->__(
+                    'We are sorry to inform you that your payment has been declined by Clearpay.'
+                ),
+                'ERROR_MESSAGE' => $this->__('For reference, the Order ID for this transaction is:')
+                    . $this->getRequest()->getParam('clearpay_reference_id'),
+            );
+            $this->loadTemplate($variables);
         }
         /** @var Mage_Checkout_Model_Session $checkoutSession */
         $config = Mage::getStoreConfig('payment/clearpay');
@@ -63,7 +73,6 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
         }
 
         if (in_array(strtoupper($locale), $allowedCountries)) {
-            $title = $this->__($extraConfig['CLEARPAY_TITLE']);
             $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
             $localConfigs = array(
                 'ES' => array(
@@ -126,7 +135,7 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
             if ($template->toHtml() == '') {
                 $this->_allowSymlinks = true;
             }
-            $template->setMethodTitle($title)->setMethodLabelAfterHtml($logoHtml);
+            $template->setMethodTitle('')->setMethodLabelAfterHtml($logoHtml);
         }
         parent::_construct();
     }
@@ -143,5 +152,28 @@ class Clearpay_Clearpay_Block_Checkout_Clearpay extends Mage_Payment_Block_Form
             '.',
             ''
         );
+    }
+
+    /**
+     * @param array $variables
+     */
+    public function loadTemplate($variables = array())
+    {
+        $variables['MORE_INFO_MESSAGE'] = $this->__(
+            'For more information, please contact the Clearpay Customer Service Team:'
+        );
+        $variables['MORE_INFO_LINK'] = $this->__(
+            'https://developers.clearpay.co.uk/clearpay-online/docs/customer-support'
+        );
+        $classCoreTemplate = Mage::getConfig()->getBlockClassName('core/template');
+        $errorTemplate = new $classCoreTemplate;
+        $errorTemplate->assign($variables);
+        $html = $errorTemplate->setTemplate('clearpay/checkout/error.phtml')->toHtml();
+
+        if ($html == '') {
+            $errorTemplate->_allowSymlinks = true;
+            $html = $errorTemplate->setTemplate('clearpay/checkout/error.phtml')->toHtml();
+        }
+        echo($html);
     }
 }

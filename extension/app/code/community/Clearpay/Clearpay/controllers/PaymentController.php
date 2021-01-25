@@ -312,7 +312,8 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
                         $this->insertOrderControl(
                             $this->magentoOrderId,
                             $createCheckoutRequest->getResponse()->getParsedBody()->token,
-                            $this->urlToken
+                            $this->urlToken,
+                            $billingCountryId
                         );
                     } catch (\Exception $exception) {
                         $this->saveLog($exception->getMessage());
@@ -341,16 +342,18 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
      * @param string $magentoOrderId
      * @param string $clearpayOrderId
      * @param string $token
+     * @param string $countryId
      *
      * @throws Exception
      */
-    private function insertOrderControl($magentoOrderId, $clearpayOrderId, $token)
+    private function insertOrderControl($magentoOrderId, $clearpayOrderId, $token, $countryId)
     {
         $model = Mage::getModel('clearpay/order');
         $model->setData(array(
             'clearpay_order_id' => $clearpayOrderId,
             'mg_order_id' => $magentoOrderId,
             'token' => $token,
+            'country_code' => $countryId,
         ));
         $model->save();
     }

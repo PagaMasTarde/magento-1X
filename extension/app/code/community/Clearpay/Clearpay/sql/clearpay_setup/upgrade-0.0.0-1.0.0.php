@@ -22,7 +22,9 @@ $installer->run('DROP TABLE IF EXISTS ' . $this->tableName);
 $sql = 'CREATE TABLE `' . $this->tableName . '` (
   `mg_order_id` varchar(50) NOT NULL,
   `token` varchar(32) NOT NULL,
-  `clearpay_order_id` varchar(50), 
+  `clearpay_order_id` varchar(60),
+  `country_code` varchar(2) NULL,
+  `completed` boolean NOT NULL DEFAULT 0,
   PRIMARY KEY (`mg_order_id`, `token`)
   )';
 $resource = Mage::getSingleton('core/resource');

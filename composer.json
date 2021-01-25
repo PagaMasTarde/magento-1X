@@ -25,13 +25,11 @@
         }
     ],
     "require": {
-        "afterpay-global/afterpay-sdk-php": "dev-downgrade-to-api-v1",
-        "pagantis/orders-api-client": "^2.1",
-        "pagantis/module-utils": "^2.0"
+        "afterpay-global/afterpay-sdk-php": "dev-downgrade-to-api-v1"
     },
     "require-dev": {
         "ext-json": "*",
-        "pagantis/selenium-form-utils": "^3.0",
+        "pagantis/selenium-form-utils":"dev-clearpay",
         "magento/core": "1.9.3.9"
     },
     "autoload-dev": {
