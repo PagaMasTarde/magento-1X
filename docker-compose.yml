@@ -56,9 +56,9 @@ services:
       - MYSQL_DATABASE=magento
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
-      - MAGENTO_LOCALE=es_ES
+      - MAGENTO_LOCALE=en_GB
       - MAGENTO_TIMEZONE=Europe/Madrid
-      - MAGENTO_DEFAULT_CURRENCY=EUR
+      - MAGENTO_DEFAULT_CURRENCY=GBP
       - MAGENTO_URL=magento16-test.docker:8017
       - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.6.1.0.tgz
       - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.6

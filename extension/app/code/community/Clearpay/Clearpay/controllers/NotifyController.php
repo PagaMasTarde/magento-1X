@@ -88,12 +88,14 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
     public function cancelAction()
     {
         try {
-            $this->prepareVariables();
+            $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
+            $this->config = array('urlKO' => $extraConfig['URL_KO']);
+            $this->merchantOrderId = Mage::app()->getRequest()->getParam('order');
             $this->getMerchantOrder();
             $this->restoreCart();
             return $this->redirect(true, null, $this->getRequest()->getParam('error_message'));
         } catch (Exception $exception) {
-            $this->$this->saveLog($exception->getMessage());
+            $this->saveLog($exception->getMessage());
             return $this->redirect(true);
         }
     }
@@ -183,7 +185,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
                 $this->clearpayMerchantAccount->setCountryCode($countryCode);
             }
         } catch (Exception $exception) {
-            throw new \Exception('Unable to load module configuration');
+            throw new \Exception($exception->getMessage());
         }
     }
 
@@ -249,7 +251,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $countryCode = $model->getCountryCode();
             if (is_null($countryCode)) {
                 throw new \Exception(
-                    'Clearpay country code not found on database table clearpay_order with token' . $this->token
+                    'Clearpay country code not found on database table clearpay_order with token:' . $this->token
                 );
             }
             return $countryCode;

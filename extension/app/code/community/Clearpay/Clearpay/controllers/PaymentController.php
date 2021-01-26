@@ -92,6 +92,11 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
     protected $urlToken;
 
     /**
+     * @var array $allowedCountries
+     */
+    protected $allowedCountries;
+
+    /**
      * Find and init variables needed to process payment
      */
     public function prepareVariables()
@@ -141,6 +146,8 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
         $this->publicKey = $moduleConfig['clearpay_merchant_id'];
         $this->privateKey = $moduleConfig['clearpay_secret_key'];
         $this->environment = $moduleConfig['clearpay_environment'];
+        $extraConfig = Mage::helper('clearpay/ExtraConfig')->getExtraConfig();
+        $this->allowedCountries = json_decode($extraConfig['ALLOWED_COUNTRIES']);
         $this->currency = Mage::app()->getStore()->getCurrentCurrencyCode();
     }
 
@@ -155,6 +162,7 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
         }
 
         $node = Mage::getConfig()->getNode();
+        $locale = substr(Mage::app()->getLocale()->getLocaleCode(), -2, 2);
         $email = $this->customer->email ? $this->customer->email : $this->magentoOrderData['customer_email'];
         $fullName = null;
         $telephone = null;
@@ -208,10 +216,12 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
                 ->setMerchantId($this->publicKey)
                 ->setSecretKey($this->privateKey)
                 ->setApiEnvironment($this->environment);
-            if (!is_null($shippingCountryId)) {
-                $clearpayMerchantAccount->setCountryCode($shippingCountryId);
+
+            if (!in_array(strtoupper($locale), $this->allowedCountries)) {
+                $locale = $shippingCountryId;
             }
 
+            $clearpayMerchantAccount->setCountryCode($locale);
             $createCheckoutRequest
                 ->setMerchant(array(
                     'redirectConfirmUrl' => $this->redirectOkUrl,
@@ -293,8 +303,6 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
                 . ') ' . Mage::getBaseUrl();
             $createCheckoutRequest->addHeader('User-Agent', $header);
             $createCheckoutRequest->addHeader('Country', $shippingCountryId);
-
-            $url = $this->cancelUrl;
             if ($createCheckoutRequest->isValid()) {
                 $createCheckoutRequest->send();
                 $errorMessage = 'empty response';
@@ -304,8 +312,10 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
                     if (isset($createCheckoutRequest->getResponse()->getParsedBody()->message)) {
                         $errorMessage = $createCheckoutRequest->getResponse()->getParsedBody()->message;
                     }
-                    $errorMessage .= '. Status code: ' . $createCheckoutRequest->getResponse()->getHttpStatusCode();
-                    $this->saveLog('Error received when trying to create a order: ' . $errorMessage);
+                    $errorMessage .= 'Error received when trying to create a order: ' .
+                        '. Status code: ' . $createCheckoutRequest->getResponse()->getHttpStatusCode();
+                    $this->saveLog($errorMessage);
+                    return $this->redirect(true, $this->cancelUrl . '&error_message=' . $errorMessage);
                 } else {
                     try {
                         $url = $createCheckoutRequest->getResponse()->getParsedBody()->redirectCheckoutUrl;
@@ -313,15 +323,19 @@ class Clearpay_Clearpay_PaymentController extends AbstractController
                             $this->magentoOrderId,
                             $createCheckoutRequest->getResponse()->getParsedBody()->token,
                             $this->urlToken,
-                            $billingCountryId
+                            $locale
                         );
                     } catch (\Exception $exception) {
                         $this->saveLog($exception->getMessage());
-                        $url = $cancelUrl;
+                        return $this->redirect(true, $this->cancelUrl . '&error_message=' . $exception->getMessage());
                     }
                 }
             } else {
                 $this->saveLog(json_encode($createCheckoutRequest->getValidationErrors()));
+                return $this->redirect(
+                    true,
+                    $this->cancelUrl . '&error_message=' . json_encode($createCheckoutRequest->getValidationErrors())
+                );
             }
         } catch (Exception $exception) {
             $this->saveLog($exception->getMessage());

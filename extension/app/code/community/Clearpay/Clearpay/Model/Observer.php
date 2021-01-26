@@ -60,6 +60,15 @@ class Clearpay_Clearpay_Model_Observer
             $maxAmount = $config['clearpay_max_amount'];
             $checkoutSession = Mage::getModel('checkout/session');
             $quote = $checkoutSession->getQuote();
+            if (!in_array(strtoupper($locale), $allowedCountries)) {
+                $addressCollection = $quote->getAddressesCollection();
+                $addressData = $addressCollection->getData();
+                for ($i = 0; $i <= count($addressData); $i++) {
+                    if (isset($addressData[$i]) && array_search('shipping', $addressData[$i])) {
+                        $locale = $addressData[$i]['country_id'];
+                    }
+                }
+            }
             $amount = $quote->getGrandTotal();
             $categoryRestriction = false;
             $productCategories = array();
