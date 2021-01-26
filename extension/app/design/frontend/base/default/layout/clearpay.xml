@@ -20,10 +20,12 @@
         </reference>
     </catalog_product_view>
     <checkout_cart_index>
-        <reference name="checkout.cart">
-            <block type="clearpay/cart_message"
-                   name="cart_message"
-                   template="clearpay/cart/cart.phtml" />
+        <reference name="checkout.cartr">
+            <block type="clearpay/cart_cart"
+                   name="extra_block"
+                   as="cart_cart"
+                   before="checkout.cart.totals"
+                   template="clearpay/cart/cart.phtml"/>
         </reference>
     </checkout_cart_index>
 </layout>
