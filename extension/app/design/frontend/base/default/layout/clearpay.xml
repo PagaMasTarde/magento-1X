@@ -14,9 +14,16 @@
     <catalog_product_view>
         <reference name="product.info.addtocart">
             <block type="clearpay/product_simulator"
+                   name="clearpay_simulator"
                    as="clearpay_simulator"
-                   name="product_simulator"
                    template="clearpay/product/simulator.phtml"/>
         </reference>
     </catalog_product_view>
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <block type="clearpay/cart_message"
+                   name="cart_message"
+                   template="clearpay/cart/cart.phtml" />
+        </reference>
+    </checkout_cart_index>
 </layout>

@@ -124,7 +124,7 @@
     <default>
         <payment>
             <clearpay translate="title" module="clearpay">
-                <active>1</active>
+                <active>0</active>
                 <title>Clearpay</title>
                 <model>clearpay/clearpay</model>
                 <order_status>pending_payment</order_status>
