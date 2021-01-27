@@ -139,7 +139,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
         try {
             $this->unblockConcurrency($this->merchantOrderId);
         } catch (\Exception $exception) {
-            $this->saveLog($exception->getMessage(), null, 2);
+            $this->saveLog($exception->getMessage());
         }
 
         return $this->finishProcess(false);
@@ -409,7 +409,7 @@ class Clearpay_Clearpay_NotifyController extends AbstractController
             $sql = 'UPDATE ' . $tableName . ' SET completed = 1 where token = \'' . $this->token . '\'';
             $conn->query($sql);
         } catch (\Exception $exception) {
-            $this->saveLog($exception->getMessage(), 2);
+            $this->saveLog($exception->getMessage());
         }
 
 

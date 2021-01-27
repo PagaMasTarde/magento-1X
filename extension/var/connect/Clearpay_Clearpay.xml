@@ -1,18 +1,28 @@
 <_>
-   <form_key>EhNGtsj95tgkUlwt</form_key>
+   <form_key>p02Ezdec758Jdtkp</form_key>
    <name>Clearpay_Clearpay</name>
    <channel>community</channel>
    <version_ids>
       <version_ids>2</version_ids>
-      <version_ids>1</version_ids>
    </version_ids>
-   <summary>Clearpay, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Clearpay, la solución líder en España de financiación omnicanal instantánea.</summary>
-   <description>Clearpay, Ofrece a tus Clientes la opción de fraccionar el pago hasta en 12 cuotas y aumenta las ventas de tu eCommerce con Clearpay, la solución líder en España de financiación omnicanal instantánea.</description>
+   <summary>Improve your sales and get higher conversion by giving your shoppers the freedom to pay later. Love it. Get it. Pay it later.</summary>
+   <description>&quot;Boost your sales
+Thanks to our flexible payment method, more shoppers can buy your products, increasing your conversion rate.
+ 
+Improve your average ticket
+Shoppers can buy more products, that translates into bigger shopping carts.
+ 
+Marketing engine
+Send qualified traffic to your online store.
+Co-marketing investments campaigns on social medial.
+Email marketing campaigns with referals to your online shop.
+And everything that is necessary to boost your sales! 
+Recurrent business: Clearpay is the payment method that puts the customer at the center of everything. Your customers will pay for their purchases in less than two months, which will allow them to buy again.&quot;</description>
    <license>GPL</license>
    <license_uri/>
-   <version>0.0.0</version>
+   <version>1.0.0</version>
    <stability>stable</stability>
-   <notes>* Development package</notes>
+   <notes>Clearpay Europe launch</notes>
    <authors>
       <name>
          <name>Clearpay</name>
@@ -41,7 +51,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                                </files>
+            <files>                                                                                  </files>
          </files>
       </package>
       <extension>
