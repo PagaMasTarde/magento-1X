@@ -78,7 +78,7 @@ services:
       dockerfile: Dockerfile
       args:
         - MAGENTO_MAYOR_VERSION=19
-        - MAGENTO_VERSION=1.9.4.2
+        - MAGENTO_VERSION=1.14.x
         - MAGENTO_SAMPLEDATA_TGZ=magento-sample-data-1.9.1.0.tgz
         - MAGENTO_SAMPLEDATA_INSTALLER=install-sampledata-1.9
     environment:
